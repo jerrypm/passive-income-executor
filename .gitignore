@@ -1,9 +1,35 @@
+# Credentials & secrets
 .env
 .env.*
 *.key
 *.pem
+*.macaroon
+.solana-keypair.json
+.solana-stake-*.json
+
+# Runtime & temp
 node_modules/
 __pycache__/
 venv/
+*.pyc
 .DS_Store
-logs/earnings.md
+.pids/
+*.pid
+
+# Logs (tracked separately)
+logs/
+data/logs/
+data/lnbits/database.sqlite3
+data/lnbits/.env
+
+# External repos (cloned separately)
+services/money4band/
+services/nostream/
+
+# Browser data (should never be committed)
+scripts/twitter/playwright_browser/
+scripts/twitter/chrome_profile/
+
+# Debug artifacts
+*.html
+logs/*.png

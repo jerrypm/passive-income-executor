@@ -1,0 +1,44 @@
+{
+  "referral_honeygain": [
+    "I've been earning passive income just by leaving my Mac running. Honeygain shares your unused bandwidth — completely hands-off. Get $5 free to start: https://join.honeygain.com/JERRYF5C2E #passiveincome",
+    "Passive income tip: Your internet bandwidth is an asset you're not using. Honeygain pays you for sharing it. Zero effort after setup. $5 bonus here: https://join.honeygain.com/JERRYF5C2E #sidehustle",
+    "My Mac Mini earns money while I sleep. How? Honeygain — it shares your unused bandwidth and pays you monthly. Try it free ($5 bonus): https://join.honeygain.com/JERRYF5C2E #passiveincome #tech",
+    "Most people don't know their unused internet bandwidth has value. Honeygain lets you monetize it passively. I've been running it for weeks. Start free: https://join.honeygain.com/JERRYF5C2E",
+    "Set it and forget it passive income: Honeygain runs in the background sharing your unused bandwidth. Works on Mac, Windows, Linux, Docker. $5 signup bonus: https://join.honeygain.com/JERRYF5C2E #earning",
+    "If you have a computer that's always on, you're leaving money on the table. Honeygain pays for your unused bandwidth. Get started with $5 free: https://join.honeygain.com/JERRYF5C2E",
+    "The easiest passive income stream I've set up: install Honeygain, let it run, get paid. That's it. No skills needed. $5 free: https://join.honeygain.com/JERRYF5C2E #indiehackers #passiveincome"
+  ],
+  "referral_pawns": [
+    "Another bandwidth sharing app worth running alongside Honeygain: IPRoyal Pawns. Stack multiple apps = more earnings. Try it: https://discoverpawns.eu/19278461 #passiveincome",
+    "Pro tip: Run multiple bandwidth sharing apps simultaneously for max passive income. I stack Honeygain + IPRoyal Pawns. Start Pawns here: https://discoverpawns.eu/19278461",
+    "IPRoyal Pawns is one of the better bandwidth sharing apps out there. Solid payouts, reliable platform. Give it a try: https://discoverpawns.eu/19278461 #sidehustle"
+  ],
+  "product_nostr_toolkit": [
+    "Built a toolkit for devs who want to earn on Nostr: AI-powered DVM, auto-posting, marketplace listings — all from your terminal. 8 production-ready Python scripts. $19 #nostr #buildinpublic",
+    "Want to monetize AI on the Nostr protocol? I built a toolkit with DVM (kind 5050), auto-content, marketplace integration. All backed by local Ollama. $19 #nostr #AI",
+    "Nostr AI Toolkit: Run an AI service on the decentralized web, accept Lightning payments, auto-post content. 8 scripts, pure Python, no external deps. $19 #bitcoin #nostr"
+  ],
+  "product_ollama_monetizer": [
+    "You can monetize your local Ollama AI models! Built an API server + RapidAPI wrapper + Lightning paywall. Turn your GPU into a revenue stream. $14 #AI #buildinpublic",
+    "If you're running Ollama locally, you're sitting on a monetizable API. My toolkit sets up HTTP endpoints, rate limiting, and payment integration. $14 #opensource #AI",
+    "Ollama API Monetizer: Sell AI inference from your own hardware. HTTP API + RapidAPI listing + Lightning payments. Setup in 10 minutes. $14 #indiehackers"
+  ],
+  "product_terminal_income": [
+    "Terminal Income Starter Kit: Cross-publish content to dev.to + Hashnode + Nostr, stake crypto, share bandwidth — all from the command line. $9 #passiveincome #developer",
+    "Built a starter kit for devs who want passive income from the terminal. Content publishing, crypto staking scripts, bandwidth sharing setup. $9 #buildinpublic",
+    "Everything you need to start earning passively as a developer: content automation, staking helpers, bandwidth monetization. All terminal-based. $9 #indiehackers"
+  ],
+  "organic_tech": [
+    "generate",
+    "generate",
+    "generate",
+    "generate",
+    "generate",
+    "generate",
+    "generate",
+    "generate",
+    "generate",
+    "generate"
+  ],
+  "_schedule_note": "Mix ratio: 40% organic tech tips (generate via Ollama), 30% referral, 30% product promo. Post 3x/day at 9:00, 14:00, 19:00 WIB"
+}

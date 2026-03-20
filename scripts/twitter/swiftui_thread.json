@@ -1,0 +1,13 @@
+[
+  "🧵 I'm writing a 100-part SwiftUI series: Zero to Expert\n\n67 parts published so far. Here's the journey from Part 1 👇\n\nFull list:\nhttps://medium.com/@21zerixpm/list/100daysswiftuitoexpert-069dcb77c2d2\n\n#SwiftUI #iOS #100DaysOfCode",
+  "📱 Part 1 — Why SwiftUI is the Future of iOS Development\n\nDeclarative UI, live previews, cross-platform (iOS, macOS, watchOS, tvOS). If you're still on UIKit, it's time.\n\n#SwiftUI #iOSDev",
+  "🧱 Part 2 — Understanding SwiftUI Views\n\nEverything is a View. Text, Image, Button — they're all structs conforming to the View protocol. The building blocks of every app.\n\n#SwiftUI #iOSDev",
+  "🎨 Part 3 — Mastering SwiftUI Modifiers\n\n.padding(), .background(), .font() — order matters! Modifiers wrap views in new views. Understanding this changes everything.\n\n#SwiftUI",
+  "📐 Part 4 — Layout System Deep Dive\n\nHStack, VStack, ZStack, LazyVGrid, LazyHGrid. SwiftUI's layout is powerful once you understand how parent-child negotiation works.\n\n#SwiftUI",
+  "🎨 Part 5 — Colors and Gradients\n\nLinearGradient, RadialGradient, AngularGradient + Color assets + dark mode support. Make your UI pop.\n\n#SwiftUI #Design",
+  "🔣 Part 6 — SF Symbols Mastery\n\n5000+ built-in icons that scale perfectly with Dynamic Type. symbolEffect(), hierarchical rendering, variable colors.\n\n#SwiftUI #SFSymbols",
+  "🖼️ Part 7 — Working with Images and Media\n\nAsyncImage, resizable(), aspectRatio(), PhotosPicker. Loading, caching, and displaying media the SwiftUI way.\n\n#SwiftUI",
+  "✏️ Part 8 — Text and Fonts in SwiftUI\n\nCustom fonts, Dynamic Type, AttributedString, markdown support. Typography that adapts and scales beautifully.\n\n#SwiftUI",
+  "🔘 Part 9 — Buttons and Controls\n\nButton, Toggle, Slider, Stepper, Picker, DatePicker. Building interactive UIs with built-in controls.\n\n#SwiftUI #iOSDev",
+  "📝 Part 10 — TextField and Forms\n\nTextField, SecureField, TextEditor, Form, Section. Mastering user input with validation and keyboard management.\n\n#SwiftUI"
+]
