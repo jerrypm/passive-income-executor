@@ -29,7 +29,7 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 ARTICLES_FILE = Path(__file__).resolve().parent / "swiftui_articles.json"
 LOG_FILE = PROJECT_DIR / "logs" / "twitter_posts.log"
-CHROME_PROFILE = "Profile 10"
+CHROME_PROFILE = "Profile 1"
 MAX_CHARS = 277
 
 # Emoji rotation per part range
