@@ -88,6 +88,29 @@ Rules:
         sys.exit(1)
 
 
+def generate_audio(narration, output_path, voice=TTS_VOICE):
+    """Stage 2: edge-tts converts narration to MP3."""
+    result = subprocess.run([
+        EDGE_TTS_BIN,
+        "--voice", voice,
+        "--text", narration,
+        "--write-media", str(output_path)
+    ], capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"ERROR: edge-tts failed: {result.stderr}")
+        sys.exit(1)
+
+    # Get duration
+    probe = subprocess.run([
+        "ffprobe", "-v", "quiet",
+        "-show_entries", "format=duration",
+        "-of", "csv=p=0",
+        str(output_path)
+    ], capture_output=True, text=True)
+    duration = float(probe.stdout.strip())
+    return duration
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="YouTube Shorts generator")
@@ -133,6 +156,13 @@ if __name__ == "__main__":
     print(f"  Narration: {len(script['narration'].split())} words")
     print(f"  Code: {len(script['code_snippet'].splitlines())} lines")
 
-    # Placeholder for stages 2-5 (added in next tasks)
-    print("\n[DEBUG] Script generation complete. Stages 2-5 not yet implemented.")
-    print(json.dumps(script, indent=2))
+    # Stage 2: Generate audio
+    TEMP_DIR.mkdir(parents=True, exist_ok=True)
+    audio_path = TEMP_DIR / "audio.mp3"
+    print(f"\n[2/5] Generating audio with {voice}...")
+    duration = generate_audio(script["narration"], audio_path, voice)
+    print(f"  Duration: {duration:.1f}s")
+    print(f"  File: {audio_path}")
+
+    # Placeholder for stages 3-5 (added in next tasks)
+    print("\n[DEBUG] Audio done. Stages 3-5 not yet implemented.")
