@@ -193,6 +193,46 @@ def generate_image(title, code_snippet, cta, output_path):
     img.save(output_path, quality=95)
 
 
+def assemble_video(image_path, audio_path, output_path, duration):
+    """Stage 4: ffmpeg combines image + audio into MP4."""
+    result = subprocess.run([
+        "ffmpeg", "-y",
+        "-loop", "1",
+        "-i", str(image_path),
+        "-i", str(audio_path),
+        "-c:v", "libx264",
+        "-tune", "stillimage",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-pix_fmt", "yuv420p",
+        "-shortest",
+        "-t", str(duration),
+        str(output_path)
+    ], capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"ERROR: ffmpeg failed: {result.stderr[:500]}")
+        sys.exit(1)
+
+
+def write_metadata(title, description, tags, cta, output_path):
+    """Stage 5: Write companion metadata .txt for YouTube upload."""
+    content = f"""TITLE:
+{title}
+
+DESCRIPTION:
+{description}
+
+{cta}
+
+TAGS:
+{tags}
+
+#Shorts #SwiftUI #iOSDev #Programming #CodingTips
+"""
+    with open(output_path, "w") as f:
+        f.write(content)
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="YouTube Shorts generator")
@@ -252,5 +292,41 @@ if __name__ == "__main__":
     generate_image(script["title"], script["code_snippet"], cta, frame_path)
     print(f"  File: {frame_path}")
 
-    # Placeholder for stages 4-5 (added in next tasks)
-    print("\n[DEBUG] Image done. Stages 4-5 not yet implemented.")
+    # Stage 4: Assemble video
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    slug = slugify(topic)
+    video_filename = f"{date_str}-{slug}.mp4"
+    video_path = OUTPUT_DIR / video_filename
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"\n[4/5] Assembling video ({duration:.1f}s)...")
+    assemble_video(frame_path, audio_path, video_path, duration)
+    print(f"  File: {video_path}")
+
+    # Stage 5: Write metadata
+    meta_path = OUTPUT_DIR / f"{date_str}-{slug}.txt"
+    print(f"\n[5/5] Writing metadata...")
+    write_metadata(
+        script["title"],
+        script.get("description", ""),
+        script.get("tags", ""),
+        cta,
+        meta_path
+    )
+    print(f"  File: {meta_path}")
+
+    # Mark topic as done
+    if topic_entry:
+        topic_entry["done"] = True
+        save_topics(topics)
+        print(f"\n  Marked topic as done in topics.json")
+
+    # Summary
+    size_mb = video_path.stat().st_size / (1024 * 1024)
+    print(f"\n{'='*50}")
+    print(f"  VIDEO READY!")
+    print(f"  File: {video_path}")
+    print(f"  Size: {size_mb:.1f} MB")
+    print(f"  Duration: {duration:.1f}s")
+    print(f"  Metadata: {meta_path}")
+    print(f"{'='*50}")
+    print(f"\nNext: upload to YouTube Studio, copy title/desc from .txt file")
