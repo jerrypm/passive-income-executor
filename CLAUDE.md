@@ -144,6 +144,21 @@ Semua research sudah selesai (4 dokumen di `docs/plans/`). Sekarang tinggal EKSE
 - Simpan semua credentials di `.env` (JANGAN commit)
 - Commit sering dengan pesan yang jelas
 
+## TWITTER RULES (WAJIB)
+- **MAX 277 CHARACTERS per tweet** — HITUNG DULU sebelum post, jangan pernah melebihi
+- Selalu pakai Chrome Profile 10 (Jeri / @luffyselah) — JANGAN pakai profile lain
+- Hitung karakter pakai `len()` di Python atau manual sebelum copy ke clipboard
+- Kalau lebih dari 277, POTONG dulu baru post
+
+## CHROME RULES (WAJIB)
+- **SELALU pakai Profile 10 (Jeri / 21zerixpm@gmail.com)**
+- Command buka: `open -na "Google Chrome" --args --profile-directory="Profile 10" "URL"`
+- Command navigate tab: cari window yang title mengandung "Jeri" lalu set URL
+- **JANGAN PERNAH** ubah atau pakai user/profile Chrome lain
+- **SEMUA SCRIPT PYTHON** yang pakai Chrome HARUS specify Profile 10
+- Untuk navigate di tab yang sama, HARUS cari window Chrome yang profile "Jeri" dulu
+- Kalau salah profile = salah akun = MASALAH BESAR
+
 ## FOLDER STRUCTURE
 ```
 passive-income-executor/
@@ -153,7 +168,11 @@ passive-income-executor/
 │   ├── nostr/             ← Nostr bot & DVM scripts
 │   ├── ai-inference/      ← Ollama paywall middleware
 │   ├── content-machine/   ← Auto-publish scripts
+│   ├── youtube/           ← YouTube Shorts generation pipeline
 │   └── staking/           ← Staking helper scripts
+├── videos/
+│   ├── ready/             ← Generated shorts (MP4 + metadata)
+│   └── archive/           ← Already uploaded
 ├── logs/                  ← Earnings & activity logs
 ├── .env                   ← Credentials (gitignored)
 └── .gitignore

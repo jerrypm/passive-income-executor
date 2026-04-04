@@ -69,6 +69,7 @@ Rules:
 - End narration with: {cta}
 - Keep it beginner-friendly but impressive"""
 
+    raw = ""
     try:
         resp = requests.post(OLLAMA_URL, json={
             "model": OLLAMA_MODEL,
@@ -107,6 +108,9 @@ def generate_audio(narration, output_path, voice=TTS_VOICE):
         "-of", "csv=p=0",
         str(output_path)
     ], capture_output=True, text=True)
+    if probe.returncode != 0 or not probe.stdout.strip():
+        print(f"ERROR: ffprobe failed to get duration: {probe.stderr}")
+        sys.exit(1)
     duration = float(probe.stdout.strip())
     return duration
 

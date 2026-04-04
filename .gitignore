@@ -33,3 +33,8 @@ scripts/twitter/chrome_profile/
 # Debug artifacts
 *.html
 logs/*.png
+
+# YouTube Shorts output
+videos/ready/*.mp4
+videos/ready/*.txt
+videos/archive/
