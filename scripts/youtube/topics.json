@@ -1,0 +1,17 @@
+[
+  {"topic": "SwiftUI gradient backgrounds in 3 lines", "type": "swiftui", "cta": "Follow for daily SwiftUI tips", "done": false},
+  {"topic": "Custom ViewModifier in SwiftUI", "type": "swiftui", "cta": "Follow for daily SwiftUI tips", "done": false},
+  {"topic": "SwiftUI animation with matchedGeometryEffect", "type": "swiftui", "cta": "Follow for daily SwiftUI tips", "done": false},
+  {"topic": "NavigationStack vs NavigationView", "type": "swiftui", "cta": "Follow for daily SwiftUI tips", "done": false},
+  {"topic": "SwiftUI AsyncImage with placeholder", "type": "swiftui", "cta": "Follow for daily SwiftUI tips", "done": false},
+  {"topic": "Xcode breakpoint tricks you should know", "type": "ios", "cta": "More iOS tips: link in bio", "done": false},
+  {"topic": "Instruments memory leak detection", "type": "ios", "cta": "More iOS tips: link in bio", "done": false},
+  {"topic": "Swift Result type error handling", "type": "ios", "cta": "More iOS tips: link in bio", "done": false},
+  {"topic": "Core Data vs SwiftData comparison", "type": "ios", "cta": "More iOS tips: link in bio", "done": false},
+  {"topic": "iOS app launch time optimization", "type": "ios", "cta": "More iOS tips: link in bio", "done": false},
+  {"topic": "Automate your dev workflow from terminal", "type": "promo", "cta": "Terminal Income Starter: link in bio", "done": false},
+  {"topic": "Build an AI API and monetize it", "type": "promo", "cta": "Ollama API Monetizer: link in bio", "done": false},
+  {"topic": "Free developer tools you need", "type": "promo", "cta": "DevToolKit: devtoolkit-sigma.vercel.app", "done": false},
+  {"topic": "Nostr AI bot in 50 lines of Python", "type": "promo", "cta": "Nostr AI Toolkit: link in bio", "done": false},
+  {"topic": "SwiftUI @Observable macro explained", "type": "swiftui", "cta": "Follow for daily SwiftUI tips", "done": false}
+]
