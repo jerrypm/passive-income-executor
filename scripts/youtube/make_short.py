@@ -111,6 +111,88 @@ def generate_audio(narration, output_path, voice=TTS_VOICE):
     return duration
 
 
+def generate_image(title, code_snippet, cta, output_path):
+    """Stage 3: Pillow generates dark-themed code image (1080x1920)."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    W, H = 1080, 1920
+    BG_COLOR = (30, 30, 46)        # Catppuccin Mocha base
+    TITLE_COLOR = (205, 214, 244)  # Catppuccin text
+    CODE_COLOR = (166, 227, 161)   # Catppuccin green
+    CTA_COLOR = (137, 180, 250)    # Catppuccin blue
+    ACCENT = (245, 194, 231)       # Catppuccin pink
+
+    img = Image.new("RGB", (W, H), BG_COLOR)
+    draw = ImageDraw.Draw(img)
+
+    # Load fonts
+    font_path = FONT_PATH if os.path.exists(FONT_PATH) else FONT_FALLBACK
+    try:
+        font_title = ImageFont.truetype(font_path, 52)
+        font_code = ImageFont.truetype(font_path, 28)
+        font_cta = ImageFont.truetype(font_path, 38)
+    except OSError:
+        font_title = ImageFont.load_default()
+        font_code = ImageFont.load_default()
+        font_cta = ImageFont.load_default()
+
+    # Draw decorative top bar
+    draw.rectangle([(0, 0), (W, 8)], fill=ACCENT)
+
+    # Title area (top 18%)
+    title_y = 80
+    # Word-wrap title
+    title_lines = []
+    words = title.split()
+    line = ""
+    for word in words:
+        test = f"{line} {word}".strip()
+        bbox = draw.textbbox((0, 0), test, font=font_title)
+        if bbox[2] > W - 120:
+            title_lines.append(line)
+            line = word
+        else:
+            line = test
+    if line:
+        title_lines.append(line)
+
+    for i, tl in enumerate(title_lines):
+        bbox = draw.textbbox((0, 0), tl, font=font_title)
+        x = (W - bbox[2]) // 2
+        draw.text((x, title_y + i * 70), tl, fill=TITLE_COLOR, font=font_title)
+
+    # Code area (middle 55%)
+    code_y = 400
+    # Draw code background box
+    draw.rounded_rectangle(
+        [(60, code_y - 20), (W - 60, code_y + 750)],
+        radius=20,
+        fill=(24, 24, 37)  # slightly darker
+    )
+    # Fake window dots
+    for i, color in enumerate([(243, 139, 168), (249, 226, 175), (166, 227, 161)]):
+        draw.ellipse([(90 + i * 30, code_y - 5), (105 + i * 30, code_y + 10)], fill=color)
+
+    # Draw code lines
+    code_lines = code_snippet.strip().splitlines()
+    for i, cl in enumerate(code_lines[:20]):  # max 20 lines
+        # Truncate long lines
+        if len(cl) > 45:
+            cl = cl[:42] + "..."
+        draw.text((90, code_y + 30 + i * 36), cl, fill=CODE_COLOR, font=font_code)
+
+    # CTA area (bottom 15%)
+    cta_y = H - 250
+    bbox = draw.textbbox((0, 0), cta, font=font_cta)
+    x = (W - bbox[2]) // 2
+    draw.text((x, cta_y), cta, fill=CTA_COLOR, font=font_cta)
+
+    # Bottom accent bar
+    draw.rectangle([(0, H - 8), (W, H)], fill=ACCENT)
+
+    img.save(output_path, quality=95)
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="YouTube Shorts generator")
@@ -164,5 +246,11 @@ if __name__ == "__main__":
     print(f"  Duration: {duration:.1f}s")
     print(f"  File: {audio_path}")
 
-    # Placeholder for stages 3-5 (added in next tasks)
-    print("\n[DEBUG] Audio done. Stages 3-5 not yet implemented.")
+    # Stage 3: Generate code image
+    frame_path = TEMP_DIR / "frame.png"
+    print(f"\n[3/5] Generating code image...")
+    generate_image(script["title"], script["code_snippet"], cta, frame_path)
+    print(f"  File: {frame_path}")
+
+    # Placeholder for stages 4-5 (added in next tasks)
+    print("\n[DEBUG] Image done. Stages 4-5 not yet implemented.")
