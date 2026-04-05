@@ -14,6 +14,14 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "BarangUnik",
+  description: "Temukan barang unik, aneh, dan lucu dari Shopee Indonesia.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://barangunik.vercel.app",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -21,6 +29,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="bg-gray-50 text-gray-900 antialiased">
         {children}
       </body>
