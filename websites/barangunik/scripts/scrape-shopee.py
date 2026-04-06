@@ -25,16 +25,14 @@ except ImportError:
     import requests
 
 KEYWORDS = [
-    "barang unik",
-    "barang aneh",
-    "barang lucu",
-    "gadget unik",
+    "barang unik murah",
     "alat dapur unik",
-    "hadiah unik",
-    "barang viral",
-    "barang anti mainstream",
-    "mainan unik",
-    "dekorasi unik",
+    "lampu unik lucu",
+    "organizer unik",
+    "gadget unik murah",
+    "aksesoris HP unik",
+    "barang aneh shopee",
+    "barang viral murah",
 ]
 
 SHOPEE_SEARCH_URL = "https://shopee.co.id/api/v4/search/search_items"
@@ -59,6 +57,25 @@ def get_price_category(price: int) -> str:
         if min_price <= price <= max_price:
             return slug
     return "diatas-500rb"
+
+
+SHOPEE_AFFILIATE_ID = "11306601811"
+SHOPEE_REDIR_BASE = "https://s.shopee.co.id/an_redir"
+
+def to_affiliate_link(url: str, sub_id: str = "") -> str:
+    """Convert a Shopee URL to an affiliate tracking link."""
+    if not url or "shopee.co.id" not in url:
+        return url
+    if "affiliate_id=" in url:
+        return url
+    from urllib.parse import urlencode, quote
+    params = {
+        "origin_link": url,
+        "affiliate_id": SHOPEE_AFFILIATE_ID,
+    }
+    if sub_id:
+        params["sub_id"] = sub_id
+    return f"{SHOPEE_REDIR_BASE}?{urlencode(params, quote_via=quote)}"
 
 
 def search_shopee(keyword: str, limit: int = 30) -> list:
@@ -133,6 +150,10 @@ def extract_product(item: dict) -> dict | None:
         slug = name.lower().replace(" ", "-")[:80]
         shopee_url = f"https://shopee.co.id/{slug}-i.{shop_id}.{item_id}"
 
+        # Generate affiliate link (Layer 1)
+        affiliate_sub_id = f"scraper-{get_price_category(price)}-{item_id}"
+        affiliate_url = to_affiliate_link(shopee_url, affiliate_sub_id)
+
         now = datetime.now(timezone.utc).isoformat()
         product_id = f"shopee_{shop_id}_{item_id}"
 
@@ -143,7 +164,8 @@ def extract_product(item: dict) -> dict | None:
             "priceCategory": get_price_category(price),
             "discount": discount,
             "imageUrl": image_url,
-            "shopeeUrl": shopee_url,
+            "shopeeUrl": affiliate_url,
+            "shopeeUrlRaw": shopee_url,
             "rating": round(rating_star, 1) if rating_star else None,
             "sold": sold,
             "status": "pending",
@@ -161,6 +183,8 @@ def main():
     parser.add_argument("--limit", type=int, default=30, help="Products per keyword (default: 30)")
     parser.add_argument("--output", type=str, default="products.json", help="Output file")
     parser.add_argument("--keywords", type=str, nargs="*", help="Custom keywords (overrides defaults)")
+    parser.add_argument("--min-rating", type=float, default=4.0, help="Min rating filter (default: 4.0)")
+    parser.add_argument("--min-sold", type=int, default=100, help="Min sold filter (default: 100)")
     args = parser.parse_args()
 
     keywords = args.keywords or KEYWORDS
@@ -185,7 +209,12 @@ def main():
             print(f"  Waiting {delay:.1f}s...")
             time.sleep(delay)
 
-    products_list = list(all_products.values())
+    # Quality filter: rating >= 4.0 and sold >= 100
+    products_list = [
+        p for p in all_products.values()
+        if (p.get("rating") is None or p["rating"] >= args.min_rating)
+        and (p.get("sold") or 0) >= args.min_sold
+    ]
 
     # Stats
     print()
