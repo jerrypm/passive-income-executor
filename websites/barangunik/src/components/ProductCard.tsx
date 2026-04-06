@@ -1,25 +1,32 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { formatRupiah, getCategoryBySlug } from "@/lib/format";
+import { toAffiliateLink } from "@/lib/affiliate";
 import type { Product } from "@/lib/types";
 
 export default function ProductCard({ product }: { product: Product }) {
   const category = getCategoryBySlug(product.priceCategory);
+  const [imgSrc, setImgSrc] = useState(product.imageUrl || "/placeholder.png");
+  const isExternal = imgSrc.startsWith("http");
 
   return (
     <a
-      href={product.shopeeUrl}
+      href={toAffiliateLink(product.shopeeUrl, `web-${product.priceCategory}-${product.id}`)}
       target="_blank"
       rel="noopener noreferrer"
       className="group block bg-white rounded-lg shadow hover:shadow-lg transition-all hover:-translate-y-1"
     >
       <div className="relative aspect-square overflow-hidden rounded-t-lg bg-gray-100">
         <Image
-          src={product.imageUrl || "/placeholder.png"}
+          src={imgSrc}
           alt={product.name}
           fill
           className="object-cover"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          unoptimized={product.imageUrl?.startsWith("http")}
+          unoptimized={isExternal}
+          onError={() => setImgSrc("/placeholder.png")}
         />
         {product.discount && (
           <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
