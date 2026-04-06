@@ -112,7 +112,7 @@ def search_shopee(keyword: str, limit: int = 30) -> list:
         return []
 
 
-def extract_product(item: dict) -> dict | None:
+def extract_product(item: dict):
     """Extract product data from Shopee search result item."""
     try:
         info = item.get("item_basic", item)
