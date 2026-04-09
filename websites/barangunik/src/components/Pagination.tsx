@@ -20,7 +20,7 @@ export default function Pagination({
       {pages.map((page) => (
         <Link
           key={page}
-          href={`${baseUrl}?page=${page}`}
+          href={`${baseUrl}${baseUrl.includes("?") ? "&" : "?"}page=${page}`}
           className={`px-3 py-2 rounded text-sm ${
             page === currentPage
               ? "bg-[var(--color-brand-500)] text-white"

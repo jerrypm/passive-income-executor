@@ -1,0 +1,224 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free HTML Entity Encode & Decode Online"
+  description="Encode special characters to HTML entities or decode HTML entities back to text. Supports named entities (&amp;amp;) and numeric entities (&#38;#38;)."
+  keywords={["html entity encoder", "html entity decoder", "html encode", "html decode", "html special characters", "html entities", "encode html online"]}
+  relatedTools={[
+    { name: "URL Encoder", href: "/tools/url-encoder" },
+    { name: "Base64 Encoder", href: "/tools/base64-encoder" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "CSS Minifier", href: "/tools/css-minifier" }
+  ]}
+>
+  <!-- Encoding Mode Toggle -->
+  <div class="mb-4 flex items-center gap-4">
+    <label class="block text-sm font-medium text-text-muted">Encoding Mode:</label>
+    <label class="flex items-center gap-2 text-sm text-text cursor-pointer">
+      <input type="radio" name="encMode" id="mode-named" value="named" checked class="rounded border-border bg-surface text-primary focus:ring-primary" />
+      Named (&amp;amp;)
+    </label>
+    <label class="flex items-center gap-2 text-sm text-text cursor-pointer">
+      <input type="radio" name="encMode" id="mode-numeric" value="numeric" class="rounded border-border bg-surface text-primary focus:ring-primary" />
+      Numeric (&amp;#38;)
+    </label>
+    <label class="flex items-center gap-2 text-sm text-text cursor-pointer">
+      <input type="radio" name="encMode" id="mode-hex" value="hex" class="rounded border-border bg-surface text-primary focus:ring-primary" />
+      Hex (&amp;#x26;)
+    </label>
+  </div>
+
+  <!-- Two Column Layout -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">Raw HTML / Text</label>
+      <textarea id="input-raw" class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]" placeholder='<div class="hello">&amp; "quotes"</div>'></textarea>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">Encoded Entities</label>
+      <textarea id="input-encoded" class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]" placeholder="&amp;lt;div class=&amp;quot;hello&amp;quot;&amp;gt;&amp;amp; &amp;quot;quotes&amp;quot;&amp;lt;/div&amp;gt;"></textarea>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-wrap gap-3 mb-4">
+    <button id="btn-encode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">Encode &rarr;</button>
+    <button id="btn-decode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">&larr; Decode</button>
+    <button id="btn-copy-raw" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy Raw</button>
+    <button id="btn-copy-encoded" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy Encoded</button>
+    <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Clear All</button>
+  </div>
+
+  <!-- Reference Table -->
+  <div>
+    <label class="block text-sm font-medium text-text-muted mb-2">Common HTML Entities Reference</label>
+    <div class="bg-surface border border-border rounded-lg overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-border bg-surface-lighter">
+            <th class="text-left p-2 text-text-muted font-medium">Character</th>
+            <th class="text-left p-2 text-text-muted font-medium">Named</th>
+            <th class="text-left p-2 text-text-muted font-medium">Numeric</th>
+            <th class="text-left p-2 text-text-muted font-medium">Description</th>
+          </tr>
+        </thead>
+        <tbody id="ref-table" class="text-text font-mono">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const inputRaw = document.getElementById('input-raw') as HTMLTextAreaElement;
+    const inputEncoded = document.getElementById('input-encoded') as HTMLTextAreaElement;
+
+    // Named entity maps
+    const charToNamed: Record<string, string> = {
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;',
+      '\u00a0': '&nbsp;', '\u00a9': '&copy;', '\u00ae': '&reg;', '\u2122': '&trade;',
+      '\u2013': '&ndash;', '\u2014': '&mdash;', '\u2018': '&lsquo;', '\u2019': '&rsquo;',
+      '\u201c': '&ldquo;', '\u201d': '&rdquo;', '\u2026': '&hellip;', '\u00b0': '&deg;',
+      '\u00b1': '&plusmn;', '\u00d7': '&times;', '\u00f7': '&divide;', '\u2260': '&ne;',
+      '\u2264': '&le;', '\u2265': '&ge;', '\u221e': '&infin;',
+    };
+
+    const namedToChar: Record<string, string> = {};
+    for (const [ch, entity] of Object.entries(charToNamed)) {
+      namedToChar[entity] = ch;
+    }
+    // Add extras
+    namedToChar['&nbsp;'] = '\u00a0';
+    namedToChar['&cent;'] = '\u00a2';
+    namedToChar['&pound;'] = '\u00a3';
+    namedToChar['&yen;'] = '\u00a5';
+    namedToChar['&euro;'] = '\u20ac';
+    namedToChar['&sect;'] = '\u00a7';
+    namedToChar['&para;'] = '\u00b6';
+    namedToChar['&bull;'] = '\u2022';
+    namedToChar['&larr;'] = '\u2190';
+    namedToChar['&rarr;'] = '\u2192';
+    namedToChar['&uarr;'] = '\u2191';
+    namedToChar['&darr;'] = '\u2193';
+
+    function getMode(): string {
+      if ((document.getElementById('mode-numeric') as HTMLInputElement).checked) return 'numeric';
+      if ((document.getElementById('mode-hex') as HTMLInputElement).checked) return 'hex';
+      return 'named';
+    }
+
+    function encodeEntities(text: string): string {
+      const mode = getMode();
+      let result = '';
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const code = text.charCodeAt(i);
+
+        if (mode === 'named' && charToNamed[ch]) {
+          result += charToNamed[ch];
+        } else if (mode === 'numeric' && (ch === '&' || ch === '<' || ch === '>' || ch === '"' || ch === "'" || code > 127)) {
+          result += `&#${code};`;
+        } else if (mode === 'hex' && (ch === '&' || ch === '<' || ch === '>' || ch === '"' || ch === "'" || code > 127)) {
+          result += `&#x${code.toString(16).toUpperCase()};`;
+        } else if (mode === 'named' && code > 127) {
+          result += `&#${code};`;
+        } else {
+          result += ch;
+        }
+      }
+      return result;
+    }
+
+    function decodeEntities(text: string): string {
+      // Decode named entities
+      let result = text.replace(/&[a-zA-Z]+;/g, (match) => {
+        if (namedToChar[match]) return namedToChar[match];
+        // Use DOM parser for unknown named entities
+        const el = document.createElement('span');
+        el.innerHTML = match;
+        return el.textContent || match;
+      });
+
+      // Decode numeric entities (decimal)
+      result = result.replace(/&#(\d+);/g, (_, code) => {
+        return String.fromCharCode(parseInt(code, 10));
+      });
+
+      // Decode hex entities
+      result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => {
+        return String.fromCharCode(parseInt(code, 16));
+      });
+
+      return result;
+    }
+
+    document.getElementById('btn-encode')!.addEventListener('click', () => {
+      inputEncoded.value = encodeEntities(inputRaw.value);
+    });
+
+    document.getElementById('btn-decode')!.addEventListener('click', () => {
+      inputRaw.value = decodeEntities(inputEncoded.value);
+    });
+
+    document.getElementById('btn-copy-raw')!.addEventListener('click', () => {
+      navigator.clipboard.writeText(inputRaw.value);
+      const btn = document.getElementById('btn-copy-raw')!;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Raw', 1500);
+    });
+
+    document.getElementById('btn-copy-encoded')!.addEventListener('click', () => {
+      navigator.clipboard.writeText(inputEncoded.value);
+      const btn = document.getElementById('btn-copy-encoded')!;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Encoded', 1500);
+    });
+
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      inputRaw.value = '';
+      inputEncoded.value = '';
+    });
+
+    // Build reference table
+    const refData = [
+      ['&', '&amp;', '&#38;', 'Ampersand'],
+      ['<', '&lt;', '&#60;', 'Less than'],
+      ['>', '&gt;', '&#62;', 'Greater than'],
+      ['"', '&quot;', '&#34;', 'Double quote'],
+      ["'", '&apos;', '&#39;', 'Single quote / Apostrophe'],
+      ['\u00a0', '&nbsp;', '&#160;', 'Non-breaking space'],
+      ['\u00a9', '&copy;', '&#169;', 'Copyright'],
+      ['\u00ae', '&reg;', '&#174;', 'Registered'],
+      ['\u2122', '&trade;', '&#8482;', 'Trademark'],
+      ['\u2013', '&ndash;', '&#8211;', 'En dash'],
+      ['\u2014', '&mdash;', '&#8212;', 'Em dash'],
+      ['\u2018', '&lsquo;', '&#8216;', 'Left single quote'],
+      ['\u2019', '&rsquo;', '&#8217;', 'Right single quote'],
+      ['\u201c', '&ldquo;', '&#8220;', 'Left double quote'],
+      ['\u201d', '&rdquo;', '&#8221;', 'Right double quote'],
+      ['\u2026', '&hellip;', '&#8230;', 'Horizontal ellipsis'],
+      ['\u00b0', '&deg;', '&#176;', 'Degree'],
+      ['\u00d7', '&times;', '&#215;', 'Multiplication'],
+      ['\u00f7', '&divide;', '&#247;', 'Division'],
+    ];
+
+    const tbody = document.getElementById('ref-table')!;
+    refData.forEach(([ch, named, numeric, desc]) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-border';
+      tr.innerHTML = `<td class="p-2">${ch === '\u00a0' ? '(space)' : ch}</td><td class="p-2">${named}</td><td class="p-2">${numeric}</td><td class="p-2 font-sans text-text-muted">${desc}</td>`;
+      tbody.appendChild(tr);
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Choose the encoding mode: Named (&amp;amp;), Numeric (&amp;#38;), or Hex (&amp;#x26;).</li>
+      <li>Paste raw HTML or text in the left panel and click Encode to convert to entities.</li>
+      <li>Or paste encoded text in the right panel and click Decode to get the original text.</li>
+      <li>Use the Copy buttons to copy either side to your clipboard.</li>
+      <li>Refer to the reference table below for common HTML entities.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

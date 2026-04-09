@@ -9,8 +9,9 @@ import {
   getActiveProducts,
   getProductsByCategory,
 } from "@/lib/products";
-import { CATEGORIES, PRODUCTS_PER_PAGE } from "@/lib/constants";
+import { PRODUCTS_PER_PAGE } from "@/lib/constants";
 import { getCategoryBySlug } from "@/lib/format";
+import CategoryIcon from "@/components/CategoryIcon";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -24,9 +25,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const category = getCategoryBySlug(slug);
   if (!category) return {};
+  const title = `Barang Unik ${category.label} (${category.shortLabel})`;
+  const description = `Temukan barang unik dan aneh dengan harga ${category.shortLabel} dari Shopee Indonesia.`;
   return {
-    title: `Barang Unik ${category.label} (${category.shortLabel})`,
-    description: `Temukan barang unik dan aneh dengan harga ${category.shortLabel} dari Shopee Indonesia.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://barangunik.vercel.app/kategori/${slug}`,
+      type: "website",
+    },
+    alternates: {
+      canonical: `https://barangunik.vercel.app/kategori/${slug}`,
+    },
   };
 }
 
@@ -38,7 +50,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
   const allProducts = await getAllProducts();
   const active = getActiveProducts(allProducts);
-  let products = getProductsByCategory(active, slug);
+  const products = getProductsByCategory(active, slug);
 
   // Sort
   switch (sort) {
@@ -68,12 +80,16 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         <nav className="text-sm text-gray-500 mb-4">
           <Link href="/" className="hover:text-[var(--color-brand-500)]">Home</Link>
           <span className="mx-2">&gt;</span>
-          <span>{category.emoji} {category.label}</span>
+          <span className="inline-flex items-center gap-1">
+            <CategoryIcon category={category} size="sm" />
+            {category.label}
+          </span>
         </nav>
 
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">
-            {category.emoji} {category.label}
+          <h1 className="text-2xl font-bold inline-flex items-center gap-2">
+            <CategoryIcon category={category} size="sm" />
+            {category.label}
             <span className="text-sm font-normal text-gray-500 ml-2">
               ({products.length} produk)
             </span>

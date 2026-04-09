@@ -17,6 +17,7 @@ async function seed() {
   const blob = await put("products.json", JSON.stringify(products, null, 2), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: "application/json",
   });
 

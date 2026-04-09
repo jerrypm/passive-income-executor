@@ -1,0 +1,59 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  keywords: string[];
+  relatedTools?: { name: string; href: string }[];
+}
+
+const { title, description, keywords, relatedTools = [] } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-text-muted mb-6">
+      <a href="/" class="hover:text-accent transition-colors">All Tools</a>
+      <span class="mx-2">/</span>
+      <span class="text-text">{title}</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-text mb-2">{title}</h1>
+      <p class="text-text-muted">{description}</p>
+    </div>
+
+    <!-- Tool Content -->
+    <div class="bg-surface-light border border-border rounded-xl p-6 mb-8">
+      <slot />
+    </div>
+
+    <!-- How to Use -->
+    <div class="bg-surface-light border border-border rounded-xl p-6 mb-8">
+      <h2 class="text-xl font-semibold text-text mb-3">How to Use</h2>
+      <slot name="howto" />
+    </div>
+
+    <!-- Related Tools -->
+    {relatedTools.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-xl font-semibold text-text mb-4">Related Tools</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {relatedTools.map(tool => (
+            <a href={tool.href} class="bg-surface-light border border-border rounded-lg p-3 text-sm text-text-muted hover:text-accent hover:border-accent/50 transition-all">
+              {tool.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Keywords for SEO -->
+    <div class="hidden">
+      {keywords.map(kw => <span>{kw}</span>)}
+    </div>
+  </div>
+</Layout>

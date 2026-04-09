@@ -1,0 +1,269 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Base64 Encode & Decode Online"
+  description="Encode text to Base64 or decode Base64 to text instantly. Supports file to Base64 conversion with drag and drop."
+  keywords={["base64 encoder", "base64 decoder", "base64 encode", "base64 decode", "text to base64", "base64 to text", "file to base64", "base64 converter"]}
+  relatedTools={[
+    { name: "URL Encoder", href: "/tools/url-encoder" },
+    { name: "Hash Generator", href: "/tools/hash-generator" },
+    { name: "JWT Decoder", href: "/tools/jwt-decoder" },
+    { name: "HTML Entity Encoder", href: "/tools/html-entity-encoder" }
+  ]}
+>
+  <div class="space-y-4">
+    <!-- Text Mode -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Left: Plain Text -->
+      <div>
+        <label for="plain-input" class="block text-sm font-medium text-text-muted mb-2">Plain Text</label>
+        <textarea
+          id="plain-input"
+          class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+          placeholder="Enter plain text here..."
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <!-- Right: Base64 -->
+      <div>
+        <label for="base64-input" class="block text-sm font-medium text-text-muted mb-2">Base64 Encoded</label>
+        <textarea
+          id="base64-input"
+          class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+          placeholder="Enter Base64 string here..."
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-3 justify-center">
+      <button id="btn-encode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        Encode &rarr;
+      </button>
+      <button id="btn-decode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        &larr; Decode
+      </button>
+      <button id="btn-copy-plain" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Copy Text
+      </button>
+      <button id="btn-copy-base64" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Copy Base64
+      </button>
+      <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Clear
+      </button>
+    </div>
+
+    <!-- Status -->
+    <div id="status-msg" class="hidden rounded-lg p-3 text-sm font-medium"></div>
+
+    <!-- File Upload -->
+    <div class="border-t border-border pt-4">
+      <label class="block text-sm font-medium text-text-muted mb-2">File to Base64</label>
+      <div
+        id="drop-zone"
+        class="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
+      >
+        <div class="text-text-muted text-sm">
+          <svg class="w-8 h-8 mx-auto mb-2 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+          </svg>
+          <p>Drag & drop a file here or <span class="text-accent underline">click to browse</span></p>
+          <p class="text-xs mt-1 text-text-muted/70">Max file size: 5MB</p>
+        </div>
+        <input type="file" id="file-input" class="hidden" />
+      </div>
+      <div id="file-info" class="hidden mt-2 text-sm text-text-muted"></div>
+      <div id="file-result" class="hidden mt-2">
+        <div class="flex items-center gap-2 mb-2">
+          <label class="block text-sm font-medium text-text-muted">File Base64 Output</label>
+          <button id="btn-copy-file-base64" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+            Copy
+          </button>
+          <label class="flex items-center gap-2 text-sm text-text-muted ml-2">
+            <input type="checkbox" id="include-data-uri" checked class="rounded" />
+            Include data URI prefix
+          </label>
+        </div>
+        <textarea
+          id="file-base64-output"
+          class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+          readonly
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const plainInput = document.getElementById('plain-input') as HTMLTextAreaElement;
+    const base64Input = document.getElementById('base64-input') as HTMLTextAreaElement;
+    const statusMsg = document.getElementById('status-msg')!;
+    const dropZone = document.getElementById('drop-zone')!;
+    const fileInput = document.getElementById('file-input') as HTMLInputElement;
+    const fileInfo = document.getElementById('file-info')!;
+    const fileResult = document.getElementById('file-result')!;
+    const fileBase64Output = document.getElementById('file-base64-output') as HTMLTextAreaElement;
+    const includeDataUri = document.getElementById('include-data-uri') as HTMLInputElement;
+
+    let lastFileData: { raw: string; dataUri: string } | null = null;
+
+    function showStatus(message: string, isError: boolean) {
+      statusMsg.classList.remove('hidden');
+      statusMsg.textContent = message;
+      if (isError) {
+        statusMsg.className = 'rounded-lg p-3 text-sm font-medium bg-red-900/30 text-red-400 border border-red-800';
+      } else {
+        statusMsg.className = 'rounded-lg p-3 text-sm font-medium bg-green-900/30 text-green-400 border border-green-800';
+      }
+    }
+
+    function utf8ToBase64(str: string): string {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      return btoa(binary);
+    }
+
+    function base64ToUtf8(b64: string): string {
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return new TextDecoder().decode(bytes);
+    }
+
+    // Encode
+    document.getElementById('btn-encode')!.addEventListener('click', () => {
+      const text = plainInput.value;
+      if (!text) return;
+      try {
+        const encoded = utf8ToBase64(text);
+        base64Input.value = encoded;
+        showStatus(`Encoded: ${text.length} chars -> ${encoded.length} chars`, false);
+      } catch (e: any) {
+        showStatus(`Encoding error: ${e.message}`, true);
+      }
+    });
+
+    // Decode
+    document.getElementById('btn-decode')!.addEventListener('click', () => {
+      const b64 = base64Input.value.trim();
+      if (!b64) return;
+      try {
+        const decoded = base64ToUtf8(b64);
+        plainInput.value = decoded;
+        showStatus(`Decoded: ${b64.length} chars -> ${decoded.length} chars`, false);
+      } catch (e: any) {
+        showStatus(`Invalid Base64: ${e.message}`, true);
+      }
+    });
+
+    // Copy buttons
+    document.getElementById('btn-copy-plain')!.addEventListener('click', () => {
+      if (!plainInput.value) return;
+      navigator.clipboard.writeText(plainInput.value).then(() => {
+        const btn = document.getElementById('btn-copy-plain')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Text', 1500);
+      });
+    });
+
+    document.getElementById('btn-copy-base64')!.addEventListener('click', () => {
+      if (!base64Input.value) return;
+      navigator.clipboard.writeText(base64Input.value).then(() => {
+        const btn = document.getElementById('btn-copy-base64')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Base64', 1500);
+      });
+    });
+
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      plainInput.value = '';
+      base64Input.value = '';
+      statusMsg.classList.add('hidden');
+    });
+
+    // File handling
+    function formatFileSize(bytes: number): string {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    function handleFile(file: File) {
+      if (file.size > 5 * 1024 * 1024) {
+        showStatus('File too large. Maximum size is 5MB.', true);
+        return;
+      }
+
+      fileInfo.classList.remove('hidden');
+      fileInfo.textContent = `File: ${file.name} (${formatFileSize(file.size)}, ${file.type || 'unknown type'})`;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUri = reader.result as string;
+        const rawBase64 = dataUri.split(',')[1] || '';
+        lastFileData = { raw: rawBase64, dataUri };
+
+        fileResult.classList.remove('hidden');
+        fileBase64Output.value = includeDataUri.checked ? dataUri : rawBase64;
+        showStatus(`File converted to Base64 (${formatFileSize(rawBase64.length)})`, false);
+      };
+      reader.onerror = () => {
+        showStatus('Failed to read file', true);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-primary', 'bg-primary/5');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-primary', 'bg-primary/5');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-primary', 'bg-primary/5');
+      const file = e.dataTransfer?.files[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    includeDataUri.addEventListener('change', () => {
+      if (lastFileData) {
+        fileBase64Output.value = includeDataUri.checked ? lastFileData.dataUri : lastFileData.raw;
+      }
+    });
+
+    document.getElementById('btn-copy-file-base64')!.addEventListener('click', () => {
+      if (!fileBase64Output.value) return;
+      navigator.clipboard.writeText(fileBase64Output.value).then(() => {
+        const btn = document.getElementById('btn-copy-file-base64')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      });
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Enter plain text on the left and click <strong class="text-text">Encode</strong> to convert to Base64</li>
+      <li>Enter Base64 on the right and click <strong class="text-text">Decode</strong> to convert back to text</li>
+      <li>Full UTF-8 support including emojis and international characters</li>
+      <li>To convert a file to Base64, drag and drop it onto the upload area or click to browse</li>
+      <li>Toggle "Include data URI prefix" for a ready-to-use data URI (e.g., for embedding images in HTML/CSS)</li>
+      <li>Use the Copy buttons to copy results to your clipboard</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

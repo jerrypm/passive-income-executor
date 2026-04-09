@@ -44,11 +44,15 @@ def mark_posted(part):
 
 
 def get_next_part(articles, posted):
-    """Get next unposted part number."""
+    """Get next unposted part number. Skip articles without individual URL."""
+    articles_by_part = {a["part"]: a for a in articles}
     all_parts = sorted(a["part"] for a in articles)
     for p in all_parts:
         if p not in posted:
-            return p
+            if articles_by_part[p].get("url"):
+                return p
+            else:
+                print(f"[!] Part {p} has no URL, skipping (add URL to swiftui_articles.json)")
     return None
 
 
@@ -74,7 +78,9 @@ def format_tweet(article, list_url):
     part = article["part"]
     title = article["title"]
     desc = article["desc"]
-    url = article["url"] or list_url
+    url = article["url"]
+    if not url:
+        return None
     emoji = get_emoji(part)
 
     tweet = f"{emoji} Part {part}/100 — {title}\n\n{desc}\n\n{url}\n\n#SwiftUI #100DaysOfCode"
@@ -95,7 +101,9 @@ def format_nostr_post(article, list_url):
     part = article["part"]
     title = article["title"]
     desc = article["desc"]
-    url = article["url"] or list_url
+    url = article["url"]
+    if not url:
+        return None
     emoji = get_emoji(part)
 
     return (
@@ -208,9 +216,17 @@ def main():
     article = articles_map[next_part]
     log(f"Next: Part {next_part} — {article['title']}")
 
+    if not article.get("url"):
+        log(f"Part {next_part} has no individual URL! Skipping. Add URL to swiftui_articles.json first.")
+        return
+
     # Format for each platform
     tweet = format_tweet(article, list_url)
     nostr_post = format_nostr_post(article, list_url)
+
+    if not tweet or not nostr_post:
+        log(f"Part {next_part} has no URL, cannot format. Skipping.")
+        return
 
     log(f"Twitter ({len(tweet)} chars): {tweet[:80]}...")
 

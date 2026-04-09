@@ -1,0 +1,363 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free JWT Decoder & Inspector Online"
+  description="Decode and inspect JSON Web Tokens (JWT) instantly. View header, payload, signature, and expiration status with color-coded visualization."
+  keywords={["jwt decoder", "jwt debugger", "jwt inspector", "decode jwt", "json web token decoder", "jwt parser", "jwt viewer", "jwt expiration"]}
+  relatedTools={[
+    { name: "Base64 Encoder", href: "/tools/base64-encoder" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "Hash Generator", href: "/tools/hash-generator" },
+    { name: "Timestamp Converter", href: "/tools/timestamp-converter" }
+  ]}
+>
+  <div class="space-y-4">
+    <!-- Input -->
+    <div>
+      <label for="jwt-input" class="block text-sm font-medium text-text-muted mb-2">Paste JWT Token</label>
+      <textarea
+        id="jwt-input"
+        class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[120px]"
+        placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        spellcheck="false"
+      ></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-3">
+      <button id="btn-decode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        Decode JWT
+      </button>
+      <button id="btn-sample" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Load Sample
+      </button>
+      <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Clear
+      </button>
+    </div>
+
+    <!-- Status -->
+    <div id="status-msg" class="hidden rounded-lg p-3 text-sm font-medium"></div>
+
+    <!-- Color-coded JWT visualization -->
+    <div id="jwt-visual" class="hidden">
+      <label class="block text-sm font-medium text-text-muted mb-2">Token Structure</label>
+      <div class="bg-surface border border-border rounded-lg p-4 font-mono text-sm break-all">
+        <span id="jwt-part-header" class="text-red-400"></span><span class="text-text-muted">.</span><span id="jwt-part-payload" class="text-purple-400"></span><span class="text-text-muted">.</span><span id="jwt-part-signature" class="text-green-400"></span>
+      </div>
+      <div class="flex gap-4 mt-2 text-xs text-text-muted">
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-400 inline-block"></span> Header</span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-purple-400 inline-block"></span> Payload</span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-400 inline-block"></span> Signature</span>
+      </div>
+    </div>
+
+    <!-- Decoded sections -->
+    <div id="decoded-sections" class="hidden space-y-4">
+      <!-- Expiration Status -->
+      <div id="exp-status" class="hidden rounded-lg p-4 border">
+        <div class="flex items-center gap-3">
+          <span id="exp-icon" class="text-2xl"></span>
+          <div>
+            <p id="exp-title" class="font-medium text-sm"></p>
+            <p id="exp-detail" class="text-xs text-text-muted mt-1"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="block text-sm font-medium text-red-400">Header (JOSE)</label>
+          <button class="copy-section px-3 py-1 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-xs" data-target="header-output">
+            Copy
+          </button>
+        </div>
+        <pre class="w-full bg-surface border border-red-900/30 rounded-lg p-4 text-sm font-mono overflow-x-auto"><code id="header-output" class="text-text"></code></pre>
+      </div>
+
+      <!-- Payload -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="block text-sm font-medium text-purple-400">Payload (Claims)</label>
+          <button class="copy-section px-3 py-1 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-xs" data-target="payload-output">
+            Copy
+          </button>
+        </div>
+        <pre class="w-full bg-surface border border-purple-900/30 rounded-lg p-4 text-sm font-mono overflow-x-auto"><code id="payload-output" class="text-text"></code></pre>
+        <!-- Claim descriptions -->
+        <div id="claims-info" class="mt-2 space-y-1"></div>
+      </div>
+
+      <!-- Signature -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="block text-sm font-medium text-green-400">Signature</label>
+        </div>
+        <div class="bg-surface border border-green-900/30 rounded-lg p-4 text-sm font-mono">
+          <p id="sig-algorithm" class="text-text-muted text-xs mb-2"></p>
+          <code id="signature-output" class="text-text break-all"></code>
+          <p class="text-xs text-text-muted mt-3">Note: Signature verification requires the secret key and is not possible client-side.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const jwtInput = document.getElementById('jwt-input') as HTMLTextAreaElement;
+    const statusMsg = document.getElementById('status-msg')!;
+    const jwtVisual = document.getElementById('jwt-visual')!;
+    const decodedSections = document.getElementById('decoded-sections')!;
+
+    const CLAIM_DESCRIPTIONS: Record<string, string> = {
+      iss: 'Issuer - identifies the principal that issued the JWT',
+      sub: 'Subject - identifies the principal subject of the JWT',
+      aud: 'Audience - identifies the recipients the JWT is intended for',
+      exp: 'Expiration Time - the time after which the JWT must not be accepted',
+      nbf: 'Not Before - the time before which the JWT must not be accepted',
+      iat: 'Issued At - the time at which the JWT was issued',
+      jti: 'JWT ID - a unique identifier for the JWT',
+      name: 'Full name of the user',
+      email: 'Email address of the user',
+      role: 'Role or permission level',
+      scope: 'OAuth 2.0 scopes',
+      azp: 'Authorized party - the client ID',
+      nonce: 'Nonce value for replay protection',
+    };
+
+    function base64UrlDecode(str: string): string {
+      // Replace URL-safe characters
+      let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      // Pad with = if needed
+      const pad = base64.length % 4;
+      if (pad) {
+        base64 += '='.repeat(4 - pad);
+      }
+      try {
+        return decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+      } catch {
+        return atob(base64);
+      }
+    }
+
+    function syntaxHighlight(json: string): string {
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        (match) => {
+          let cls = 'color: #22d3ee;';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'color: #c084fc;';
+            } else {
+              cls = 'color: #4ade80;';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'color: #fb923c;';
+          } else if (/null/.test(match)) {
+            cls = 'color: #f87171;';
+          }
+          return `<span style="${cls}">${match}</span>`;
+        }
+      );
+    }
+
+    function showStatus(message: string, isError: boolean) {
+      statusMsg.classList.remove('hidden');
+      statusMsg.textContent = message;
+      if (isError) {
+        statusMsg.className = 'rounded-lg p-3 text-sm font-medium bg-red-900/30 text-red-400 border border-red-800';
+      } else {
+        statusMsg.className = 'rounded-lg p-3 text-sm font-medium bg-green-900/30 text-green-400 border border-green-800';
+      }
+    }
+
+    function formatTimestamp(ts: number): string {
+      return new Date(ts * 1000).toLocaleString(undefined, {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        timeZoneName: 'short'
+      });
+    }
+
+    function getTimeDiff(ts: number): string {
+      const now = Math.floor(Date.now() / 1000);
+      const diff = ts - now;
+      const absDiff = Math.abs(diff);
+
+      if (absDiff < 60) return `${absDiff} seconds`;
+      if (absDiff < 3600) return `${Math.floor(absDiff / 60)} minutes`;
+      if (absDiff < 86400) return `${Math.floor(absDiff / 3600)} hours, ${Math.floor((absDiff % 3600) / 60)} minutes`;
+      return `${Math.floor(absDiff / 86400)} days, ${Math.floor((absDiff % 86400) / 3600)} hours`;
+    }
+
+    function decodeJWT() {
+      const token = jwtInput.value.trim();
+      if (!token) return;
+
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        showStatus('Invalid JWT: A JWT must have exactly 3 parts separated by dots (header.payload.signature)', true);
+        jwtVisual.classList.add('hidden');
+        decodedSections.classList.add('hidden');
+        return;
+      }
+
+      // Color-coded visual
+      jwtVisual.classList.remove('hidden');
+      document.getElementById('jwt-part-header')!.textContent = parts[0];
+      document.getElementById('jwt-part-payload')!.textContent = parts[1];
+      document.getElementById('jwt-part-signature')!.textContent = parts[2];
+
+      try {
+        // Decode header
+        const headerJson = base64UrlDecode(parts[0]);
+        const header = JSON.parse(headerJson);
+        const headerFormatted = JSON.stringify(header, null, 2);
+        document.getElementById('header-output')!.innerHTML = syntaxHighlight(headerFormatted);
+
+        // Decode payload
+        const payloadJson = base64UrlDecode(parts[1]);
+        const payload = JSON.parse(payloadJson);
+        const payloadFormatted = JSON.stringify(payload, null, 2);
+        document.getElementById('payload-output')!.innerHTML = syntaxHighlight(payloadFormatted);
+
+        // Signature info
+        const algName = header.alg || 'Unknown';
+        document.getElementById('sig-algorithm')!.textContent = `Algorithm: ${algName} | Type: ${header.typ || 'JWT'}`;
+        document.getElementById('signature-output')!.textContent = parts[2];
+
+        // Claim descriptions
+        const claimsInfo = document.getElementById('claims-info')!;
+        claimsInfo.innerHTML = '';
+        for (const [key, value] of Object.entries(payload)) {
+          const desc = CLAIM_DESCRIPTIONS[key];
+          if (desc) {
+            const div = document.createElement('div');
+            div.className = 'text-xs text-text-muted bg-surface rounded px-3 py-1.5';
+            let displayValue = '';
+            if ((key === 'exp' || key === 'iat' || key === 'nbf') && typeof value === 'number') {
+              displayValue = ` = ${formatTimestamp(value)}`;
+            }
+            div.innerHTML = `<span class="text-purple-400 font-mono">${key}</span>: ${desc}${displayValue ? ` <span class="text-accent">${displayValue}</span>` : ''}`;
+            claimsInfo.appendChild(div);
+          }
+        }
+
+        // Expiration status
+        const expStatus = document.getElementById('exp-status')!;
+        if (payload.exp) {
+          expStatus.classList.remove('hidden');
+          const now = Math.floor(Date.now() / 1000);
+          const isExpired = now > payload.exp;
+          const timeDiff = getTimeDiff(payload.exp);
+
+          if (isExpired) {
+            expStatus.className = 'rounded-lg p-4 border bg-red-900/20 border-red-800';
+            document.getElementById('exp-icon')!.textContent = '\u2716';
+            document.getElementById('exp-title')!.textContent = 'Token EXPIRED';
+            document.getElementById('exp-title')!.className = 'font-medium text-sm text-red-400';
+            document.getElementById('exp-detail')!.textContent = `Expired ${timeDiff} ago (${formatTimestamp(payload.exp)})`;
+          } else {
+            expStatus.className = 'rounded-lg p-4 border bg-green-900/20 border-green-800';
+            document.getElementById('exp-icon')!.textContent = '\u2714';
+            document.getElementById('exp-title')!.textContent = 'Token VALID (not expired)';
+            document.getElementById('exp-title')!.className = 'font-medium text-sm text-green-400';
+            document.getElementById('exp-detail')!.textContent = `Expires in ${timeDiff} (${formatTimestamp(payload.exp)})`;
+          }
+
+          if (payload.iat) {
+            const age = getTimeDiff(payload.iat);
+            document.getElementById('exp-detail')!.textContent += ` | Issued ${age} ago`;
+          }
+        } else {
+          expStatus.classList.add('hidden');
+        }
+
+        decodedSections.classList.remove('hidden');
+        showStatus('JWT decoded successfully', false);
+      } catch (e: any) {
+        showStatus(`Failed to decode JWT: ${e.message}`, true);
+        decodedSections.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('btn-decode')!.addEventListener('click', decodeJWT);
+
+    // Auto-decode on paste
+    jwtInput.addEventListener('paste', () => {
+      setTimeout(decodeJWT, 50);
+    });
+
+    // Sample JWT
+    document.getElementById('btn-sample')!.addEventListener('click', () => {
+      // Generate a sample JWT with current timestamps
+      const now = Math.floor(Date.now() / 1000);
+      const header = { alg: 'HS256', typ: 'JWT' };
+      const payload = {
+        sub: '1234567890',
+        name: 'Jane Developer',
+        email: 'jane@example.com',
+        role: 'admin',
+        iat: now,
+        exp: now + 3600, // 1 hour from now
+        iss: 'devtoolkit.vercel.app'
+      };
+
+      function base64UrlEncode(obj: any): string {
+        const json = JSON.stringify(obj);
+        const bytes = new TextEncoder().encode(json);
+        let binary = '';
+        bytes.forEach(b => binary += String.fromCharCode(b));
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      }
+
+      const headerB64 = base64UrlEncode(header);
+      const payloadB64 = base64UrlEncode(payload);
+      const fakeSig = 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
+      jwtInput.value = `${headerB64}.${payloadB64}.${fakeSig}`;
+      decodeJWT();
+    });
+
+    // Clear
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      jwtInput.value = '';
+      statusMsg.classList.add('hidden');
+      jwtVisual.classList.add('hidden');
+      decodedSections.classList.add('hidden');
+    });
+
+    // Copy section buttons
+    document.querySelectorAll('.copy-section').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = (btn as HTMLElement).dataset.target!;
+        const target = document.getElementById(targetId)!;
+        const text = target.textContent || '';
+        navigator.clipboard.writeText(text).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = orig, 1500);
+        });
+      });
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Paste a JWT token into the input textarea (or click <strong class="text-text">Load Sample</strong> to try)</li>
+      <li>Click <strong class="text-text">Decode JWT</strong> to inspect the token (also auto-decodes on paste)</li>
+      <li>View the color-coded token: <span class="text-red-400">Header</span> . <span class="text-purple-400">Payload</span> . <span class="text-green-400">Signature</span></li>
+      <li>Check the expiration status bar to see if the token is still valid</li>
+      <li>Standard claims (iss, sub, exp, iat, etc.) are annotated with descriptions</li>
+      <li>Copy individual sections using the Copy buttons</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

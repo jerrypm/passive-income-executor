@@ -1,0 +1,382 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Markdown Preview & Editor Online"
+  description="Write Markdown and see a live HTML preview side by side. Supports headings, bold, italic, code blocks, links, images, lists, blockquotes, tables, and more."
+  keywords={["markdown preview", "markdown editor", "markdown to html", "markdown renderer", "live markdown", "markdown parser", "markdown online"]}
+  relatedTools={[
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "HTML Entity Encoder", href: "/tools/html-entity-encoder" },
+    { name: "CSS Minifier", href: "/tools/css-minifier" },
+    { name: "Lorem Ipsum Generator", href: "/tools/lorem-ipsum-generator" }
+  ]}
+>
+  <!-- Toolbar -->
+  <div class="flex flex-wrap gap-2 mb-4">
+    <button id="btn-copy-html" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy HTML</button>
+    <button id="btn-copy-md" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy Markdown</button>
+    <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Clear</button>
+    <button id="btn-sample" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Load Sample</button>
+  </div>
+
+  <!-- Split View -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">Markdown Editor</label>
+      <textarea id="md-input" class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]" style="min-height:500px" placeholder="Type your Markdown here..."></textarea>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">HTML Preview</label>
+      <div id="md-preview" class="w-full bg-surface border border-border rounded-lg p-4 text-text text-sm overflow-auto prose-custom" style="min-height:500px"></div>
+    </div>
+  </div>
+
+  <!-- Hidden textarea for raw HTML -->
+  <textarea id="html-output" class="hidden"></textarea>
+
+  <style>
+    .prose-custom h1 { font-size: 1.75rem; font-weight: 700; margin: 1rem 0 0.5rem; line-height: 1.3; }
+    .prose-custom h2 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; line-height: 1.3; }
+    .prose-custom h3 { font-size: 1.25rem; font-weight: 600; margin: 0.75rem 0 0.4rem; line-height: 1.3; }
+    .prose-custom h4 { font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0 0.3rem; }
+    .prose-custom h5 { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0.3rem; }
+    .prose-custom h6 { font-size: 0.9rem; font-weight: 600; margin: 0.5rem 0 0.3rem; color: #888; }
+    .prose-custom p { margin: 0.5rem 0; line-height: 1.7; }
+    .prose-custom a { color: #60a5fa; text-decoration: underline; }
+    .prose-custom a:hover { color: #93bbfc; }
+    .prose-custom strong { font-weight: 700; }
+    .prose-custom em { font-style: italic; }
+    .prose-custom code { background: rgba(255,255,255,0.08); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+    .prose-custom pre { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 0.75rem 0; }
+    .prose-custom pre code { background: none; padding: 0; font-size: 0.85em; }
+    .prose-custom blockquote { border-left: 3px solid #60a5fa; padding-left: 1rem; margin: 0.75rem 0; color: #aaa; font-style: italic; }
+    .prose-custom ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+    .prose-custom ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.5rem 0; }
+    .prose-custom li { margin: 0.2rem 0; line-height: 1.6; }
+    .prose-custom hr { border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 1.5rem 0; }
+    .prose-custom img { max-width: 100%; border-radius: 8px; margin: 0.75rem 0; }
+    .prose-custom table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; }
+    .prose-custom th { text-align: left; padding: 0.5rem; border-bottom: 2px solid rgba(255,255,255,0.2); font-weight: 600; }
+    .prose-custom td { padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .prose-custom tr:hover td { background: rgba(255,255,255,0.03); }
+  </style>
+
+  <script>
+    const mdInput = document.getElementById('md-input') as HTMLTextAreaElement;
+    const mdPreview = document.getElementById('md-preview')!;
+    const htmlOutput = document.getElementById('html-output') as HTMLTextAreaElement;
+
+    function escapeHtml(str: string): string {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function parseInline(text: string): string {
+      let result = text;
+      // Images (before links)
+      result = result.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />');
+      // Links
+      result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      // Bold+Italic (***text*** or ___text___)
+      result = result.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+      result = result.replace(/___(.+?)___/g, '<strong><em>$1</em></strong>');
+      // Bold (**text** or __text__)
+      result = result.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      result = result.replace(/__(.+?)__/g, '<strong>$1</strong>');
+      // Italic (*text* or _text_)
+      result = result.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      result = result.replace(/(?<![a-zA-Z0-9])_(.+?)_(?![a-zA-Z0-9])/g, '<em>$1</em>');
+      // Strikethrough ~~text~~
+      result = result.replace(/~~(.+?)~~/g, '<del>$1</del>');
+      // Inline code `text`
+      result = result.replace(/`([^`]+)`/g, '<code>$1</code>');
+      return result;
+    }
+
+    function parseMarkdown(md: string): string {
+      const lines = md.split('\n');
+      const html: string[] = [];
+      let inCodeBlock = false;
+      let codeBlockContent: string[] = [];
+      let codeBlockLang = '';
+      let inList = false;
+      let listType = '';
+      let inTable = false;
+      let tableRows: string[] = [];
+      let inBlockquote = false;
+      let blockquoteLines: string[] = [];
+
+      function flushList() {
+        if (inList) {
+          html.push(listType === 'ul' ? '</ul>' : '</ol>');
+          inList = false;
+        }
+      }
+
+      function flushTable() {
+        if (inTable && tableRows.length > 0) {
+          let tableHtml = '<table><thead><tr>';
+          const headerCells = tableRows[0].split('|').map(c => c.trim()).filter(c => c !== '');
+          headerCells.forEach(cell => {
+            tableHtml += `<th>${parseInline(cell)}</th>`;
+          });
+          tableHtml += '</tr></thead><tbody>';
+          // Skip row 1 (separator)
+          for (let i = 2; i < tableRows.length; i++) {
+            const cells = tableRows[i].split('|').map(c => c.trim()).filter(c => c !== '');
+            tableHtml += '<tr>';
+            cells.forEach(cell => {
+              tableHtml += `<td>${parseInline(cell)}</td>`;
+            });
+            tableHtml += '</tr>';
+          }
+          tableHtml += '</tbody></table>';
+          html.push(tableHtml);
+          inTable = false;
+          tableRows = [];
+        }
+      }
+
+      function flushBlockquote() {
+        if (inBlockquote) {
+          html.push(`<blockquote>${blockquoteLines.map(l => parseInline(l)).join('<br>')}</blockquote>`);
+          inBlockquote = false;
+          blockquoteLines = [];
+        }
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        // Code block toggle
+        if (line.trimStart().startsWith('```')) {
+          if (!inCodeBlock) {
+            flushList();
+            flushTable();
+            flushBlockquote();
+            inCodeBlock = true;
+            codeBlockLang = line.trimStart().slice(3).trim();
+            codeBlockContent = [];
+          } else {
+            html.push(`<pre><code class="language-${escapeHtml(codeBlockLang)}">${escapeHtml(codeBlockContent.join('\n'))}</code></pre>`);
+            inCodeBlock = false;
+          }
+          continue;
+        }
+
+        if (inCodeBlock) {
+          codeBlockContent.push(line);
+          continue;
+        }
+
+        // Table detection: line contains | and next line is separator
+        if (line.includes('|') && !inTable) {
+          const nextLine = i + 1 < lines.length ? lines[i + 1] : '';
+          if (nextLine.match(/^\|?\s*[-:]+[-| :]*\s*\|?$/)) {
+            flushList();
+            flushBlockquote();
+            inTable = true;
+            tableRows = [line];
+            continue;
+          }
+        }
+        if (inTable) {
+          if (line.includes('|')) {
+            tableRows.push(line);
+            continue;
+          } else {
+            flushTable();
+          }
+        }
+
+        // Blockquote
+        if (line.startsWith('>')) {
+          flushList();
+          flushTable();
+          inBlockquote = true;
+          blockquoteLines.push(line.replace(/^>\s?/, ''));
+          continue;
+        } else if (inBlockquote) {
+          flushBlockquote();
+        }
+
+        // Horizontal rule
+        if (line.match(/^(\s*[-*_]){3,}\s*$/)) {
+          flushList();
+          html.push('<hr>');
+          continue;
+        }
+
+        // Headings
+        const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
+        if (headingMatch) {
+          flushList();
+          const level = headingMatch[1].length;
+          html.push(`<h${level}>${parseInline(headingMatch[2])}</h${level}>`);
+          continue;
+        }
+
+        // Unordered list
+        if (line.match(/^\s*[-*+]\s+/)) {
+          flushTable();
+          flushBlockquote();
+          if (!inList || listType !== 'ul') {
+            flushList();
+            html.push('<ul>');
+            inList = true;
+            listType = 'ul';
+          }
+          html.push(`<li>${parseInline(line.replace(/^\s*[-*+]\s+/, ''))}</li>`);
+          continue;
+        }
+
+        // Ordered list
+        if (line.match(/^\s*\d+\.\s+/)) {
+          flushTable();
+          flushBlockquote();
+          if (!inList || listType !== 'ol') {
+            flushList();
+            html.push('<ol>');
+            inList = true;
+            listType = 'ol';
+          }
+          html.push(`<li>${parseInline(line.replace(/^\s*\d+\.\s+/, ''))}</li>`);
+          continue;
+        }
+
+        // If we had a list and hit a non-list line
+        if (inList) {
+          flushList();
+        }
+
+        // Empty line
+        if (line.trim() === '') {
+          continue;
+        }
+
+        // Paragraph
+        html.push(`<p>${parseInline(line)}</p>`);
+      }
+
+      // Flush remaining
+      if (inCodeBlock) {
+        html.push(`<pre><code>${escapeHtml(codeBlockContent.join('\n'))}</code></pre>`);
+      }
+      flushList();
+      flushTable();
+      flushBlockquote();
+
+      return html.join('\n');
+    }
+
+    function update() {
+      const htmlStr = parseMarkdown(mdInput.value);
+      mdPreview.innerHTML = htmlStr;
+      htmlOutput.value = htmlStr;
+    }
+
+    mdInput.addEventListener('input', update);
+
+    // Tab key support
+    mdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = mdInput.selectionStart;
+        const end = mdInput.selectionEnd;
+        mdInput.value = mdInput.value.substring(0, start) + '  ' + mdInput.value.substring(end);
+        mdInput.selectionStart = mdInput.selectionEnd = start + 2;
+        update();
+      }
+    });
+
+    document.getElementById('btn-copy-html')!.addEventListener('click', () => {
+      navigator.clipboard.writeText(htmlOutput.value);
+      const btn = document.getElementById('btn-copy-html')!;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy HTML', 1500);
+    });
+
+    document.getElementById('btn-copy-md')!.addEventListener('click', () => {
+      navigator.clipboard.writeText(mdInput.value);
+      const btn = document.getElementById('btn-copy-md')!;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Markdown', 1500);
+    });
+
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      mdInput.value = '';
+      mdPreview.innerHTML = '';
+      htmlOutput.value = '';
+    });
+
+    document.getElementById('btn-sample')!.addEventListener('click', () => {
+      mdInput.value = `# Markdown Preview Demo
+
+## Text Formatting
+
+This is a paragraph with **bold text**, *italic text*, and ***bold italic***. You can also use ~~strikethrough~~ and \`inline code\`.
+
+## Links & Images
+
+[Visit DevToolKit](https://devtoolkit.vercel.app)
+
+![Placeholder Image](https://via.placeholder.com/400x200/1a1a2e/60a5fa?text=Preview)
+
+## Lists
+
+### Unordered List
+- First item
+- Second item
+- Third item
+
+### Ordered List
+1. Step one
+2. Step two
+3. Step three
+
+## Blockquote
+
+> "The best way to predict the future is to invent it."
+> — Alan Kay
+
+## Code Block
+
+\`\`\`javascript
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+console.log(greet("World"));
+\`\`\`
+
+## Table
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Headings | Done | H1-H6 |
+| Bold/Italic | Done | ** and * |
+| Code blocks | Done | With language |
+| Tables | Done | With alignment |
+
+## Horizontal Rule
+
+---
+
+That's all! Start editing on the left to see your preview here.`;
+      update();
+    });
+
+    // Initial render
+    update();
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Type or paste Markdown in the left editor panel.</li>
+      <li>The right panel shows a live HTML preview as you type.</li>
+      <li>Supports headings, bold, italic, code blocks, links, images, lists, blockquotes, tables, and horizontal rules.</li>
+      <li>Click "Load Sample" to see a demo of all supported features.</li>
+      <li>Click "Copy HTML" to copy the rendered HTML output.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

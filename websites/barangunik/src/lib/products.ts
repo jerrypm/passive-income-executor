@@ -7,9 +7,13 @@ export async function getAllProducts(): Promise<Product[]> {
   try {
     const { blobs } = await list({ prefix: BLOB_FILENAME });
     if (blobs.length === 0) return [];
-    const response = await fetch(blobs[0].url);
+    // Cache bust: unique query param forces CDN to fetch from origin
+    const url = new URL(blobs[0].url);
+    url.searchParams.set("t", Date.now().toString());
+    const response = await fetch(url.toString(), { cache: "no-store" });
     return (await response.json()) as Product[];
-  } catch {
+  } catch (err) {
+    console.error("getAllProducts error:", err);
     return [];
   }
 }
@@ -18,7 +22,9 @@ export async function saveAllProducts(products: Product[]): Promise<void> {
   await put(BLOB_FILENAME, JSON.stringify(products, null, 2), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: "application/json",
+    cacheControlMaxAge: 60,
   });
 }
 

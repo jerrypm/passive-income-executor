@@ -1,0 +1,316 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free UUID Generator Online"
+  description="Generate UUID v4 (random) identifiers instantly. Bulk generate up to 100 UUIDs with options for uppercase, lowercase, and with or without dashes."
+  keywords={["uuid generator", "uuid v4", "generate uuid", "random uuid", "guid generator", "unique id generator", "uuid online", "bulk uuid"]}
+  relatedTools={[
+    { name: "Password Generator", href: "/tools/password-generator" },
+    { name: "Hash Generator", href: "/tools/hash-generator" },
+    { name: "Lorem Ipsum Generator", href: "/tools/lorem-ipsum-generator" },
+    { name: "Timestamp Converter", href: "/tools/timestamp-converter" }
+  ]}
+>
+  <div class="space-y-4">
+    <!-- Single UUID -->
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">Generated UUID</label>
+      <div class="flex gap-2">
+        <input
+          id="single-uuid"
+          type="text"
+          readonly
+          class="flex-1 bg-surface border border-border rounded-lg px-4 py-3 text-text font-mono text-lg focus:outline-none focus:ring-2 focus:ring-primary select-all"
+          value=""
+        />
+        <button id="btn-copy-single" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm whitespace-nowrap">
+          Copy
+        </button>
+        <button id="btn-generate-single" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors whitespace-nowrap">
+          Generate
+        </button>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="flex flex-wrap gap-4 items-center p-3 bg-surface rounded-lg border border-border">
+      <label class="flex items-center gap-2 text-sm text-text-muted cursor-pointer">
+        <input type="checkbox" id="opt-uppercase" class="rounded border-border text-primary focus:ring-primary" />
+        Uppercase
+      </label>
+      <label class="flex items-center gap-2 text-sm text-text-muted cursor-pointer">
+        <input type="checkbox" id="opt-no-dashes" class="rounded border-border text-primary focus:ring-primary" />
+        Without dashes
+      </label>
+      <label class="flex items-center gap-2 text-sm text-text-muted cursor-pointer">
+        <input type="checkbox" id="opt-braces" class="rounded border-border text-primary focus:ring-primary" />
+        With braces {  }
+      </label>
+      <label class="flex items-center gap-2 text-sm text-text-muted cursor-pointer">
+        <input type="checkbox" id="opt-quotes" class="rounded border-border text-primary focus:ring-primary" />
+        With quotes "  "
+      </label>
+    </div>
+
+    <!-- Bulk Generate -->
+    <div class="border-t border-border pt-4">
+      <div class="flex flex-wrap gap-3 items-end">
+        <div>
+          <label for="bulk-count" class="block text-sm font-medium text-text-muted mb-2">Quantity</label>
+          <input
+            id="bulk-count"
+            type="number"
+            min="1"
+            max="100"
+            value="10"
+            class="w-24 bg-surface border border-border rounded-lg px-3 py-2.5 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="bulk-separator" class="block text-sm font-medium text-text-muted mb-2">Separator</label>
+          <select id="bulk-separator" class="bg-surface border border-border rounded-lg px-3 py-2.5 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+            <option value="newline">New line</option>
+            <option value="comma">Comma</option>
+            <option value="comma-space">Comma + space</option>
+            <option value="json">JSON array</option>
+          </select>
+        </div>
+        <button id="btn-generate-bulk" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+          Generate Bulk
+        </button>
+        <button id="btn-copy-all" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+          Copy All
+        </button>
+      </div>
+    </div>
+
+    <!-- Bulk Output -->
+    <div id="bulk-output-container" class="hidden">
+      <div class="flex items-center justify-between mb-2">
+        <label class="block text-sm font-medium text-text-muted">
+          Bulk UUIDs (<span id="bulk-count-label">0</span>)
+        </label>
+      </div>
+      <div id="bulk-list" class="bg-surface border border-border rounded-lg p-4 max-h-[400px] overflow-y-auto font-mono text-sm space-y-1">
+      </div>
+    </div>
+
+    <!-- UUID Info -->
+    <div class="border-t border-border pt-4">
+      <h3 class="text-sm font-medium text-text mb-3">About UUID v4</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-text-muted">
+        <div class="bg-surface rounded-lg p-3">
+          <p class="font-medium text-text mb-1">Format</p>
+          <p class="font-mono text-accent">xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</p>
+          <p class="mt-1">The "4" indicates version 4 (random). "y" is one of: 8, 9, a, b.</p>
+        </div>
+        <div class="bg-surface rounded-lg p-3">
+          <p class="font-medium text-text mb-1">Uniqueness</p>
+          <p>122 bits of randomness. Probability of collision generating 1 billion UUIDs/sec for 85 years: ~50%.</p>
+        </div>
+        <div class="bg-surface rounded-lg p-3">
+          <p class="font-medium text-text mb-1">Usage</p>
+          <p>Database primary keys, session IDs, correlation IDs, distributed systems, file naming.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const singleUuid = document.getElementById('single-uuid') as HTMLInputElement;
+    const optUppercase = document.getElementById('opt-uppercase') as HTMLInputElement;
+    const optNoDashes = document.getElementById('opt-no-dashes') as HTMLInputElement;
+    const optBraces = document.getElementById('opt-braces') as HTMLInputElement;
+    const optQuotes = document.getElementById('opt-quotes') as HTMLInputElement;
+    const bulkCountInput = document.getElementById('bulk-count') as HTMLInputElement;
+    const bulkSeparator = document.getElementById('bulk-separator') as HTMLSelectElement;
+    const bulkOutputContainer = document.getElementById('bulk-output-container')!;
+    const bulkList = document.getElementById('bulk-list')!;
+    const bulkCountLabel = document.getElementById('bulk-count-label')!;
+
+    function generateUUID(): string {
+      return crypto.randomUUID();
+    }
+
+    function formatUUID(uuid: string): string {
+      let result = uuid;
+
+      if (optNoDashes.checked) {
+        result = result.replace(/-/g, '');
+      }
+
+      if (optUppercase.checked) {
+        result = result.toUpperCase();
+      }
+
+      if (optBraces.checked) {
+        result = `{${result}}`;
+      }
+
+      if (optQuotes.checked) {
+        result = `"${result}"`;
+      }
+
+      return result;
+    }
+
+    function generateSingle() {
+      const uuid = generateUUID();
+      singleUuid.value = formatUUID(uuid);
+    }
+
+    // Generate on load
+    generateSingle();
+
+    // Generate single
+    document.getElementById('btn-generate-single')!.addEventListener('click', generateSingle);
+
+    // Copy single
+    document.getElementById('btn-copy-single')!.addEventListener('click', () => {
+      if (!singleUuid.value) return;
+      navigator.clipboard.writeText(singleUuid.value).then(() => {
+        const btn = document.getElementById('btn-copy-single')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      });
+    });
+
+    // Click to select all in single input
+    singleUuid.addEventListener('click', () => {
+      singleUuid.select();
+    });
+
+    // Re-format single UUID when options change
+    [optUppercase, optNoDashes, optBraces, optQuotes].forEach(opt => {
+      opt.addEventListener('change', () => {
+        // Get raw UUID from current value (strip formatting)
+        let raw = singleUuid.value.replace(/[{}"]/g, '');
+        if (!raw.includes('-') && raw.length === 32) {
+          // Re-add dashes for proper formatting
+          raw = `${raw.slice(0,8)}-${raw.slice(8,12)}-${raw.slice(12,16)}-${raw.slice(16,20)}-${raw.slice(20)}`;
+        }
+        raw = raw.toLowerCase();
+
+        if (optNoDashes.checked) {
+          raw = raw.replace(/-/g, '');
+        }
+        if (optUppercase.checked) {
+          raw = raw.toUpperCase();
+        }
+        if (optBraces.checked) {
+          raw = `{${raw}}`;
+        }
+        if (optQuotes.checked) {
+          raw = `"${raw}"`;
+        }
+
+        singleUuid.value = raw;
+
+        // Re-format bulk if visible
+        if (!bulkOutputContainer.classList.contains('hidden')) {
+          regenerateBulkDisplay();
+        }
+      });
+    });
+
+    let currentBulkUUIDs: string[] = [];
+
+    function regenerateBulkDisplay() {
+      if (currentBulkUUIDs.length === 0) return;
+
+      bulkList.innerHTML = '';
+      currentBulkUUIDs.forEach((uuid, i) => {
+        const formatted = formatUUID(uuid);
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between group hover:bg-surface-lighter rounded px-2 py-1 -mx-2';
+        row.innerHTML = `
+          <span class="text-text font-mono text-sm select-all">${formatted}</span>
+          <button class="copy-uuid opacity-0 group-hover:opacity-100 px-2 py-0.5 bg-surface-lighter hover:bg-border text-text-muted rounded text-xs transition-all" data-uuid="${formatted.replace(/"/g, '&quot;')}">
+            Copy
+          </button>
+        `;
+        bulkList.appendChild(row);
+      });
+
+      // Re-attach copy listeners
+      bulkList.querySelectorAll('.copy-uuid').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const uuid = (btn as HTMLElement).dataset.uuid!;
+          navigator.clipboard.writeText(uuid).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 1000);
+          });
+        });
+      });
+    }
+
+    // Generate bulk
+    document.getElementById('btn-generate-bulk')!.addEventListener('click', () => {
+      let count = parseInt(bulkCountInput.value);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 100) count = 100;
+      bulkCountInput.value = String(count);
+
+      currentBulkUUIDs = [];
+      for (let i = 0; i < count; i++) {
+        currentBulkUUIDs.push(generateUUID());
+      }
+
+      bulkCountLabel.textContent = String(count);
+      bulkOutputContainer.classList.remove('hidden');
+
+      regenerateBulkDisplay();
+    });
+
+    // Copy all
+    document.getElementById('btn-copy-all')!.addEventListener('click', () => {
+      if (currentBulkUUIDs.length === 0) return;
+
+      const formatted = currentBulkUUIDs.map(u => formatUUID(u));
+      let output: string;
+      const sep = bulkSeparator.value;
+
+      switch (sep) {
+        case 'comma':
+          output = formatted.join(',');
+          break;
+        case 'comma-space':
+          output = formatted.join(', ');
+          break;
+        case 'json':
+          output = JSON.stringify(formatted, null, 2);
+          break;
+        default:
+          output = formatted.join('\n');
+      }
+
+      navigator.clipboard.writeText(output).then(() => {
+        const btn = document.getElementById('btn-copy-all')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy All', 1500);
+      });
+    });
+
+    // Keyboard shortcut: press Enter or Space to generate
+    document.addEventListener('keydown', (e) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        generateSingle();
+      }
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Click <strong class="text-text">Generate</strong> to create a new UUID v4 (or press Space/Enter)</li>
+      <li>Click <strong class="text-text">Copy</strong> to copy the UUID to your clipboard</li>
+      <li>Toggle options: uppercase, without dashes, with braces, or with quotes</li>
+      <li>For bulk generation, set a quantity (1-100), choose a separator format, and click <strong class="text-text">Generate Bulk</strong></li>
+      <li>Hover over individual UUIDs in the bulk list to copy them one by one</li>
+      <li>Use <strong class="text-text">Copy All</strong> to copy all bulk UUIDs with your chosen separator</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

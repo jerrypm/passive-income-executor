@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductCard from "./ProductCard";
 import { getPriceCategory } from "@/lib/format";
-import { CATEGORIES } from "@/lib/constants";
+import { CATEGORIES, STATUS_OPTIONS } from "@/lib/constants";
 import type { Product, PriceCategory, ProductStatus } from "@/lib/types";
 
 interface ProductFormProps {
@@ -15,6 +15,7 @@ interface ProductFormProps {
 export default function ProductForm({ initial, mode }: ProductFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: initial?.name || "",
     price: initial?.price || 0,
@@ -25,7 +26,9 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
     status: initial?.status || ("active" as ProductStatus),
   });
 
-  function handleChange(field: string, value: string | number) {
+  type FormField = keyof typeof form;
+
+  function handleChange(field: FormField, value: string | number) {
     setForm((prev) => {
       const next = { ...prev, [field]: value };
       if (field === "price") {
@@ -52,6 +55,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
+    setError("");
 
     const url =
       mode === "create"
@@ -59,14 +63,25 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
         : `/api/products/${initial!.id}`;
     const method = mode === "create" ? "POST" : "PUT";
 
-    await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    setSaving(false);
-    router.push("/admin");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || `Gagal menyimpan (${res.status})`);
+        setSaving(false);
+        return;
+      }
+
+      router.push("/admin");
+    } catch (err) {
+      setError(`Gagal menyimpan: ${err instanceof Error ? err.message : "Network error"}`);
+      setSaving(false);
+    }
   }
 
   return (
@@ -79,7 +94,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
             type="text"
             value={form.name}
             onChange={(e) => handleChange("name", e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
             required
           />
         </div>
@@ -91,7 +106,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
               type="number"
               value={form.price}
               onChange={(e) => handleChange("price", parseInt(e.target.value) || 0)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
               required
               min={0}
             />
@@ -102,7 +117,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
               type="number"
               value={form.discount}
               onChange={(e) => handleChange("discount", parseInt(e.target.value) || 0)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
               min={0}
               max={100}
             />
@@ -115,7 +130,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
             type="url"
             value={form.shopeeUrl}
             onChange={(e) => handleChange("shopeeUrl", e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
             placeholder="https://shopee.co.id/..."
           />
         </div>
@@ -126,7 +141,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
             type="text"
             value={form.imageUrl}
             onChange={(e) => handleChange("imageUrl", e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
             placeholder="https://cf.shopee.co.id/file/..."
           />
         </div>
@@ -137,7 +152,7 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
             <select
               value={form.priceCategory}
               onChange={(e) => handleChange("priceCategory", e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat.slug} value={cat.slug}>
@@ -151,14 +166,18 @@ export default function ProductForm({ initial, mode }: ProductFormProps) {
             <select
               value={form.status}
               onChange={(e) => handleChange("status", e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
             >
-              <option value="active">Active</option>
-              <option value="hidden">Hidden</option>
-              <option value="pending">Pending</option>
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
             </select>
           </div>
         </div>
+
+        {error && (
+          <p className="text-red-500 text-sm bg-red-50 p-3 rounded">{error}</p>
+        )}
 
         <button
           type="submit"

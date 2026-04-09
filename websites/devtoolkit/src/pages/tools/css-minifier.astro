@@ -1,0 +1,356 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free CSS Minifier & Beautifier Online"
+  description="Minify CSS to reduce file size or beautify minified CSS with proper indentation. See compression stats instantly."
+  keywords={["css minifier", "css beautifier", "minify css", "css compressor", "css formatter", "css prettifier", "compress css online"]}
+  relatedTools={[
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "HTML Entity Encoder", href: "/tools/html-entity-encoder" },
+    { name: "Markdown Preview", href: "/tools/markdown-preview" },
+    { name: "Color Converter", href: "/tools/color-converter" }
+  ]}
+>
+  <!-- Input -->
+  <div class="mb-4">
+    <label class="block text-sm font-medium text-text-muted mb-2">Input CSS</label>
+    <textarea id="css-input" class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]" placeholder="Paste your CSS here...
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}"></textarea>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-wrap gap-3 mb-4">
+    <button id="btn-minify" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">Minify</button>
+    <button id="btn-beautify" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">Beautify</button>
+    <button id="btn-copy" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy Output</button>
+    <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Clear</button>
+    <button id="btn-sample" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Load Sample</button>
+  </div>
+
+  <!-- Stats -->
+  <div id="stats" class="mb-4 hidden">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="bg-surface border border-border rounded-lg p-3 text-center">
+        <div class="text-xs text-text-muted mb-1">Original Size</div>
+        <div id="stat-original" class="text-lg font-semibold text-text">0 B</div>
+      </div>
+      <div class="bg-surface border border-border rounded-lg p-3 text-center">
+        <div class="text-xs text-text-muted mb-1">Output Size</div>
+        <div id="stat-output" class="text-lg font-semibold text-text">0 B</div>
+      </div>
+      <div class="bg-surface border border-border rounded-lg p-3 text-center">
+        <div class="text-xs text-text-muted mb-1">Savings</div>
+        <div id="stat-savings" class="text-lg font-semibold text-green-400">0 B</div>
+      </div>
+      <div class="bg-surface border border-border rounded-lg p-3 text-center">
+        <div class="text-xs text-text-muted mb-1">Reduction</div>
+        <div id="stat-percent" class="text-lg font-semibold text-green-400">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div>
+    <label class="block text-sm font-medium text-text-muted mb-2">Output</label>
+    <textarea id="css-output" class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]" readonly placeholder="Minified or beautified CSS will appear here..."></textarea>
+  </div>
+
+  <script>
+    const cssInput = document.getElementById('css-input') as HTMLTextAreaElement;
+    const cssOutput = document.getElementById('css-output') as HTMLTextAreaElement;
+    const statsDiv = document.getElementById('stats')!;
+
+    function formatSize(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    }
+
+    function showStats(original: string, output: string) {
+      const origSize = new Blob([original]).size;
+      const outSize = new Blob([output]).size;
+      const savings = origSize - outSize;
+      const percent = origSize > 0 ? ((savings / origSize) * 100).toFixed(1) : '0';
+
+      document.getElementById('stat-original')!.textContent = formatSize(origSize);
+      document.getElementById('stat-output')!.textContent = formatSize(outSize);
+
+      const savingsEl = document.getElementById('stat-savings')!;
+      const percentEl = document.getElementById('stat-percent')!;
+
+      if (savings >= 0) {
+        savingsEl.textContent = formatSize(savings);
+        savingsEl.className = 'text-lg font-semibold text-green-400';
+        percentEl.textContent = `${percent}%`;
+        percentEl.className = 'text-lg font-semibold text-green-400';
+      } else {
+        savingsEl.textContent = `+${formatSize(Math.abs(savings))}`;
+        savingsEl.className = 'text-lg font-semibold text-yellow-400';
+        percentEl.textContent = `+${Math.abs(parseFloat(percent))}%`;
+        percentEl.className = 'text-lg font-semibold text-yellow-400';
+      }
+
+      statsDiv.classList.remove('hidden');
+    }
+
+    function minifyCSS(css: string): string {
+      let result = css;
+      // Remove comments
+      result = result.replace(/\/\*[\s\S]*?\*\//g, '');
+      // Remove newlines and carriage returns
+      result = result.replace(/[\r\n]+/g, '');
+      // Remove spaces around selectors and properties
+      result = result.replace(/\s*{\s*/g, '{');
+      result = result.replace(/\s*}\s*/g, '}');
+      result = result.replace(/\s*;\s*/g, ';');
+      result = result.replace(/\s*:\s*/g, ':');
+      result = result.replace(/\s*,\s*/g, ',');
+      // Remove trailing semicolons before closing brace
+      result = result.replace(/;}/g, '}');
+      // Collapse remaining whitespace
+      result = result.replace(/\s{2,}/g, ' ');
+      // Remove leading/trailing whitespace
+      result = result.trim();
+      return result;
+    }
+
+    function beautifyCSS(css: string): string {
+      // First minify to normalize
+      let normalized = css;
+      // Remove comments but save them to re-insert
+      normalized = normalized.replace(/\/\*[\s\S]*?\*\//g, '');
+      // Collapse whitespace
+      normalized = normalized.replace(/\s+/g, ' ');
+      normalized = normalized.trim();
+
+      let result = '';
+      let indent = 0;
+      const indentStr = '  ';
+      let inString = false;
+      let stringChar = '';
+
+      for (let i = 0; i < normalized.length; i++) {
+        const ch = normalized[i];
+        const next = normalized[i + 1] || '';
+
+        // Track strings
+        if ((ch === '"' || ch === "'") && normalized[i - 1] !== '\\') {
+          if (!inString) {
+            inString = true;
+            stringChar = ch;
+          } else if (ch === stringChar) {
+            inString = false;
+          }
+          result += ch;
+          continue;
+        }
+
+        if (inString) {
+          result += ch;
+          continue;
+        }
+
+        if (ch === '{') {
+          // Check for @media or @keyframes
+          result = result.trimEnd();
+          result += ' {\n';
+          indent++;
+          result += indentStr.repeat(indent);
+        } else if (ch === '}') {
+          result = result.trimEnd();
+          result += '\n';
+          indent = Math.max(0, indent - 1);
+          result += indentStr.repeat(indent) + '}\n';
+          if (indent === 0) result += '\n';
+          if (next && next !== '}') {
+            result += indentStr.repeat(indent);
+          }
+        } else if (ch === ';') {
+          result += ';\n';
+          if (next && next !== '}') {
+            result += indentStr.repeat(indent);
+          }
+        } else if (ch === ':' && next === ' ') {
+          result += ': ';
+          i++; // skip next space
+        } else if (ch === ':') {
+          result += ': ';
+        } else if (ch === ',' && !inString) {
+          result += ',\n' + indentStr.repeat(indent);
+        } else if (ch === ' ' && result.endsWith('\n' + indentStr.repeat(indent))) {
+          // Skip leading spaces after indentation
+          continue;
+        } else {
+          result += ch;
+        }
+      }
+
+      // Clean up extra blank lines
+      result = result.replace(/\n{3,}/g, '\n\n');
+      result = result.trim() + '\n';
+
+      return result;
+    }
+
+    document.getElementById('btn-minify')!.addEventListener('click', () => {
+      const input = cssInput.value;
+      if (!input.trim()) return;
+      const output = minifyCSS(input);
+      cssOutput.value = output;
+      showStats(input, output);
+    });
+
+    document.getElementById('btn-beautify')!.addEventListener('click', () => {
+      const input = cssInput.value;
+      if (!input.trim()) return;
+      const output = beautifyCSS(input);
+      cssOutput.value = output;
+      showStats(input, output);
+    });
+
+    document.getElementById('btn-copy')!.addEventListener('click', () => {
+      navigator.clipboard.writeText(cssOutput.value);
+      const btn = document.getElementById('btn-copy')!;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Output', 1500);
+    });
+
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      cssInput.value = '';
+      cssOutput.value = '';
+      statsDiv.classList.add('hidden');
+    });
+
+    document.getElementById('btn-sample')!.addEventListener('click', () => {
+      cssInput.value = `/* Main Layout Styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Component */
+.header {
+  background-color: #1a1a2e;
+  color: #ffffff;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header__nav {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.header__nav a {
+  color: #60a5fa;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.header__nav a:hover {
+  color: #93bbfc;
+}
+
+/* Card Component */
+.card {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.card__content {
+  color: #a0aec0;
+  line-height: 1.6;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn--primary {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.btn--primary:hover {
+  background-color: #2563eb;
+}
+
+.btn--secondary {
+  background-color: #374151;
+  color: #d1d5db;
+}
+
+.btn--secondary:hover {
+  background-color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+
+  .header__nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}`;
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Paste your CSS code in the input textarea, or click "Load Sample" for a demo.</li>
+      <li>Click "Minify" to remove comments, whitespace, and newlines for production.</li>
+      <li>Click "Beautify" to format minified CSS with proper indentation.</li>
+      <li>Check the stats bar for original size, output size, and savings percentage.</li>
+      <li>Click "Copy Output" to copy the result to your clipboard.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

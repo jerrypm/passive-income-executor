@@ -1,0 +1,202 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free JSON Formatter & Validator Online"
+  description="Format, minify, and validate JSON data instantly in your browser. Syntax highlighting, error detection with line numbers, and one-click copy."
+  keywords={["json formatter", "json validator", "json beautifier", "json minifier", "json prettifier", "format json online", "validate json", "json lint"]}
+  relatedTools={[
+    { name: "Base64 Encoder", href: "/tools/base64-encoder" },
+    { name: "URL Encoder", href: "/tools/url-encoder" },
+    { name: "JWT Decoder", href: "/tools/jwt-decoder" },
+    { name: "Hash Generator", href: "/tools/hash-generator" }
+  ]}
+>
+  <div class="space-y-4">
+    <!-- Input -->
+    <div>
+      <label for="json-input" class="block text-sm font-medium text-text-muted mb-2">Input JSON</label>
+      <textarea
+        id="json-input"
+        class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+        placeholder='{"name": "John", "age": 30, "hobbies": ["coding", "reading"]}'
+        spellcheck="false"
+      ></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-3">
+      <button id="btn-format" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        Format
+      </button>
+      <button id="btn-minify" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        Minify
+      </button>
+      <button id="btn-validate" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        Validate
+      </button>
+      <button id="btn-copy" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Copy Output
+      </button>
+      <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Clear
+      </button>
+      <div class="flex items-center gap-2 ml-auto">
+        <label for="indent-size" class="text-sm text-text-muted">Indent:</label>
+        <select id="indent-size" class="bg-surface border border-border rounded-lg px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="2" selected>2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="\t">Tab</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Validation Status -->
+    <div id="validation-status" class="hidden rounded-lg p-3 text-sm font-medium"></div>
+
+    <!-- Output -->
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">Output</label>
+      <pre id="json-output" class="w-full bg-surface border border-border rounded-lg p-4 text-sm font-mono overflow-x-auto min-h-[200px] max-h-[500px] overflow-y-auto"><code id="json-output-code" class="text-text"></code></pre>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('json-input') as HTMLTextAreaElement;
+    const outputCode = document.getElementById('json-output-code')!;
+    const status = document.getElementById('validation-status')!;
+    const indentSelect = document.getElementById('indent-size') as HTMLSelectElement;
+
+    function getIndent(): string | number {
+      const val = indentSelect.value;
+      return val === '\\t' ? '\t' : parseInt(val);
+    }
+
+    function syntaxHighlight(json: string): string {
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        (match) => {
+          let cls = 'color: #22d3ee;'; // number - accent
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'color: #c084fc;'; // key - purple
+            } else {
+              cls = 'color: #4ade80;'; // string - green
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'color: #fb923c;'; // boolean - orange
+          } else if (/null/.test(match)) {
+            cls = 'color: #f87171;'; // null - red
+          }
+          return `<span style="${cls}">${match}</span>`;
+        }
+      );
+    }
+
+    function showStatus(message: string, isError: boolean) {
+      status.classList.remove('hidden');
+      status.textContent = message;
+      if (isError) {
+        status.className = 'rounded-lg p-3 text-sm font-medium bg-red-900/30 text-red-400 border border-red-800';
+      } else {
+        status.className = 'rounded-lg p-3 text-sm font-medium bg-green-900/30 text-green-400 border border-green-800';
+      }
+    }
+
+    function hideStatus() {
+      status.classList.add('hidden');
+    }
+
+    function getErrorLineNumber(jsonStr: string, errorMsg: string): string {
+      const posMatch = errorMsg.match(/position\s+(\d+)/i);
+      if (posMatch) {
+        const pos = parseInt(posMatch[1]);
+        const upToError = jsonStr.substring(0, pos);
+        const line = upToError.split('\n').length;
+        return ` (near line ${line})`;
+      }
+      return '';
+    }
+
+    document.getElementById('btn-format')!.addEventListener('click', () => {
+      const raw = input.value.trim();
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw);
+        const formatted = JSON.stringify(parsed, null, getIndent());
+        outputCode.innerHTML = syntaxHighlight(formatted);
+        showStatus('Valid JSON - formatted successfully', false);
+      } catch (e: any) {
+        const lineInfo = getErrorLineNumber(raw, e.message);
+        showStatus(`Invalid JSON: ${e.message}${lineInfo}`, true);
+        outputCode.textContent = '';
+      }
+    });
+
+    document.getElementById('btn-minify')!.addEventListener('click', () => {
+      const raw = input.value.trim();
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw);
+        const minified = JSON.stringify(parsed);
+        outputCode.innerHTML = syntaxHighlight(minified);
+        showStatus(`Minified: ${raw.length} chars -> ${minified.length} chars (saved ${raw.length - minified.length})`, false);
+      } catch (e: any) {
+        const lineInfo = getErrorLineNumber(raw, e.message);
+        showStatus(`Invalid JSON: ${e.message}${lineInfo}`, true);
+        outputCode.textContent = '';
+      }
+    });
+
+    document.getElementById('btn-validate')!.addEventListener('click', () => {
+      const raw = input.value.trim();
+      if (!raw) {
+        showStatus('Please enter JSON to validate', true);
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        const type = Array.isArray(parsed) ? 'Array' : typeof parsed;
+        const keys = typeof parsed === 'object' && parsed !== null
+          ? (Array.isArray(parsed) ? `${parsed.length} items` : `${Object.keys(parsed).length} keys`)
+          : '';
+        showStatus(`Valid JSON! Type: ${type}${keys ? ` (${keys})` : ''}`, false);
+        outputCode.innerHTML = syntaxHighlight(JSON.stringify(parsed, null, getIndent()));
+      } catch (e: any) {
+        const lineInfo = getErrorLineNumber(raw, e.message);
+        showStatus(`Invalid JSON: ${e.message}${lineInfo}`, true);
+        outputCode.textContent = '';
+      }
+    });
+
+    document.getElementById('btn-copy')!.addEventListener('click', () => {
+      const text = outputCode.textContent || '';
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btn-copy')!;
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    });
+
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      input.value = '';
+      outputCode.innerHTML = '';
+      hideStatus();
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Paste your JSON data into the input textarea</li>
+      <li>Click <strong class="text-text">Format</strong> to pretty-print with indentation and syntax highlighting</li>
+      <li>Click <strong class="text-text">Minify</strong> to compress JSON by removing whitespace</li>
+      <li>Click <strong class="text-text">Validate</strong> to check if your JSON is valid (errors show line numbers)</li>
+      <li>Use <strong class="text-text">Copy Output</strong> to copy the result to your clipboard</li>
+      <li>Change indent size (2 spaces, 4 spaces, or tab) using the dropdown</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

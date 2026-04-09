@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { formatRupiah } from "@/lib/format";
-import { CATEGORIES } from "@/lib/constants";
+import { CATEGORIES, STATUS_OPTIONS } from "@/lib/constants";
+import CategoryIcon from "@/components/CategoryIcon";
 import type { Product, ProductStatus } from "@/lib/types";
 
 export default function AdminDashboard() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -16,33 +16,54 @@ export default function AdminDashboard() {
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
-    const params = new URLSearchParams();
-    if (search) params.set("search", search);
-    if (filterCategory) params.set("category", filterCategory);
-    if (filterStatus) params.set("status", filterStatus);
-    const res = await fetch(`/api/products?${params}`);
+    const res = await fetch("/api/products");
+    if (!res.ok) {
+      setLoading(false);
+      return;
+    }
     const data = await res.json();
-    setProducts(data);
+    setAllProducts(data);
     setLoading(false);
-  }, [search, filterCategory, filterStatus]);
+  }, []);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
+  const products = useMemo(() => {
+    let filtered = allProducts;
+    if (search) {
+      const q = search.toLowerCase();
+      filtered = filtered.filter((p) => p.name.toLowerCase().includes(q));
+    }
+    if (filterCategory) filtered = filtered.filter((p) => p.priceCategory === filterCategory);
+    if (filterStatus) filtered = filtered.filter((p) => p.status === filterStatus);
+    return filtered;
+  }, [allProducts, search, filterCategory, filterStatus]);
+
   async function handleDelete(id: string) {
     if (!confirm("Hapus produk ini?")) return;
-    await fetch(`/api/products/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error || "Gagal menghapus produk");
+      return;
+    }
     fetchProducts();
   }
 
   async function handleToggleStatus(id: string, currentStatus: ProductStatus) {
     const newStatus = currentStatus === "active" ? "hidden" : "active";
-    await fetch(`/api/products/${id}`, {
+    const res = await fetch(`/api/products/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error || "Gagal mengubah status");
+      return;
+    }
     fetchProducts();
   }
 
@@ -50,23 +71,30 @@ export default function AdminDashboard() {
     const file = e.target.files?.[0];
     if (!file) return;
     const text = await file.text();
-    const data = JSON.parse(text);
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      alert("File JSON tidak valid");
+      e.target.value = "";
+      return;
+    }
     const res = await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || "Gagal import produk");
+      e.target.value = "";
+      return;
+    }
     const result = await res.json();
     alert(`Imported ${result.imported} produk baru (status: pending)`);
     fetchProducts();
     e.target.value = "";
   }
-
-  // Stats
-  const stats = CATEGORIES.map((cat) => ({
-    label: `${cat.emoji} ${cat.label}`,
-    count: products.filter((p) => p.priceCategory === cat.slug).length,
-  }));
 
   return (
     <div>
@@ -74,10 +102,11 @@ export default function AdminDashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-lg p-4 shadow text-center">
-            <p className="text-2xl font-bold">{s.count}</p>
-            <p className="text-xs text-gray-500">{s.label}</p>
+        {CATEGORIES.map((cat) => (
+          <div key={cat.slug} className="bg-white rounded-lg p-4 shadow text-center flex flex-col items-center gap-2">
+            <CategoryIcon category={cat} size="sm" />
+            <p className="text-2xl font-bold">{allProducts.filter((p) => p.priceCategory === cat.slug).length}</p>
+            <p className="text-xs text-gray-500">{cat.label}</p>
           </div>
         ))}
       </div>
@@ -92,7 +121,7 @@ export default function AdminDashboard() {
         </Link>
         <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600">
           Import Hasil Scrape
-          <input type="file" accept=".json" onChange={handleImport} className="hidden" />
+          <input type="file" accept=".json" onChange={handleImport} className="hidden" aria-label="Import produk dari file JSON" />
         </label>
       </div>
 
@@ -103,12 +132,12 @@ export default function AdminDashboard() {
           placeholder="Cari produk..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border rounded px-3 py-2 text-sm w-64"
+          className="border rounded px-3 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
         />
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="border rounded px-3 py-2 text-sm"
+          className="border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
         >
           <option value="">Semua Kategori</option>
           {CATEGORIES.map((cat) => (
@@ -120,12 +149,12 @@ export default function AdminDashboard() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="border rounded px-3 py-2 text-sm"
+          className="border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
         >
           <option value="">Semua Status</option>
-          <option value="active">Active</option>
-          <option value="hidden">Hidden</option>
-          <option value="pending">Pending</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s.value} value={s.value}>{s.label}</option>
+          ))}
         </select>
       </div>
 
@@ -151,13 +180,13 @@ export default function AdminDashboard() {
                 return (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2">
-                      <Image
+                      <img
                         src={product.imageUrl || "/placeholder.png"}
-                        alt=""
+                        alt={product.name}
                         width={40}
                         height={40}
                         className="rounded object-cover"
-                        unoptimized={product.imageUrl?.startsWith("http")}
+                        onError={(e) => { e.currentTarget.src = "/placeholder.png"; }}
                       />
                     </td>
                     <td className="px-4 py-2 max-w-xs truncate">{product.name}</td>
@@ -170,17 +199,14 @@ export default function AdminDashboard() {
                       )}
                     </td>
                     <td className="px-4 py-2">
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded ${
-                          product.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : product.status === "pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {product.status}
-                      </span>
+                      {(() => {
+                        const st = STATUS_OPTIONS.find((s) => s.value === product.status);
+                        return (
+                          <span className={`text-xs px-2 py-0.5 rounded ${st?.badgeBg ?? ""} ${st?.badgeColor ?? ""}`}>
+                            {product.status}
+                          </span>
+                        );
+                      })()}
                     </td>
                     <td className="px-4 py-2">
                       <div className="flex gap-2">

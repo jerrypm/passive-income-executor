@@ -1,0 +1,358 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Color Converter Online (HEX, RGB, HSL)"
+  description="Convert colors between HEX, RGB, and HSL formats instantly. Includes color picker, CSS variables, Tailwind class suggestions, and opacity variants."
+  keywords={["color converter", "hex to rgb", "rgb to hsl", "hsl to hex", "color picker", "css colors", "tailwind colors", "color tool", "web colors"]}
+  relatedTools={[
+    { name: "CSS Minifier", href: "/tools/css-minifier" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "UUID Generator", href: "/tools/uuid-generator" },
+    { name: "Password Generator", href: "/tools/password-generator" }
+  ]}
+>
+  <!-- Color Preview -->
+  <div class="flex flex-col md:flex-row gap-6 mb-6">
+    <div class="flex-shrink-0">
+      <label class="block text-sm font-medium text-text-muted mb-2">Preview</label>
+      <div id="colorPreview" class="w-full md:w-48 h-48 rounded-xl border-2 border-border shadow-inner" style="background-color: #6366f1;"></div>
+      <div class="mt-3">
+        <label class="block text-sm font-medium text-text-muted mb-1">Color Picker</label>
+        <input type="color" id="colorPicker" value="#6366f1" class="w-full h-10 rounded-lg cursor-pointer border border-border bg-surface" />
+      </div>
+    </div>
+
+    <div class="flex-1 space-y-4">
+      <!-- HEX -->
+      <div>
+        <label for="hexInput" class="block text-sm font-medium text-text-muted mb-2">HEX</label>
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="hexInput"
+            class="flex-1 bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            value="#6366f1"
+            placeholder="#000000"
+          />
+          <button class="copy-btn px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm" data-target="hexInput">Copy</button>
+        </div>
+      </div>
+
+      <!-- RGB -->
+      <div>
+        <label class="block text-sm font-medium text-text-muted mb-2">RGB</label>
+        <div class="flex gap-2">
+          <div class="flex-1 flex gap-2">
+            <div class="flex-1">
+              <label class="text-xs text-text-muted">R</label>
+              <input type="number" id="rgbR" min="0" max="255" value="99" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div class="flex-1">
+              <label class="text-xs text-text-muted">G</label>
+              <input type="number" id="rgbG" min="0" max="255" value="102" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div class="flex-1">
+              <label class="text-xs text-text-muted">B</label>
+              <input type="number" id="rgbB" min="0" max="255" value="241" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+          </div>
+          <button class="copy-btn px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm self-end" data-format="rgb">Copy</button>
+        </div>
+      </div>
+
+      <!-- HSL -->
+      <div>
+        <label class="block text-sm font-medium text-text-muted mb-2">HSL</label>
+        <div class="flex gap-2">
+          <div class="flex-1 flex gap-2">
+            <div class="flex-1">
+              <label class="text-xs text-text-muted">H</label>
+              <input type="number" id="hslH" min="0" max="360" value="239" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div class="flex-1">
+              <label class="text-xs text-text-muted">S%</label>
+              <input type="number" id="hslS" min="0" max="100" value="84" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div class="flex-1">
+              <label class="text-xs text-text-muted">L%</label>
+              <input type="number" id="hslL" min="0" max="100" value="67" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+          </div>
+          <button class="copy-btn px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm self-end" data-format="hsl">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra Info -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <!-- CSS Variable -->
+    <div class="bg-surface rounded-lg p-4 border border-border">
+      <label class="block text-sm font-medium text-text-muted mb-2">CSS Variable</label>
+      <div class="flex items-center gap-2">
+        <code id="cssVar" class="flex-1 font-mono text-sm text-accent break-all">--color-custom: #6366f1;</code>
+        <button class="copy-val-btn px-3 py-1 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded text-xs transition-colors" data-target="cssVar">Copy</button>
+      </div>
+    </div>
+
+    <!-- Tailwind Suggestion -->
+    <div class="bg-surface rounded-lg p-4 border border-border">
+      <label class="block text-sm font-medium text-text-muted mb-2">Tailwind Suggestion</label>
+      <div class="flex items-center gap-2">
+        <code id="tailwindClass" class="flex-1 font-mono text-sm text-accent break-all">bg-indigo-500</code>
+        <button class="copy-val-btn px-3 py-1 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded text-xs transition-colors" data-target="tailwindClass">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opacity Variants -->
+  <div class="bg-surface rounded-lg p-4 border border-border">
+    <label class="block text-sm font-medium text-text-muted mb-3">Opacity Variants</label>
+    <div id="opacityVariants" class="flex flex-wrap gap-3"></div>
+  </div>
+
+  <script>
+    // Tailwind default color palette (subset for nearest match)
+    const TAILWIND_COLORS = {
+      'slate-50':'#f8fafc','slate-100':'#f1f5f9','slate-200':'#e2e8f0','slate-300':'#cbd5e1','slate-400':'#94a3b8','slate-500':'#64748b','slate-600':'#475569','slate-700':'#334155','slate-800':'#1e293b','slate-900':'#0f172a','slate-950':'#020617',
+      'gray-50':'#f9fafb','gray-100':'#f3f4f6','gray-200':'#e5e7eb','gray-300':'#d1d5db','gray-400':'#9ca3af','gray-500':'#6b7280','gray-600':'#4b5563','gray-700':'#374151','gray-800':'#1f2937','gray-900':'#111827','gray-950':'#030712',
+      'red-50':'#fef2f2','red-100':'#fee2e2','red-200':'#fecaca','red-300':'#fca5a5','red-400':'#f87171','red-500':'#ef4444','red-600':'#dc2626','red-700':'#b91c1c','red-800':'#991b1b','red-900':'#7f1d1d','red-950':'#450a0a',
+      'orange-50':'#fff7ed','orange-100':'#ffedd5','orange-200':'#fed7aa','orange-300':'#fdba74','orange-400':'#fb923c','orange-500':'#f97316','orange-600':'#ea580c','orange-700':'#c2410c','orange-800':'#9a3412','orange-900':'#7c2d12',
+      'amber-50':'#fffbeb','amber-100':'#fef3c7','amber-200':'#fde68a','amber-300':'#fcd34d','amber-400':'#fbbf24','amber-500':'#f59e0b','amber-600':'#d97706','amber-700':'#b45309','amber-800':'#92400e','amber-900':'#78350f',
+      'yellow-50':'#fefce8','yellow-100':'#fef9c3','yellow-200':'#fef08a','yellow-300':'#fde047','yellow-400':'#facc15','yellow-500':'#eab308','yellow-600':'#ca8a04','yellow-700':'#a16207','yellow-800':'#854d0e','yellow-900':'#713f12',
+      'lime-50':'#f7fee7','lime-100':'#ecfccb','lime-200':'#d9f99d','lime-300':'#bef264','lime-400':'#a3e635','lime-500':'#84cc16','lime-600':'#65a30d','lime-700':'#4d7c0f','lime-800':'#3f6212','lime-900':'#365314',
+      'green-50':'#f0fdf4','green-100':'#dcfce7','green-200':'#bbf7d0','green-300':'#86efac','green-400':'#4ade80','green-500':'#22c55e','green-600':'#16a34a','green-700':'#15803d','green-800':'#166534','green-900':'#14532d',
+      'emerald-50':'#ecfdf5','emerald-100':'#d1fae5','emerald-200':'#a7f3d0','emerald-300':'#6ee7b7','emerald-400':'#34d399','emerald-500':'#10b981','emerald-600':'#059669','emerald-700':'#047857','emerald-800':'#065f46','emerald-900':'#064e3b',
+      'teal-50':'#f0fdfa','teal-100':'#ccfbf1','teal-200':'#99f6e4','teal-300':'#5eead4','teal-400':'#2dd4bf','teal-500':'#14b8a6','teal-600':'#0d9488','teal-700':'#0f766e','teal-800':'#115e59','teal-900':'#134e4a',
+      'cyan-50':'#ecfeff','cyan-100':'#cffafe','cyan-200':'#a5f3fc','cyan-300':'#67e8f9','cyan-400':'#22d3ee','cyan-500':'#06b6d4','cyan-600':'#0891b2','cyan-700':'#0e7490','cyan-800':'#155e75','cyan-900':'#164e63',
+      'sky-50':'#f0f9ff','sky-100':'#e0f2fe','sky-200':'#bae6fd','sky-300':'#7dd3fc','sky-400':'#38bdf8','sky-500':'#0ea5e9','sky-600':'#0284c7','sky-700':'#0369a1','sky-800':'#075985','sky-900':'#0c4a6e',
+      'blue-50':'#eff6ff','blue-100':'#dbeafe','blue-200':'#bfdbfe','blue-300':'#93c5fd','blue-400':'#60a5fa','blue-500':'#3b82f6','blue-600':'#2563eb','blue-700':'#1d4ed8','blue-800':'#1e40af','blue-900':'#1e3a8a',
+      'indigo-50':'#eef2ff','indigo-100':'#e0e7ff','indigo-200':'#c7d2fe','indigo-300':'#a5b4fc','indigo-400':'#818cf8','indigo-500':'#6366f1','indigo-600':'#4f46e5','indigo-700':'#4338ca','indigo-800':'#3730a3','indigo-900':'#312e81',
+      'violet-50':'#f5f3ff','violet-100':'#ede9fe','violet-200':'#ddd6fe','violet-300':'#c4b5fd','violet-400':'#a78bfa','violet-500':'#8b5cf6','violet-600':'#7c3aed','violet-700':'#6d28d9','violet-800':'#5b21b6','violet-900':'#4c1d95',
+      'purple-50':'#faf5ff','purple-100':'#f3e8ff','purple-200':'#e9d5ff','purple-300':'#d8b4fe','purple-400':'#c084fc','purple-500':'#a855f7','purple-600':'#9333ea','purple-700':'#7e22ce','purple-800':'#6b21a8','purple-900':'#581c87',
+      'fuchsia-50':'#fdf4ff','fuchsia-100':'#fae8ff','fuchsia-200':'#f5d0fe','fuchsia-300':'#f0abfc','fuchsia-400':'#e879f9','fuchsia-500':'#d946ef','fuchsia-600':'#c026d3','fuchsia-700':'#a21caf','fuchsia-800':'#86198f','fuchsia-900':'#701a75',
+      'pink-50':'#fdf2f8','pink-100':'#fce7f3','pink-200':'#fbcfe8','pink-300':'#f9a8d4','pink-400':'#f472b6','pink-500':'#ec4899','pink-600':'#db2777','pink-700':'#be185d','pink-800':'#9d174d','pink-900':'#831843',
+      'rose-50':'#fff1f2','rose-100':'#ffe4e6','rose-200':'#fecdd3','rose-300':'#fda4af','rose-400':'#fb7185','rose-500':'#f43f5e','rose-600':'#e11d48','rose-700':'#be123c','rose-800':'#9f1239','rose-900':'#881337',
+      'white':'#ffffff','black':'#000000',
+    };
+
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+      const num = parseInt(hex, 16);
+      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+    }
+
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, '0')).join('');
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+          case g: h = ((b - r) / d + 2) / 6; break;
+          case b: h = ((r - g) / d + 4) / 6; break;
+        }
+      }
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function hslToRgb(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      let r, g, b;
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        function hue2rgb(p, q, t) {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        }
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+    }
+
+    function colorDistance(hex1, hex2) {
+      const c1 = hexToRgb(hex1), c2 = hexToRgb(hex2);
+      return Math.sqrt((c1.r - c2.r) ** 2 + (c1.g - c2.g) ** 2 + (c1.b - c2.b) ** 2);
+    }
+
+    function findNearestTailwind(hex) {
+      let closest = 'gray-500';
+      let minDist = Infinity;
+      for (const [name, value] of Object.entries(TAILWIND_COLORS)) {
+        const dist = colorDistance(hex, value);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = name;
+        }
+      }
+      return closest;
+    }
+
+    function updateAll(source, rgb) {
+      const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+      const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+      // Update preview
+      document.getElementById('colorPreview').style.backgroundColor = hex;
+
+      // Update inputs (skip the source to avoid cursor jump)
+      if (source !== 'hex') document.getElementById('hexInput').value = hex;
+      if (source !== 'picker') document.getElementById('colorPicker').value = hex;
+      if (source !== 'rgb') {
+        document.getElementById('rgbR').value = rgb.r;
+        document.getElementById('rgbG').value = rgb.g;
+        document.getElementById('rgbB').value = rgb.b;
+      }
+      if (source !== 'hsl') {
+        document.getElementById('hslH').value = hsl.h;
+        document.getElementById('hslS').value = hsl.s;
+        document.getElementById('hslL').value = hsl.l;
+      }
+
+      // CSS Variable
+      document.getElementById('cssVar').textContent = `--color-custom: ${hex};`;
+
+      // Tailwind
+      const twName = findNearestTailwind(hex);
+      document.getElementById('tailwindClass').textContent = `bg-${twName}`;
+
+      // Opacity variants
+      const opacities = [100, 80, 60, 40, 20, 10];
+      const container = document.getElementById('opacityVariants');
+      container.innerHTML = opacities.map(op => {
+        const alpha = op / 100;
+        const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+        return `
+          <div class="flex flex-col items-center gap-1 cursor-pointer opacity-variant" data-value="${rgba}">
+            <div class="w-12 h-12 rounded-lg border border-border" style="background-color: ${rgba};"></div>
+            <span class="text-xs text-text-muted">${op}%</span>
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.opacity-variant').forEach(el => {
+        el.addEventListener('click', () => {
+          navigator.clipboard.writeText(el.dataset.value).then(() => {
+            const label = el.querySelector('span');
+            const orig = label.textContent;
+            label.textContent = 'Copied!';
+            label.classList.add('text-accent');
+            setTimeout(() => {
+              label.textContent = orig;
+              label.classList.remove('text-accent');
+            }, 1000);
+          });
+        });
+      });
+    }
+
+    // HEX input
+    document.getElementById('hexInput').addEventListener('input', function() {
+      let val = this.value.trim();
+      if (!val.startsWith('#')) val = '#' + val;
+      if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(val)) {
+        updateAll('hex', hexToRgb(val));
+      }
+    });
+
+    // RGB inputs
+    ['rgbR', 'rgbG', 'rgbB'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        const r = parseInt(document.getElementById('rgbR').value) || 0;
+        const g = parseInt(document.getElementById('rgbG').value) || 0;
+        const b = parseInt(document.getElementById('rgbB').value) || 0;
+        updateAll('rgb', { r, g, b });
+      });
+    });
+
+    // HSL inputs
+    ['hslH', 'hslS', 'hslL'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        const h = parseInt(document.getElementById('hslH').value) || 0;
+        const s = parseInt(document.getElementById('hslS').value) || 0;
+        const l = parseInt(document.getElementById('hslL').value) || 0;
+        const rgb = hslToRgb(h, s, l);
+        updateAll('hsl', rgb);
+      });
+    });
+
+    // Color picker
+    document.getElementById('colorPicker').addEventListener('input', function() {
+      updateAll('picker', hexToRgb(this.value));
+    });
+
+    // Copy buttons
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let text;
+        if (btn.dataset.target) {
+          text = document.getElementById(btn.dataset.target).value;
+        } else if (btn.dataset.format === 'rgb') {
+          const r = document.getElementById('rgbR').value;
+          const g = document.getElementById('rgbG').value;
+          const b = document.getElementById('rgbB').value;
+          text = `rgb(${r}, ${g}, ${b})`;
+        } else if (btn.dataset.format === 'hsl') {
+          const h = document.getElementById('hslH').value;
+          const s = document.getElementById('hslS').value;
+          const l = document.getElementById('hslL').value;
+          text = `hsl(${h}, ${s}%, ${l}%)`;
+        }
+        if (text) {
+          navigator.clipboard.writeText(text).then(() => {
+            const orig = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('text-accent');
+            setTimeout(() => { btn.textContent = orig; btn.classList.remove('text-accent'); }, 1500);
+          });
+        }
+      });
+    });
+
+    document.querySelectorAll('.copy-val-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = document.getElementById(btn.dataset.target).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('text-accent');
+          setTimeout(() => { btn.textContent = orig; btn.classList.remove('text-accent'); }, 1500);
+        });
+      });
+    });
+
+    // Initial render
+    updateAll('hex', hexToRgb('#6366f1'));
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Use the color picker or enter a color value in HEX, RGB, or HSL format.</li>
+      <li>All other formats update automatically in real-time.</li>
+      <li>Click the "Copy" button next to any format to copy it to your clipboard.</li>
+      <li>View the nearest Tailwind CSS class suggestion and CSS variable output.</li>
+      <li>Click any opacity variant swatch to copy its rgba() value.</li>
+      <li>All conversion happens locally in your browser.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

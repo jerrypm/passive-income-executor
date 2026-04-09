@@ -1,0 +1,240 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Regex Tester & Debugger Online"
+  description="Test and debug regular expressions in real-time with match highlighting, capture groups, and detailed match info. Runs entirely in your browser."
+  keywords={["regex tester", "regular expression", "regex debugger", "regex online", "regex matcher", "regex pattern", "regex groups", "regex flags"]}
+  relatedTools={[
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "URL Encoder", href: "/tools/url-encoder" },
+    { name: "HTML Entity Encoder", href: "/tools/html-entity-encoder" },
+    { name: "CSS Minifier", href: "/tools/css-minifier" }
+  ]}
+>
+  <!-- Regex Pattern -->
+  <div class="mb-4">
+    <label for="regexPattern" class="block text-sm font-medium text-text-muted mb-2">Regular Expression</label>
+    <div class="flex gap-2">
+      <div class="flex-1 flex items-center bg-surface border border-border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary">
+        <span class="pl-3 text-text-muted font-mono text-sm">/</span>
+        <input
+          type="text"
+          id="regexPattern"
+          class="flex-1 bg-transparent p-3 text-text font-mono text-sm focus:outline-none"
+          placeholder="Enter regex pattern..."
+          value="(\w+)@(\w+)\.(\w+)"
+        />
+        <span class="pr-3 text-text-muted font-mono text-sm">/</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flags -->
+  <div class="flex flex-wrap gap-4 mb-6">
+    <label class="block text-sm font-medium text-text-muted mr-2 self-center">Flags:</label>
+    <label class="flex items-center gap-1.5 text-sm text-text-muted cursor-pointer">
+      <input type="checkbox" id="flagG" checked class="rounded" />
+      <code class="text-accent">g</code> global
+    </label>
+    <label class="flex items-center gap-1.5 text-sm text-text-muted cursor-pointer">
+      <input type="checkbox" id="flagI" class="rounded" />
+      <code class="text-accent">i</code> case-insensitive
+    </label>
+    <label class="flex items-center gap-1.5 text-sm text-text-muted cursor-pointer">
+      <input type="checkbox" id="flagM" class="rounded" />
+      <code class="text-accent">m</code> multiline
+    </label>
+    <label class="flex items-center gap-1.5 text-sm text-text-muted cursor-pointer">
+      <input type="checkbox" id="flagS" class="rounded" />
+      <code class="text-accent">s</code> dotAll
+    </label>
+  </div>
+
+  <!-- Test String -->
+  <div class="mb-4">
+    <label for="testString" class="block text-sm font-medium text-text-muted mb-2">Test String</label>
+    <textarea
+      id="testString"
+      class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+      placeholder="Enter test string..."
+    >user@example.com sent an email to admin@company.org and support@help.net</textarea>
+  </div>
+
+  <!-- Match Info Bar -->
+  <div id="matchInfo" class="flex flex-wrap gap-4 mb-6 text-sm text-text-muted">
+    <span id="matchCount" class="px-3 py-1 bg-surface rounded-lg border border-border">0 matches</span>
+    <span id="regexError" class="px-3 py-1 bg-red-900/30 text-red-400 rounded-lg border border-red-800 hidden"></span>
+  </div>
+
+  <!-- Highlighted Output -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-text-muted mb-2">Matches</label>
+    <div
+      id="highlightedOutput"
+      class="w-full bg-surface border border-border rounded-lg p-4 font-mono text-sm min-h-[100px] whitespace-pre-wrap break-all"
+    ></div>
+  </div>
+
+  <!-- Match Details -->
+  <div id="matchDetails" class="hidden">
+    <label class="block text-sm font-medium text-text-muted mb-2">Match Details</label>
+    <div id="matchTable" class="bg-surface border border-border rounded-lg overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-border text-left text-text-muted">
+            <th class="px-4 py-2 font-medium">#</th>
+            <th class="px-4 py-2 font-medium">Match</th>
+            <th class="px-4 py-2 font-medium">Groups</th>
+            <th class="px-4 py-2 font-medium">Index</th>
+          </tr>
+        </thead>
+        <tbody id="matchTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const MATCH_COLORS = [
+      'bg-yellow-500/30 text-yellow-200 border-b-2 border-yellow-400',
+      'bg-green-500/30 text-green-200 border-b-2 border-green-400',
+      'bg-blue-500/30 text-blue-200 border-b-2 border-blue-400',
+      'bg-pink-500/30 text-pink-200 border-b-2 border-pink-400',
+      'bg-purple-500/30 text-purple-200 border-b-2 border-purple-400',
+      'bg-orange-500/30 text-orange-200 border-b-2 border-orange-400',
+    ];
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function runRegex() {
+      const pattern = document.getElementById('regexPattern').value;
+      const testStr = document.getElementById('testString').value;
+      const matchCountEl = document.getElementById('matchCount');
+      const errorEl = document.getElementById('regexError');
+      const highlightEl = document.getElementById('highlightedOutput');
+      const detailsEl = document.getElementById('matchDetails');
+      const tableBody = document.getElementById('matchTableBody');
+
+      errorEl.classList.add('hidden');
+      errorEl.textContent = '';
+
+      if (!pattern) {
+        matchCountEl.textContent = '0 matches';
+        highlightEl.innerHTML = '<span class="text-text-muted">Enter a pattern to see matches</span>';
+        detailsEl.classList.add('hidden');
+        return;
+      }
+
+      // Build flags
+      let flags = '';
+      if (document.getElementById('flagG').checked) flags += 'g';
+      if (document.getElementById('flagI').checked) flags += 'i';
+      if (document.getElementById('flagM').checked) flags += 'm';
+      if (document.getElementById('flagS').checked) flags += 's';
+
+      let regex;
+      try {
+        regex = new RegExp(pattern, flags);
+      } catch (e) {
+        errorEl.textContent = e.message;
+        errorEl.classList.remove('hidden');
+        matchCountEl.textContent = '0 matches';
+        highlightEl.innerHTML = escapeHtml(testStr);
+        detailsEl.classList.add('hidden');
+        return;
+      }
+
+      if (!testStr) {
+        matchCountEl.textContent = '0 matches';
+        highlightEl.innerHTML = '';
+        detailsEl.classList.add('hidden');
+        return;
+      }
+
+      // Collect all matches
+      const matches = [];
+      if (flags.includes('g')) {
+        let m;
+        // Safety: prevent infinite loop on zero-length matches
+        let lastIndex = -1;
+        while ((m = regex.exec(testStr)) !== null) {
+          if (regex.lastIndex === lastIndex) {
+            regex.lastIndex++;
+            continue;
+          }
+          lastIndex = regex.lastIndex;
+          matches.push({ match: m[0], groups: m.slice(1), index: m.index, length: m[0].length });
+          if (matches.length > 1000) break;
+        }
+      } else {
+        const m = regex.exec(testStr);
+        if (m) {
+          matches.push({ match: m[0], groups: m.slice(1), index: m.index, length: m[0].length });
+        }
+      }
+
+      matchCountEl.textContent = `${matches.length} match${matches.length !== 1 ? 'es' : ''}`;
+
+      // Build highlighted output
+      let html = '';
+      let lastEnd = 0;
+      matches.forEach((m, i) => {
+        if (m.index > lastEnd) {
+          html += escapeHtml(testStr.slice(lastEnd, m.index));
+        }
+        const colorClass = MATCH_COLORS[i % MATCH_COLORS.length];
+        html += `<span class="${colorClass} px-0.5 rounded">${escapeHtml(m.match)}</span>`;
+        lastEnd = m.index + m.length;
+      });
+      if (lastEnd < testStr.length) {
+        html += escapeHtml(testStr.slice(lastEnd));
+      }
+      highlightEl.innerHTML = html || escapeHtml(testStr);
+
+      // Build match table
+      if (matches.length > 0) {
+        detailsEl.classList.remove('hidden');
+        tableBody.innerHTML = matches.map((m, i) => {
+          const groupsHtml = m.groups.length > 0
+            ? m.groups.map((g, gi) => `<span class="inline-block px-2 py-0.5 mr-1 mb-1 bg-surface-lighter rounded text-xs font-mono">Group ${gi + 1}: <span class="text-accent">${escapeHtml(g || '(empty)')}</span></span>`).join('')
+            : '<span class="text-text-muted text-xs">No groups</span>';
+          return `
+            <tr class="border-b border-border hover:bg-surface-lighter/50">
+              <td class="px-4 py-2 text-text-muted">${i + 1}</td>
+              <td class="px-4 py-2 font-mono text-accent">${escapeHtml(m.match)}</td>
+              <td class="px-4 py-2">${groupsHtml}</td>
+              <td class="px-4 py-2 text-text-muted">${m.index}</td>
+            </tr>
+          `;
+        }).join('');
+      } else {
+        detailsEl.classList.add('hidden');
+      }
+    }
+
+    // Real-time testing
+    document.getElementById('regexPattern').addEventListener('input', runRegex);
+    document.getElementById('testString').addEventListener('input', runRegex);
+    document.getElementById('flagG').addEventListener('change', runRegex);
+    document.getElementById('flagI').addEventListener('change', runRegex);
+    document.getElementById('flagM').addEventListener('change', runRegex);
+    document.getElementById('flagS').addEventListener('change', runRegex);
+
+    // Initial run
+    runRegex();
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Enter your regular expression pattern in the pattern field (without delimiters).</li>
+      <li>Select the flags you need: global (g), case-insensitive (i), multiline (m), or dotAll (s).</li>
+      <li>Type or paste your test string in the text area below.</li>
+      <li>Matches are highlighted in real-time with different colors for each match.</li>
+      <li>View detailed match information including capture groups and indices in the table below.</li>
+      <li>All processing happens locally in your browser -- nothing is sent to a server.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

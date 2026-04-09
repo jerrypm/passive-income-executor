@@ -4,6 +4,7 @@ import {
   addProduct,
   bulkImportProducts,
 } from "@/lib/products";
+import { getSessionFromCookies } from "@/lib/auth";
 import { getPriceCategory, generateId } from "@/lib/format";
 import type { Product } from "@/lib/types";
 
@@ -24,46 +25,57 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  if (!(await getSessionFromCookies())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  try {
+    const body = await request.json();
 
-  // Bulk import: array of products
-  if (Array.isArray(body)) {
+    // Bulk import: array of products
+    if (Array.isArray(body)) {
+      const now = new Date().toISOString();
+      const products: Product[] = body.map((item: Partial<Product>) => ({
+        id: item.id || generateId(),
+        name: item.name || "Unnamed Product",
+        price: item.price || 0,
+        priceCategory: item.priceCategory || getPriceCategory(item.price || 0),
+        discount: item.discount,
+        imageUrl: item.imageUrl || "",
+        shopeeUrl: item.shopeeUrl || "",
+        rating: item.rating,
+        sold: item.sold,
+        status: "pending" as const,
+        scrapedAt: item.scrapedAt,
+        createdAt: now,
+        updatedAt: now,
+      }));
+      const imported = await bulkImportProducts(products);
+      return NextResponse.json({ imported }, { status: 201 });
+    }
+
+    // Single product create
     const now = new Date().toISOString();
-    const products: Product[] = body.map((item: Partial<Product>) => ({
-      id: item.id || generateId(),
-      name: item.name || "Unnamed Product",
-      price: item.price || 0,
-      priceCategory: item.priceCategory || getPriceCategory(item.price || 0),
-      discount: item.discount,
-      imageUrl: item.imageUrl || "",
-      shopeeUrl: item.shopeeUrl || "",
-      rating: item.rating,
-      sold: item.sold,
-      status: "pending" as const,
-      scrapedAt: item.scrapedAt,
+    const product: Product = {
+      id: generateId(),
+      name: body.name,
+      price: body.price,
+      priceCategory: body.priceCategory || getPriceCategory(body.price),
+      discount: body.discount,
+      imageUrl: body.imageUrl || "",
+      shopeeUrl: body.shopeeUrl || "",
+      rating: body.rating,
+      sold: body.sold,
+      status: body.status || "active",
       createdAt: now,
       updatedAt: now,
-    }));
-    const imported = await bulkImportProducts(products);
-    return NextResponse.json({ imported }, { status: 201 });
+    };
+    await addProduct(product);
+    return NextResponse.json(product, { status: 201 });
+  } catch (err) {
+    console.error("POST /api/products error:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Gagal menyimpan produk" },
+      { status: 500 }
+    );
   }
-
-  // Single product create
-  const now = new Date().toISOString();
-  const product: Product = {
-    id: generateId(),
-    name: body.name,
-    price: body.price,
-    priceCategory: body.priceCategory || getPriceCategory(body.price),
-    discount: body.discount,
-    imageUrl: body.imageUrl || "",
-    shopeeUrl: body.shopeeUrl || "",
-    rating: body.rating,
-    sold: body.sold,
-    status: body.status || "active",
-    createdAt: now,
-    updatedAt: now,
-  };
-  await addProduct(product);
-  return NextResponse.json(product, { status: 201 });
 }

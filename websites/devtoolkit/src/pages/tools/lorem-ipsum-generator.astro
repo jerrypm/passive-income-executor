@@ -1,0 +1,191 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Lorem Ipsum Generator Online"
+  description="Generate placeholder lorem ipsum text in paragraphs, sentences, or words. Customize output length and format. Free, no signup required."
+  keywords={["lorem ipsum generator", "placeholder text", "dummy text generator", "lorem ipsum online", "sample text"]}
+  relatedTools={[
+    { name: "UUID Generator", href: "/tools/uuid-generator" },
+    { name: "Password Generator", href: "/tools/password-generator" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "Markdown Preview", href: "/tools/markdown-preview" }
+  ]}
+>
+  <!-- Options -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <div>
+      <label for="mode" class="block text-sm font-medium text-text-muted mb-2">Generate</label>
+      <select id="mode" class="w-full bg-surface border border-border rounded-lg p-3 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="paragraphs">Paragraphs</option>
+        <option value="sentences">Sentences</option>
+        <option value="words">Words</option>
+      </select>
+    </div>
+    <div>
+      <label for="count" class="block text-sm font-medium text-text-muted mb-2">Count</label>
+      <input type="number" id="count" value="3" min="1" max="100" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-text-muted mb-2">&nbsp;</label>
+      <label class="flex items-center gap-2 p-3 cursor-pointer">
+        <input type="checkbox" id="startClassic" checked class="rounded border-border bg-surface text-primary focus:ring-primary" />
+        <span class="text-sm text-text-muted">Start with "Lorem ipsum dolor sit amet..."</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex flex-wrap gap-3 mb-4">
+    <button id="generateBtn" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+      Generate
+    </button>
+    <button id="copyBtn" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+      Copy to Clipboard
+    </button>
+  </div>
+
+  <!-- Output -->
+  <label for="output" class="block text-sm font-medium text-text-muted mb-2">Generated Text</label>
+  <textarea id="output" readonly class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"></textarea>
+
+  <!-- Stats -->
+  <div class="flex gap-6 mt-3 text-sm text-text-muted">
+    <span>Words: <strong id="wordCount" class="text-text">0</strong></span>
+    <span>Characters: <strong id="charCount" class="text-text">0</strong></span>
+    <span>Paragraphs: <strong id="paraCount" class="text-text">0</strong></span>
+  </div>
+
+  <script>
+    const LOREM_WORDS = [
+      "lorem","ipsum","dolor","sit","amet","consectetur","adipiscing","elit","sed","do",
+      "eiusmod","tempor","incididunt","ut","labore","et","dolore","magna","aliqua","enim",
+      "ad","minim","veniam","quis","nostrud","exercitation","ullamco","laboris","nisi",
+      "aliquip","ex","ea","commodo","consequat","duis","aute","irure","in","reprehenderit",
+      "voluptate","velit","esse","cillum","fugiat","nulla","pariatur","excepteur","sint",
+      "occaecat","cupidatat","non","proident","sunt","culpa","qui","officia","deserunt",
+      "mollit","anim","id","est","laborum","ac","accumsan","aliquet","ante","aptent",
+      "arcu","at","auctor","augue","bibendum","blandit","class","condimentum","congue",
+      "cras","curabitur","cursus","dapibus","diam","dictum","dictumst","dignissim",
+      "donec","egestas","eget","eleifend","elementum","eu","euismod","facilisi",
+      "facilisis","fames","faucibus","felis","fermentum","feugiat","fringilla","fusce",
+      "gravida","habitant","habitasse","hac","hendrerit","himenaeos","iaculis","imperdiet",
+      "inceptos","integer","interdum","justo","lacinia","lacus","laoreet","lectus","leo",
+      "libero","ligula","litora","lobortis","luctus","maecenas","malesuada","massa",
+      "mattis","mauris","metus","mi","morbi","nam","nec","neque","nibh","nisl","nunc",
+      "odio","orci","ornare","pellentesque","pharetra","phasellus","placerat","platea",
+      "porta","porttitor","posuere","praesent","pretium","primis","proin","pulvinar",
+      "purus","quam","quisque","rhoncus","ridiculus","risus","rutrum","sagittis","sapien",
+      "scelerisque","semper","senectus","sociosqu","sodales","sollicitudin","suscipit",
+      "suspendisse","taciti","tellus","tincidunt","torquent","tortor","tristique","turpis",
+      "ultrices","ultricies","urna","varius","vehicula","vel","vestibulum","vitae","vivamus",
+      "viverra","volutpat","vulputate"
+    ];
+
+    const CLASSIC_START = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+    function randomInt(min: number, max: number): number {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomWord(): string {
+      return LOREM_WORDS[Math.floor(Math.random() * LOREM_WORDS.length)];
+    }
+
+    function generateSentence(wordCount?: number): string {
+      const len = wordCount || randomInt(8, 18);
+      const words: string[] = [];
+      for (let i = 0; i < len; i++) {
+        words.push(randomWord());
+      }
+      words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+      return words.join(" ") + ".";
+    }
+
+    function generateParagraph(): string {
+      const sentenceCount = randomInt(4, 8);
+      const sentences: string[] = [];
+      for (let i = 0; i < sentenceCount; i++) {
+        sentences.push(generateSentence());
+      }
+      return sentences.join(" ");
+    }
+
+    function generate(): void {
+      const mode = (document.getElementById("mode") as HTMLSelectElement).value;
+      const count = parseInt((document.getElementById("count") as HTMLInputElement).value) || 3;
+      const startClassic = (document.getElementById("startClassic") as HTMLInputElement).checked;
+      const clamped = Math.max(1, Math.min(100, count));
+
+      let result = "";
+
+      if (mode === "paragraphs") {
+        const paragraphs: string[] = [];
+        for (let i = 0; i < clamped; i++) {
+          if (i === 0 && startClassic) {
+            paragraphs.push(CLASSIC_START + " " + generateParagraph());
+          } else {
+            paragraphs.push(generateParagraph());
+          }
+        }
+        result = paragraphs.join("\n\n");
+      } else if (mode === "sentences") {
+        const sentences: string[] = [];
+        for (let i = 0; i < clamped; i++) {
+          if (i === 0 && startClassic) {
+            sentences.push(CLASSIC_START);
+          } else {
+            sentences.push(generateSentence());
+          }
+        }
+        result = sentences.join(" ");
+      } else {
+        const words: string[] = [];
+        if (startClassic) {
+          const classicWords = "lorem ipsum dolor sit amet consectetur adipiscing elit".split(" ");
+          for (let i = 0; i < Math.min(clamped, classicWords.length); i++) {
+            words.push(classicWords[i]);
+          }
+        }
+        while (words.length < clamped) {
+          words.push(randomWord());
+        }
+        result = words.slice(0, clamped).join(" ");
+        if (result.length > 0) {
+          result = result.charAt(0).toUpperCase() + result.slice(1);
+        }
+      }
+
+      const output = document.getElementById("output") as HTMLTextAreaElement;
+      output.value = result;
+
+      const wordC = result.trim() ? result.trim().split(/\s+/).length : 0;
+      (document.getElementById("wordCount") as HTMLElement).textContent = wordC.toString();
+      (document.getElementById("charCount") as HTMLElement).textContent = result.length.toString();
+      (document.getElementById("paraCount") as HTMLElement).textContent = (result.split("\n\n").length).toString();
+    }
+
+    document.getElementById("generateBtn")?.addEventListener("click", generate);
+    document.getElementById("copyBtn")?.addEventListener("click", () => {
+      const output = document.getElementById("output") as HTMLTextAreaElement;
+      navigator.clipboard.writeText(output.value);
+      const btn = document.getElementById("copyBtn")!;
+      btn.textContent = "Copied!";
+      setTimeout(() => { btn.textContent = "Copy to Clipboard"; }, 1500);
+    });
+
+    // Auto-generate on load
+    generate();
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Select the output type: paragraphs, sentences, or words</li>
+      <li>Set the count (how many to generate)</li>
+      <li>Optionally start with the classic "Lorem ipsum dolor sit amet..." opening</li>
+      <li>Click Generate to create placeholder text</li>
+      <li>Copy the output to use in your designs, mockups, or prototypes</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

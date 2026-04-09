@@ -1,0 +1,249 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free URL Encode & Decode Online"
+  description="Encode and decode URLs, query strings, and URI components instantly. Supports encodeURIComponent and encodeURI variants."
+  keywords={["url encoder", "url decoder", "url encode online", "url decode online", "encodeURIComponent", "encodeURI", "percent encoding", "url escape"]}
+  relatedTools={[
+    { name: "Base64 Encoder", href: "/tools/base64-encoder" },
+    { name: "HTML Entity Encoder", href: "/tools/html-entity-encoder" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "Hash Generator", href: "/tools/hash-generator" }
+  ]}
+>
+  <div class="space-y-4">
+    <!-- Mode Toggle -->
+    <div class="flex gap-2">
+      <button id="mode-component" class="px-4 py-2 bg-primary text-white font-medium rounded-lg transition-colors text-sm">
+        encodeURIComponent
+      </button>
+      <button id="mode-uri" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        encodeURI
+      </button>
+    </div>
+    <p id="mode-description" class="text-xs text-text-muted">
+      Encodes all special characters. Best for encoding query parameter values.
+    </p>
+
+    <!-- Textareas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Left: Decoded -->
+      <div>
+        <label for="decoded-input" class="block text-sm font-medium text-text-muted mb-2">Decoded (Plain Text)</label>
+        <textarea
+          id="decoded-input"
+          class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+          placeholder="Hello World! How are you?"
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <!-- Right: Encoded -->
+      <div>
+        <label for="encoded-input" class="block text-sm font-medium text-text-muted mb-2">Encoded (URL Safe)</label>
+        <textarea
+          id="encoded-input"
+          class="w-full bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-y min-h-[200px]"
+          placeholder="Hello%20World%21%20How%20are%20you%3F"
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-3 justify-center">
+      <button id="btn-encode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        Encode &rarr;
+      </button>
+      <button id="btn-decode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">
+        &larr; Decode
+      </button>
+      <button id="btn-copy-decoded" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Copy Decoded
+      </button>
+      <button id="btn-copy-encoded" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Copy Encoded
+      </button>
+      <button id="btn-clear" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">
+        Clear
+      </button>
+    </div>
+
+    <!-- Status -->
+    <div id="status-msg" class="hidden rounded-lg p-3 text-sm font-medium"></div>
+
+    <!-- Quick Reference -->
+    <div class="border-t border-border pt-4">
+      <h3 class="text-sm font-medium text-text mb-3">Common URL Encodings</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">space</span>
+          <span class="text-accent font-mono text-xs">%20</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">!</span>
+          <span class="text-accent font-mono text-xs">%21</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">#</span>
+          <span class="text-accent font-mono text-xs">%23</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">&</span>
+          <span class="text-accent font-mono text-xs">%26</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">=</span>
+          <span class="text-accent font-mono text-xs">%3D</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">?</span>
+          <span class="text-accent font-mono text-xs">%3F</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">@</span>
+          <span class="text-accent font-mono text-xs">%40</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">+</span>
+          <span class="text-accent font-mono text-xs">%2B</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">/</span>
+          <span class="text-accent font-mono text-xs">%2F</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">:</span>
+          <span class="text-accent font-mono text-xs">%3A</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">[</span>
+          <span class="text-accent font-mono text-xs">%5B</span>
+        </div>
+        <div class="bg-surface rounded-lg p-2 text-center">
+          <span class="text-text font-mono text-sm block">]</span>
+          <span class="text-accent font-mono text-xs">%5D</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Difference explanation -->
+    <div class="border-t border-border pt-4">
+      <h3 class="text-sm font-medium text-text mb-2">encodeURIComponent vs encodeURI</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-text-muted">
+        <div class="bg-surface rounded-lg p-3">
+          <p class="font-medium text-text mb-1">encodeURIComponent</p>
+          <p>Encodes everything except: <code class="text-accent">A-Z a-z 0-9 - _ . ! ~ * ' ( )</code></p>
+          <p class="mt-1">Use for: query parameter values, form data</p>
+        </div>
+        <div class="bg-surface rounded-lg p-3">
+          <p class="font-medium text-text mb-1">encodeURI</p>
+          <p>Preserves URL structure characters: <code class="text-accent">: / ? # [ ] @ ! $ & ' ( ) * + , ; =</code></p>
+          <p class="mt-1">Use for: encoding a full URL while keeping it valid</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const decodedInput = document.getElementById('decoded-input') as HTMLTextAreaElement;
+    const encodedInput = document.getElementById('encoded-input') as HTMLTextAreaElement;
+    const statusMsg = document.getElementById('status-msg')!;
+    const modeComponent = document.getElementById('mode-component')!;
+    const modeUri = document.getElementById('mode-uri')!;
+    const modeDescription = document.getElementById('mode-description')!;
+
+    let useComponent = true;
+
+    function showStatus(message: string, isError: boolean) {
+      statusMsg.classList.remove('hidden');
+      statusMsg.textContent = message;
+      if (isError) {
+        statusMsg.className = 'rounded-lg p-3 text-sm font-medium bg-red-900/30 text-red-400 border border-red-800';
+      } else {
+        statusMsg.className = 'rounded-lg p-3 text-sm font-medium bg-green-900/30 text-green-400 border border-green-800';
+      }
+    }
+
+    function setActiveMode(component: boolean) {
+      useComponent = component;
+      if (component) {
+        modeComponent.className = 'px-4 py-2 bg-primary text-white font-medium rounded-lg transition-colors text-sm';
+        modeUri.className = 'px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm';
+        modeDescription.textContent = 'Encodes all special characters. Best for encoding query parameter values.';
+      } else {
+        modeUri.className = 'px-4 py-2 bg-primary text-white font-medium rounded-lg transition-colors text-sm';
+        modeComponent.className = 'px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm';
+        modeDescription.textContent = 'Preserves URL structure characters (://?#[]@). Best for encoding a full URL.';
+      }
+    }
+
+    modeComponent.addEventListener('click', () => setActiveMode(true));
+    modeUri.addEventListener('click', () => setActiveMode(false));
+
+    // Encode
+    document.getElementById('btn-encode')!.addEventListener('click', () => {
+      const text = decodedInput.value;
+      if (!text) return;
+      try {
+        const encoded = useComponent ? encodeURIComponent(text) : encodeURI(text);
+        encodedInput.value = encoded;
+        const method = useComponent ? 'encodeURIComponent' : 'encodeURI';
+        showStatus(`Encoded using ${method}: ${text.length} chars -> ${encoded.length} chars`, false);
+      } catch (e: any) {
+        showStatus(`Encoding error: ${e.message}`, true);
+      }
+    });
+
+    // Decode
+    document.getElementById('btn-decode')!.addEventListener('click', () => {
+      const encoded = encodedInput.value.trim();
+      if (!encoded) return;
+      try {
+        const decoded = useComponent ? decodeURIComponent(encoded) : decodeURI(encoded);
+        decodedInput.value = decoded;
+        const method = useComponent ? 'decodeURIComponent' : 'decodeURI';
+        showStatus(`Decoded using ${method}: ${encoded.length} chars -> ${decoded.length} chars`, false);
+      } catch (e: any) {
+        showStatus(`Decoding error: ${e.message}. Make sure the input is properly URL-encoded.`, true);
+      }
+    });
+
+    // Copy
+    document.getElementById('btn-copy-decoded')!.addEventListener('click', () => {
+      if (!decodedInput.value) return;
+      navigator.clipboard.writeText(decodedInput.value).then(() => {
+        const btn = document.getElementById('btn-copy-decoded')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Decoded', 1500);
+      });
+    });
+
+    document.getElementById('btn-copy-encoded')!.addEventListener('click', () => {
+      if (!encodedInput.value) return;
+      navigator.clipboard.writeText(encodedInput.value).then(() => {
+        const btn = document.getElementById('btn-copy-encoded')!;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Encoded', 1500);
+      });
+    });
+
+    document.getElementById('btn-clear')!.addEventListener('click', () => {
+      decodedInput.value = '';
+      encodedInput.value = '';
+      statusMsg.classList.add('hidden');
+    });
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Enter plain text on the left and click <strong class="text-text">Encode</strong> to URL-encode it</li>
+      <li>Enter URL-encoded text on the right and click <strong class="text-text">Decode</strong> to convert back</li>
+      <li>Switch between <strong class="text-text">encodeURIComponent</strong> (for query params) and <strong class="text-text">encodeURI</strong> (for full URLs) modes</li>
+      <li>Use the reference table below to see common percent-encoded characters</li>
+      <li>Click Copy buttons to copy results to your clipboard</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

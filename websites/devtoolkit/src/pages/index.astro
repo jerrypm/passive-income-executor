@@ -1,0 +1,240 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const tools = [
+  {
+    name: "JSON Formatter",
+    description: "Format, validate, and minify JSON data with syntax highlighting",
+    href: "/tools/json-formatter",
+    icon: "{ }",
+    category: "Formatters"
+  },
+  {
+    name: "Base64 Encode/Decode",
+    description: "Encode text to Base64 or decode Base64 to plain text",
+    href: "/tools/base64-encoder",
+    icon: "B64",
+    category: "Encoders"
+  },
+  {
+    name: "URL Encode/Decode",
+    description: "Encode and decode URLs with percent-encoding",
+    href: "/tools/url-encoder",
+    icon: "%20",
+    category: "Encoders"
+  },
+  {
+    name: "JWT Decoder",
+    description: "Decode and inspect JSON Web Tokens (JWT) without verification",
+    href: "/tools/jwt-decoder",
+    icon: "JWT",
+    category: "Security"
+  },
+  {
+    name: "UUID Generator",
+    description: "Generate UUID v4 identifiers, single or in bulk",
+    href: "/tools/uuid-generator",
+    icon: "ID",
+    category: "Generators"
+  },
+  {
+    name: "Hash Generator",
+    description: "Generate MD5, SHA-1, SHA-256, SHA-384, SHA-512 hashes",
+    href: "/tools/hash-generator",
+    icon: "#",
+    category: "Security"
+  },
+  {
+    name: "Regex Tester",
+    description: "Test regular expressions with real-time match highlighting",
+    href: "/tools/regex-tester",
+    icon: ".*",
+    category: "Testing"
+  },
+  {
+    name: "Color Converter",
+    description: "Convert between HEX, RGB, and HSL color formats",
+    href: "/tools/color-converter",
+    icon: "CLR",
+    category: "Design"
+  },
+  {
+    name: "Timestamp Converter",
+    description: "Convert Unix timestamps to human-readable dates and back",
+    href: "/tools/timestamp-converter",
+    icon: "T",
+    category: "Converters"
+  },
+  {
+    name: "Lorem Ipsum Generator",
+    description: "Generate placeholder text in paragraphs, sentences, or words",
+    href: "/tools/lorem-ipsum-generator",
+    icon: "Aa",
+    category: "Generators"
+  },
+  {
+    name: "Cron Expression Generator",
+    description: "Build and decode cron expressions with visual editor",
+    href: "/tools/cron-expression-generator",
+    icon: "*/5",
+    category: "DevOps"
+  },
+  {
+    name: "HTML Entity Encoder",
+    description: "Encode and decode HTML entities (named and numeric)",
+    href: "/tools/html-entity-encoder",
+    icon: "&amp;",
+    category: "Encoders"
+  },
+  {
+    name: "Markdown Preview",
+    description: "Write Markdown and see rendered HTML in real-time",
+    href: "/tools/markdown-preview",
+    icon: "MD",
+    category: "Formatters"
+  },
+  {
+    name: "CSS Minifier",
+    description: "Minify and beautify CSS with size comparison stats",
+    href: "/tools/css-minifier",
+    icon: "CSS",
+    category: "Formatters"
+  },
+  {
+    name: "Password Generator",
+    description: "Generate strong, customizable passwords with strength meter",
+    href: "/tools/password-generator",
+    icon: "***",
+    category: "Security"
+  },
+];
+
+const categories = [...new Set(tools.map(t => t.category))];
+---
+
+<Layout
+  title="Free Online Developer Tools"
+  description="15+ free online tools for developers. JSON formatter, Base64 encoder, JWT decoder, UUID generator, regex tester, and more. No signup, no ads, 100% client-side."
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-b from-surface-light to-surface py-16">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-text mb-4">
+        Free Developer Tools
+      </h1>
+      <p class="text-lg text-text-muted max-w-2xl mx-auto mb-6">
+        15+ essential tools for developers. No signup, no ads, no tracking.
+        All processing happens in your browser — your data never leaves your device.
+      </p>
+      <div class="flex flex-wrap justify-center gap-2 text-sm">
+        {categories.map(cat => (
+          <span class="px-3 py-1 bg-surface border border-border rounded-full text-text-muted">
+            {cat}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <section class="max-w-5xl mx-auto px-4 -mt-6">
+    <div class="relative">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search tools... (e.g., json, base64, hash)"
+        class="w-full bg-surface-light border border-border rounded-xl px-5 py-4 text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary text-lg"
+      />
+      <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    </div>
+  </section>
+
+  <!-- Tools Grid -->
+  <section class="max-w-5xl mx-auto px-4 py-10">
+    <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {tools.map(tool => (
+        <a
+          href={tool.href}
+          class="tool-card group bg-surface-light border border-border rounded-xl p-5 hover:border-primary/50 hover:bg-surface-lighter transition-all duration-200"
+          data-name={tool.name.toLowerCase()}
+          data-desc={tool.description.toLowerCase()}
+          data-cat={tool.category.toLowerCase()}
+        >
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-mono font-bold text-sm shrink-0 group-hover:bg-primary/20 transition-colors">
+              {tool.icon}
+            </div>
+            <div>
+              <h2 class="font-semibold text-text group-hover:text-primary transition-colors">
+                {tool.name}
+              </h2>
+              <p class="text-sm text-text-muted mt-1">
+                {tool.description}
+              </p>
+              <span class="inline-block mt-2 text-xs text-accent/80 bg-accent/10 px-2 py-0.5 rounded-full">
+                {tool.category}
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div id="noResults" class="hidden text-center py-12 text-text-muted">
+      No tools found matching your search.
+    </div>
+  </section>
+
+  <!-- Promo Section -->
+  <section class="max-w-5xl mx-auto px-4 pb-12">
+    <div class="bg-surface-light border border-border rounded-xl p-6 md:p-8">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h2 class="text-xl font-semibold text-text mb-3">Why DevToolKit?</h2>
+          <ul class="text-sm text-text-muted space-y-2">
+            <li class="flex items-center gap-2"><span class="text-accent">&#10003;</span> 100% free, no signup required</li>
+            <li class="flex items-center gap-2"><span class="text-accent">&#10003;</span> All processing in your browser</li>
+            <li class="flex items-center gap-2"><span class="text-accent">&#10003;</span> No data sent to any server</li>
+            <li class="flex items-center gap-2"><span class="text-accent">&#10003;</span> No ads, no tracking</li>
+            <li class="flex items-center gap-2"><span class="text-accent">&#10003;</span> Fast, modern, mobile-friendly</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-text mb-3">Developer Resources</h2>
+          <ul class="text-sm text-text-muted space-y-2">
+            <li><a href="https://m.do.co/c/placeholder" target="_blank" rel="noopener" class="text-accent hover:underline">DigitalOcean — Get $200 free credit</a></li>
+            <li><a href="https://vercel.com" target="_blank" rel="noopener" class="text-accent hover:underline">Vercel — Deploy for free</a></li>
+            <li><a href="https://zerix1.gumroad.com/l/vrblqu" target="_blank" rel="noopener" class="text-accent hover:underline">Nostr AI Toolkit — $19</a></li>
+            <li><a href="https://zerix1.gumroad.com/l/pzesvw" target="_blank" rel="noopener" class="text-accent hover:underline">Ollama API Monetizer — $14</a></li>
+            <li><a href="https://zerix1.gumroad.com/l/ptikgy" target="_blank" rel="noopener" class="text-accent hover:underline">Terminal Income Starter — $9</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    const toolCards = document.querySelectorAll('.tool-card');
+    const noResults = document.getElementById('noResults');
+
+    searchInput?.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      toolCards.forEach(card => {
+        const el = card as HTMLElement;
+        const name = el.dataset.name || '';
+        const desc = el.dataset.desc || '';
+        const cat = el.dataset.cat || '';
+        const match = !query || name.includes(query) || desc.includes(query) || cat.includes(query);
+        el.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+
+      if (noResults) {
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    });
+  </script>
+</Layout>

@@ -1,0 +1,409 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Cron Expression Generator & Explainer"
+  description="Build, decode, and test cron expressions visually. See human-readable explanations and next 5 execution times for any cron schedule."
+  keywords={["cron expression generator", "cron builder", "cron explainer", "cron schedule", "cron next run", "crontab generator", "cron expression tester"]}
+  relatedTools={[
+    { name: "Timestamp Converter", href: "/tools/timestamp-converter" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "Regex Tester", href: "/tools/regex-tester" },
+    { name: "UUID Generator", href: "/tools/uuid-generator" }
+  ]}
+>
+  <!-- Preset Buttons -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-text-muted mb-2">Quick Presets</label>
+    <div class="flex flex-wrap gap-2">
+      <button id="preset-every-min" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Every Minute</button>
+      <button id="preset-every-hour" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Every Hour</button>
+      <button id="preset-daily" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Daily at Midnight</button>
+      <button id="preset-weekly" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Weekly (Sun)</button>
+      <button id="preset-monthly" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Monthly (1st)</button>
+      <button id="preset-weekdays" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Weekdays 9 AM</button>
+      <button id="preset-every5" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Every 5 Min</button>
+    </div>
+  </div>
+
+  <!-- Visual Builder -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-text-muted mb-2">Visual Cron Builder</label>
+    <div class="grid grid-cols-5 gap-3">
+      <div>
+        <label class="block text-xs text-text-muted mb-1">Minute (0-59)</label>
+        <input id="field-minute" type="text" value="*" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+      </div>
+      <div>
+        <label class="block text-xs text-text-muted mb-1">Hour (0-23)</label>
+        <input id="field-hour" type="text" value="*" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+      </div>
+      <div>
+        <label class="block text-xs text-text-muted mb-1">Day of Month (1-31)</label>
+        <input id="field-dom" type="text" value="*" class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+      </div>
+      <div>
+        <label class="block text-xs text-text-muted mb-1">Month (1-12)</label>
+        <select id="field-month" class="w-full bg-surface border border-border rounded-lg p-3 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="*">* (Every)</option>
+          <option value="1">1 (Jan)</option>
+          <option value="2">2 (Feb)</option>
+          <option value="3">3 (Mar)</option>
+          <option value="4">4 (Apr)</option>
+          <option value="5">5 (May)</option>
+          <option value="6">6 (Jun)</option>
+          <option value="7">7 (Jul)</option>
+          <option value="8">8 (Aug)</option>
+          <option value="9">9 (Sep)</option>
+          <option value="10">10 (Oct)</option>
+          <option value="11">11 (Nov)</option>
+          <option value="12">12 (Dec)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs text-text-muted mb-1">Day of Week (0-6)</label>
+        <select id="field-dow" class="w-full bg-surface border border-border rounded-lg p-3 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="*">* (Every)</option>
+          <option value="0">0 (Sun)</option>
+          <option value="1">1 (Mon)</option>
+          <option value="2">2 (Tue)</option>
+          <option value="3">3 (Wed)</option>
+          <option value="4">4 (Thu)</option>
+          <option value="5">5 (Fri)</option>
+          <option value="6">6 (Sat)</option>
+          <option value="1-5">1-5 (Mon-Fri)</option>
+          <option value="0,6">0,6 (Weekends)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generated Expression -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-text-muted mb-2">Cron Expression</label>
+    <div class="flex gap-3">
+      <input id="cron-expression" type="text" value="* * * * *" class="flex-1 bg-surface border border-border rounded-lg p-3 text-text font-mono text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+      <button id="btn-copy" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">Copy</button>
+    </div>
+  </div>
+
+  <!-- Decode Existing -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-text-muted mb-2">Or paste a cron expression to decode</label>
+    <div class="flex gap-3">
+      <input id="cron-decode-input" type="text" placeholder="e.g. 0 6 * * 1-5" class="flex-1 bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+      <button id="btn-decode" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors">Decode</button>
+    </div>
+  </div>
+
+  <!-- Explanation -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-text-muted mb-2">Human-Readable Explanation</label>
+    <div id="explanation" class="bg-surface border border-border rounded-lg p-4 text-text text-sm min-h-[40px]">
+      Every minute
+    </div>
+  </div>
+
+  <!-- Next Execution Times -->
+  <div>
+    <label class="block text-sm font-medium text-text-muted mb-2">Next 5 Execution Times</label>
+    <div id="next-runs" class="bg-surface border border-border rounded-lg p-4 text-text font-mono text-sm space-y-1">
+    </div>
+  </div>
+
+  <script>
+    const fieldMinute = document.getElementById('field-minute') as HTMLInputElement;
+    const fieldHour = document.getElementById('field-hour') as HTMLInputElement;
+    const fieldDom = document.getElementById('field-dom') as HTMLInputElement;
+    const fieldMonth = document.getElementById('field-month') as HTMLSelectElement;
+    const fieldDow = document.getElementById('field-dow') as HTMLSelectElement;
+    const cronExpression = document.getElementById('cron-expression') as HTMLInputElement;
+    const explanationEl = document.getElementById('explanation')!;
+    const nextRunsEl = document.getElementById('next-runs')!;
+
+    const monthNames = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    function buildFromFields() {
+      const expr = `${fieldMinute.value} ${fieldHour.value} ${fieldDom.value} ${fieldMonth.value} ${fieldDow.value}`;
+      cronExpression.value = expr;
+      updateOutput(expr);
+    }
+
+    function setFields(min: string, hr: string, dom: string, mon: string, dow: string) {
+      fieldMinute.value = min;
+      fieldHour.value = hr;
+      fieldDom.value = dom;
+      fieldMonth.value = mon;
+      fieldDow.value = dow;
+      buildFromFields();
+    }
+
+    function explainField(value: string, fieldName: string, names?: string[]): string {
+      if (value === '*') return `every ${fieldName}`;
+      if (value.includes('/')) {
+        const parts = value.split('/');
+        const base = parts[0] === '*' ? '' : ` starting at ${fieldName} ${parts[0]}`;
+        return `every ${parts[1]} ${fieldName}(s)${base}`;
+      }
+      if (value.includes('-')) {
+        const parts = value.split('-');
+        const from = names ? names[parseInt(parts[0])] || parts[0] : parts[0];
+        const to = names ? names[parseInt(parts[1])] || parts[1] : parts[1];
+        return `${from} through ${to}`;
+      }
+      if (value.includes(',')) {
+        const vals = value.split(',').map(v => names ? names[parseInt(v)] || v : v);
+        return vals.join(', ');
+      }
+      if (names && names[parseInt(value)]) return names[parseInt(value)];
+      return value;
+    }
+
+    function explainCron(expr: string): string {
+      const parts = expr.trim().split(/\s+/);
+      if (parts.length !== 5) return 'Invalid cron expression (need exactly 5 fields)';
+
+      const [min, hr, dom, mon, dow] = parts;
+
+      // Special common patterns
+      if (min === '*' && hr === '*' && dom === '*' && mon === '*' && dow === '*') return 'Every minute';
+      if (min === '0' && hr === '*' && dom === '*' && mon === '*' && dow === '*') return 'Every hour, at minute 0';
+      if (min === '0' && hr === '0' && dom === '*' && mon === '*' && dow === '*') return 'Every day at midnight (00:00)';
+      if (min === '0' && hr === '0' && dom === '*' && mon === '*' && dow === '0') return 'Every Sunday at midnight (00:00)';
+      if (min === '0' && hr === '0' && dom === '1' && mon === '*' && dow === '*') return 'On the 1st of every month at midnight (00:00)';
+
+      let result = 'At ';
+
+      // Minute
+      if (min === '*') {
+        result += 'every minute';
+      } else if (min.includes('/')) {
+        result += `every ${min.split('/')[1]} minute(s)`;
+      } else {
+        result += `minute ${min}`;
+      }
+
+      // Hour
+      if (hr === '*') {
+        result += ' of every hour';
+      } else if (hr.includes('/')) {
+        result += `, every ${hr.split('/')[1]} hour(s)`;
+      } else if (hr.includes(',')) {
+        result += `, at hour(s) ${hr}`;
+      } else if (hr.includes('-')) {
+        result += `, between hours ${hr}`;
+      } else {
+        result += `, at ${hr.padStart(2, '0')}:${min === '*' ? '**' : min.padStart(2, '0')}`;
+        // Rewrite to be cleaner
+        if (min !== '*' && !min.includes('/') && !min.includes(',')) {
+          result = `At ${hr.padStart(2, '0')}:${min.padStart(2, '0')}`;
+        }
+      }
+
+      // Day of month
+      if (dom !== '*') {
+        if (dom.includes('/')) {
+          result += `, every ${dom.split('/')[1]} day(s)`;
+        } else if (dom.includes(',')) {
+          result += `, on day(s) ${dom} of the month`;
+        } else if (dom.includes('-')) {
+          result += `, on days ${dom} of the month`;
+        } else {
+          result += `, on day ${dom} of the month`;
+        }
+      }
+
+      // Month
+      if (mon !== '*') {
+        if (mon.includes('/')) {
+          result += `, every ${mon.split('/')[1]} month(s)`;
+        } else if (mon.includes(',')) {
+          const ms = mon.split(',').map(m => monthNames[parseInt(m)] || m);
+          result += `, in ${ms.join(', ')}`;
+        } else if (mon.includes('-')) {
+          const ps = mon.split('-');
+          result += `, ${monthNames[parseInt(ps[0])] || ps[0]} through ${monthNames[parseInt(ps[1])] || ps[1]}`;
+        } else {
+          result += `, in ${monthNames[parseInt(mon)] || mon}`;
+        }
+      }
+
+      // Day of week
+      if (dow !== '*') {
+        if (dow === '1-5') {
+          result += ', Monday through Friday';
+        } else if (dow === '0,6') {
+          result += ', on weekends';
+        } else if (dow.includes(',')) {
+          const ds = dow.split(',').map(d => dayNames[parseInt(d)] || d);
+          result += `, on ${ds.join(', ')}`;
+        } else if (dow.includes('-')) {
+          const ps = dow.split('-');
+          result += `, ${dayNames[parseInt(ps[0])] || ps[0]} through ${dayNames[parseInt(ps[1])] || ps[1]}`;
+        } else {
+          result += `, on ${dayNames[parseInt(dow)] || dow}`;
+        }
+      }
+
+      return result;
+    }
+
+    function parseFieldValues(field: string, min: number, max: number): number[] {
+      const values: Set<number> = new Set();
+      const segments = field.split(',');
+      for (const seg of segments) {
+        if (seg.includes('/')) {
+          const [rangePart, stepStr] = seg.split('/');
+          const step = parseInt(stepStr);
+          let start = min;
+          let end = max;
+          if (rangePart !== '*') {
+            if (rangePart.includes('-')) {
+              const [a, b] = rangePart.split('-').map(Number);
+              start = a; end = b;
+            } else {
+              start = parseInt(rangePart);
+            }
+          }
+          for (let i = start; i <= end; i += step) values.add(i);
+        } else if (seg.includes('-')) {
+          const [a, b] = seg.split('-').map(Number);
+          for (let i = a; i <= b; i++) values.add(i);
+        } else if (seg === '*') {
+          for (let i = min; i <= max; i++) values.add(i);
+        } else {
+          values.add(parseInt(seg));
+        }
+      }
+      return Array.from(values).sort((a, b) => a - b);
+    }
+
+    function getNextRuns(expr: string, count: number): Date[] {
+      const parts = expr.trim().split(/\s+/);
+      if (parts.length !== 5) return [];
+
+      const minutes = parseFieldValues(parts[0], 0, 59);
+      const hours = parseFieldValues(parts[1], 0, 23);
+      const doms = parseFieldValues(parts[2], 1, 31);
+      const months = parseFieldValues(parts[3], 1, 12);
+      const dows = parseFieldValues(parts[4], 0, 6);
+
+      const domIsWild = parts[2] === '*';
+      const dowIsWild = parts[4] === '*';
+
+      const results: Date[] = [];
+      const now = new Date();
+      const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes() + 1, 0, 0);
+      const maxIter = 525600; // 1 year of minutes
+
+      for (let i = 0; i < maxIter && results.length < count; i++) {
+        const m = cursor.getMinutes();
+        const h = cursor.getHours();
+        const d = cursor.getDate();
+        const mo = cursor.getMonth() + 1;
+        const wd = cursor.getDay();
+
+        const minMatch = minutes.includes(m);
+        const hrMatch = hours.includes(h);
+        const monMatch = months.includes(mo);
+
+        let dayMatch: boolean;
+        if (domIsWild && dowIsWild) {
+          dayMatch = true;
+        } else if (domIsWild) {
+          dayMatch = dows.includes(wd);
+        } else if (dowIsWild) {
+          dayMatch = doms.includes(d);
+        } else {
+          // Both specified: union (standard cron behavior)
+          dayMatch = doms.includes(d) || dows.includes(wd);
+        }
+
+        if (minMatch && hrMatch && dayMatch && monMatch) {
+          results.push(new Date(cursor));
+        }
+
+        cursor.setMinutes(cursor.getMinutes() + 1);
+      }
+
+      return results;
+    }
+
+    function updateOutput(expr: string) {
+      explanationEl.textContent = explainCron(expr);
+      const runs = getNextRuns(expr, 5);
+      if (runs.length === 0) {
+        nextRunsEl.innerHTML = '<div class="text-text-muted">No upcoming executions found (invalid expression or no matches in next year)</div>';
+      } else {
+        nextRunsEl.innerHTML = runs.map((d, i) => {
+          const pad = (n: number) => n.toString().padStart(2, '0');
+          const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
+          const dayName = dayNames[d.getDay()];
+          return `<div class="flex items-center gap-2"><span class="text-text-muted">${i+1}.</span> <span>${dateStr}</span> <span class="text-text-muted">(${dayName})</span></div>`;
+        }).join('');
+      }
+    }
+
+    // Events for visual builder fields
+    [fieldMinute, fieldHour, fieldDom].forEach(el => el.addEventListener('input', buildFromFields));
+    [fieldMonth, fieldDow].forEach(el => el.addEventListener('change', buildFromFields));
+
+    // Direct expression input
+    cronExpression.addEventListener('input', () => {
+      const parts = cronExpression.value.trim().split(/\s+/);
+      if (parts.length === 5) {
+        fieldMinute.value = parts[0];
+        fieldHour.value = parts[1];
+        fieldDom.value = parts[2];
+        // Set select values
+        const monthOpts = Array.from(fieldMonth.options).map(o => o.value);
+        fieldMonth.value = monthOpts.includes(parts[3]) ? parts[3] : '*';
+        const dowOpts = Array.from(fieldDow.options).map(o => o.value);
+        fieldDow.value = dowOpts.includes(parts[4]) ? parts[4] : '*';
+        updateOutput(cronExpression.value);
+      }
+    });
+
+    // Decode button
+    document.getElementById('btn-decode')!.addEventListener('click', () => {
+      const val = (document.getElementById('cron-decode-input') as HTMLInputElement).value.trim();
+      if (val) {
+        cronExpression.value = val;
+        cronExpression.dispatchEvent(new Event('input'));
+      }
+    });
+
+    // Copy
+    document.getElementById('btn-copy')!.addEventListener('click', () => {
+      navigator.clipboard.writeText(cronExpression.value);
+      const btn = document.getElementById('btn-copy')!;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+
+    // Presets
+    document.getElementById('preset-every-min')!.addEventListener('click', () => setFields('*', '*', '*', '*', '*'));
+    document.getElementById('preset-every-hour')!.addEventListener('click', () => setFields('0', '*', '*', '*', '*'));
+    document.getElementById('preset-daily')!.addEventListener('click', () => setFields('0', '0', '*', '*', '*'));
+    document.getElementById('preset-weekly')!.addEventListener('click', () => setFields('0', '0', '*', '*', '0'));
+    document.getElementById('preset-monthly')!.addEventListener('click', () => setFields('0', '0', '1', '*', '*'));
+    document.getElementById('preset-weekdays')!.addEventListener('click', () => setFields('0', '9', '*', '*', '1-5'));
+    document.getElementById('preset-every5')!.addEventListener('click', () => setFields('*/5', '*', '*', '*', '*'));
+
+    // Initial render
+    updateOutput('* * * * *');
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>Use the visual builder to set each cron field (minute, hour, day, month, weekday).</li>
+      <li>Or click a preset button for common schedules.</li>
+      <li>Or paste an existing cron expression in the decode field and click Decode.</li>
+      <li>Read the human-readable explanation to verify your schedule.</li>
+      <li>Check the next 5 execution times to confirm correctness.</li>
+      <li>Copy the expression and paste it into your crontab or CI/CD config.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

@@ -1,0 +1,301 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  title="Free Unix Timestamp Converter Online"
+  description="Convert Unix timestamps to human-readable dates and vice versa. Live clock, ISO 8601, locale strings, relative time, and timezone info."
+  keywords={["unix timestamp", "timestamp converter", "epoch converter", "unix time", "date converter", "iso 8601", "epoch time", "time converter", "unix to date"]}
+  relatedTools={[
+    { name: "UUID Generator", href: "/tools/uuid-generator" },
+    { name: "JSON Formatter", href: "/tools/json-formatter" },
+    { name: "Cron Expression Generator", href: "/tools/cron-expression-generator" },
+    { name: "JWT Decoder", href: "/tools/jwt-decoder" }
+  ]}
+>
+  <!-- Live Clock -->
+  <div class="bg-surface rounded-xl border border-border p-6 mb-6 text-center">
+    <label class="block text-sm font-medium text-text-muted mb-2">Current Unix Timestamp</label>
+    <div id="liveTimestamp" class="text-4xl font-mono font-bold text-primary mb-1 tabular-nums"></div>
+    <div id="liveTimestampMs" class="text-sm font-mono text-text-muted mb-2 tabular-nums"></div>
+    <div id="liveDate" class="text-sm text-text-muted tabular-nums"></div>
+    <div class="mt-3 flex justify-center gap-3">
+      <button id="copyLiveTs" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy Seconds</button>
+      <button id="copyLiveTsMs" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm">Copy Milliseconds</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Timestamp to Date -->
+    <div class="bg-surface rounded-xl border border-border p-6">
+      <h3 class="text-lg font-semibold text-text mb-4">Timestamp to Date</h3>
+      <div class="mb-4">
+        <label for="tsInput" class="block text-sm font-medium text-text-muted mb-2">Unix Timestamp</label>
+        <input
+          type="text"
+          id="tsInput"
+          class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="e.g. 1700000000 or 1700000000000"
+        />
+      </div>
+      <button id="btnConvertTs" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors w-full mb-4">
+        Convert to Date
+      </button>
+      <div id="tsResults" class="space-y-3 hidden">
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">ISO 8601 (UTC)</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="tsIso">Copy</button>
+          </div>
+          <div id="tsIso" class="font-mono text-sm text-accent bg-surface-light rounded px-3 py-2 border border-border break-all"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">ISO 8601 (Local)</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="tsIsoLocal">Copy</button>
+          </div>
+          <div id="tsIsoLocal" class="font-mono text-sm text-accent bg-surface-light rounded px-3 py-2 border border-border break-all"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">Locale String</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="tsLocale">Copy</button>
+          </div>
+          <div id="tsLocale" class="font-mono text-sm text-accent bg-surface-light rounded px-3 py-2 border border-border break-all"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">UTC String</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="tsUtc">Copy</button>
+          </div>
+          <div id="tsUtc" class="font-mono text-sm text-accent bg-surface-light rounded px-3 py-2 border border-border break-all"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">Relative Time</span>
+          </div>
+          <div id="tsRelative" class="font-mono text-sm text-accent bg-surface-light rounded px-3 py-2 border border-border break-all"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date to Timestamp -->
+    <div class="bg-surface rounded-xl border border-border p-6">
+      <h3 class="text-lg font-semibold text-text mb-4">Date to Timestamp</h3>
+      <div class="mb-4">
+        <label for="dateInput" class="block text-sm font-medium text-text-muted mb-2">Date & Time</label>
+        <input
+          type="datetime-local"
+          id="dateInput"
+          class="w-full bg-surface border border-border rounded-lg p-3 text-text font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          step="1"
+        />
+      </div>
+      <div class="flex gap-2 mb-4">
+        <button id="btnNow" class="px-4 py-2 bg-surface-lighter hover:bg-border text-text-muted font-medium rounded-lg transition-colors text-sm flex-1">
+          Now
+        </button>
+        <button id="btnConvertDate" class="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors flex-1">
+          Convert to Timestamp
+        </button>
+      </div>
+      <div id="dateResults" class="space-y-3 hidden">
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">Seconds</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="dtSeconds">Copy</button>
+          </div>
+          <div id="dtSeconds" class="font-mono text-2xl text-primary bg-surface-light rounded px-3 py-2 border border-border"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">Milliseconds</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="dtMillis">Copy</button>
+          </div>
+          <div id="dtMillis" class="font-mono text-lg text-accent bg-surface-light rounded px-3 py-2 border border-border"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-text-muted">ISO 8601</span>
+            <button class="copy-result-btn text-xs text-text-muted hover:text-accent transition-colors" data-target="dtIso">Copy</button>
+          </div>
+          <div id="dtIso" class="font-mono text-sm text-accent bg-surface-light rounded px-3 py-2 border border-border break-all"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timezone Info -->
+  <div class="bg-surface rounded-xl border border-border p-4 mt-6">
+    <div class="flex flex-wrap gap-6 text-sm text-text-muted">
+      <span>Your timezone: <strong id="tzName" class="text-text"></strong></span>
+      <span>UTC offset: <strong id="tzOffset" class="text-text"></strong></span>
+    </div>
+  </div>
+
+  <script>
+    // Live clock
+    function updateLiveClock() {
+      const now = Date.now();
+      const sec = Math.floor(now / 1000);
+      document.getElementById('liveTimestamp').textContent = sec;
+      document.getElementById('liveTimestampMs').textContent = now + ' ms';
+      document.getElementById('liveDate').textContent = new Date(now).toISOString();
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+
+    // Copy live timestamp
+    document.getElementById('copyLiveTs').addEventListener('click', function() {
+      const ts = Math.floor(Date.now() / 1000).toString();
+      navigator.clipboard.writeText(ts).then(() => {
+        this.textContent = 'Copied!';
+        this.classList.add('text-accent');
+        setTimeout(() => { this.textContent = 'Copy Seconds'; this.classList.remove('text-accent'); }, 1500);
+      });
+    });
+    document.getElementById('copyLiveTsMs').addEventListener('click', function() {
+      const ts = Date.now().toString();
+      navigator.clipboard.writeText(ts).then(() => {
+        this.textContent = 'Copied!';
+        this.classList.add('text-accent');
+        setTimeout(() => { this.textContent = 'Copy Milliseconds'; this.classList.remove('text-accent'); }, 1500);
+      });
+    });
+
+    // Relative time
+    function relativeTime(date) {
+      const now = Date.now();
+      const diffMs = now - date.getTime();
+      const absDiff = Math.abs(diffMs);
+      const isFuture = diffMs < 0;
+      const suffix = isFuture ? 'from now' : 'ago';
+
+      const seconds = Math.floor(absDiff / 1000);
+      if (seconds < 60) return `${seconds} second${seconds !== 1 ? 's' : ''} ${suffix}`;
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes} minute${minutes !== 1 ? 's' : ''} ${suffix}`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours} hour${hours !== 1 ? 's' : ''} ${suffix}`;
+      const days = Math.floor(hours / 24);
+      if (days < 30) return `${days} day${days !== 1 ? 's' : ''} ${suffix}`;
+      const months = Math.floor(days / 30);
+      if (months < 12) return `${months} month${months !== 1 ? 's' : ''} ${suffix}`;
+      const years = Math.floor(days / 365.25);
+      return `${years} year${years !== 1 ? 's' : ''} ${suffix}`;
+    }
+
+    function formatLocalIso(date) {
+      const pad = (n, d = 2) => String(n).padStart(d, '0');
+      const y = date.getFullYear();
+      const mo = pad(date.getMonth() + 1);
+      const d = pad(date.getDate());
+      const h = pad(date.getHours());
+      const mi = pad(date.getMinutes());
+      const s = pad(date.getSeconds());
+      const offMin = -date.getTimezoneOffset();
+      const offH = pad(Math.floor(Math.abs(offMin) / 60));
+      const offM = pad(Math.abs(offMin) % 60);
+      const sign = offMin >= 0 ? '+' : '-';
+      return `${y}-${mo}-${d}T${h}:${mi}:${s}${sign}${offH}:${offM}`;
+    }
+
+    // Timestamp to Date
+    function convertTimestamp() {
+      const input = document.getElementById('tsInput').value.trim();
+      if (!input) return;
+
+      let ts = parseInt(input, 10);
+      if (isNaN(ts)) return;
+
+      // Auto-detect seconds vs milliseconds
+      if (ts > 1e12) {
+        // milliseconds
+      } else {
+        ts = ts * 1000;
+      }
+
+      const date = new Date(ts);
+      if (isNaN(date.getTime())) return;
+
+      document.getElementById('tsIso').textContent = date.toISOString();
+      document.getElementById('tsIsoLocal').textContent = formatLocalIso(date);
+      document.getElementById('tsLocale').textContent = date.toLocaleString();
+      document.getElementById('tsUtc').textContent = date.toUTCString();
+      document.getElementById('tsRelative').textContent = relativeTime(date);
+      document.getElementById('tsResults').classList.remove('hidden');
+    }
+
+    document.getElementById('btnConvertTs').addEventListener('click', convertTimestamp);
+    document.getElementById('tsInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') convertTimestamp();
+    });
+    document.getElementById('tsInput').addEventListener('input', convertTimestamp);
+
+    // Date to Timestamp
+    function convertDate() {
+      const input = document.getElementById('dateInput').value;
+      if (!input) return;
+
+      const date = new Date(input);
+      if (isNaN(date.getTime())) return;
+
+      const seconds = Math.floor(date.getTime() / 1000);
+      const millis = date.getTime();
+
+      document.getElementById('dtSeconds').textContent = seconds;
+      document.getElementById('dtMillis').textContent = millis;
+      document.getElementById('dtIso').textContent = date.toISOString();
+      document.getElementById('dateResults').classList.remove('hidden');
+    }
+
+    document.getElementById('btnConvertDate').addEventListener('click', convertDate);
+    document.getElementById('dateInput').addEventListener('input', convertDate);
+
+    // Now button
+    document.getElementById('btnNow').addEventListener('click', () => {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const val = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      document.getElementById('dateInput').value = val;
+      convertDate();
+    });
+
+    // Copy result buttons
+    document.querySelectorAll('.copy-result-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = document.getElementById(btn.dataset.target).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('text-accent');
+          setTimeout(() => { btn.textContent = orig; btn.classList.remove('text-accent'); }, 1500);
+        });
+      });
+    });
+
+    // Timezone info
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById('tzName').textContent = tz;
+    const offset = -new Date().getTimezoneOffset();
+    const offsetH = Math.floor(Math.abs(offset) / 60);
+    const offsetM = Math.abs(offset) % 60;
+    const offsetSign = offset >= 0 ? '+' : '-';
+    document.getElementById('tzOffset').textContent = `UTC${offsetSign}${String(offsetH).padStart(2,'0')}:${String(offsetM).padStart(2,'0')}`;
+
+    // Set default timestamp input
+    document.getElementById('tsInput').value = Math.floor(Date.now() / 1000);
+    convertTimestamp();
+  </script>
+
+  <Fragment slot="howto">
+    <ol class="list-decimal list-inside text-text-muted space-y-2 text-sm">
+      <li>The current Unix timestamp is shown at the top, updating every second.</li>
+      <li>To convert a timestamp to a date: enter a Unix timestamp (seconds or milliseconds) in the left panel.</li>
+      <li>The converter auto-detects whether your input is in seconds or milliseconds.</li>
+      <li>To convert a date to a timestamp: use the date picker in the right panel, or click "Now".</li>
+      <li>Click "Copy" next to any result to copy it to your clipboard.</li>
+      <li>Your local timezone and UTC offset are shown at the bottom.</li>
+    </ol>
+  </Fragment>
+</ToolLayout>

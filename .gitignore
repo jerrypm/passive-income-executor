@@ -33,6 +33,7 @@ scripts/twitter/chrome_profile/
 # Debug artifacts
 *.html
 logs/*.png
+websites/barangunik/scripts/shopee-debug.png
 
 # YouTube Shorts output
 videos/ready/*.mp4
