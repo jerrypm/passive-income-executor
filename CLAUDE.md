@@ -159,12 +159,61 @@ Semua research sudah selesai (4 dokumen di `docs/plans/`). Sekarang tinggal EKSE
 - Untuk navigate di tab yang sama, HARUS cari window Chrome yang profile "Jeri" dulu
 - Kalau salah profile = salah akun = MASALAH BESAR
 
+## BLOGGER AUTO-POST (jrdevhub.com)
+
+### Quick Post Draft
+```bash
+echo "y" | /usr/bin/python3 -W ignore post_to_blogger.py -f "/full/path/to/article.html" --draft 2>&1
+```
+Run from: `scripts/blogger/`
+Python: HARUS pakai `/usr/bin/python3` (bukan default python3)
+
+### Article Format
+Setiap file HTML artikel HARUS punya comment block di atas:
+```html
+<!--
+TITLE: Judul Artikel
+SEARCH DESCRIPTION: Deskripsi SEO (max 155 char)
+LABELS: tag1, tag2, tag3
+-->
+(konten HTML di sini)
+```
+
+### Rules
+- JANGAN pakai HTML entities (`&mdash;`, `&ndash;`) — pakai unicode langsung: — dan –
+- Simpan artikel di `articles/` dengan format: `NNN-slug-name.html`
+- SELALU post sebagai `--draft` kecuali user bilang publish
+- Include gambar Unsplash (free license, tambah `?w=800&q=80`)
+- Include Gumroad product CTA di akhir artikel yang relevan
+- Pakai `!important` untuk list styles (override template CSS reset)
+
+### Gumroad Products (promote di artikel)
+1. Terminal Income Starter ($9) — https://zerix1.gumroad.com/l/ptikgy
+2. Ollama API Monetizer ($14) — https://zerix1.gumroad.com/l/pzesvw
+3. Nostr AI Toolkit ($19) — https://zerix1.gumroad.com/l/vrblqu
+4. InfiXOX Android Source ($14) — https://zerix1.gumroad.com/l/pheupx
+
+### Amazon Affiliate
+- Associate ID: `fullmoonmauli-20`
+- Link: `https://www.amazon.com/dp/ASIN?tag=fullmoonmauli-20`
+
+### Blog Design Specs
+- Fonts: Domine (body), Josefin Sans (headings), Montserrat (labels)
+- Colors: #ff7f24 (primary), #c62641 (links), #333 (headings)
+- Width: 728px content area
+
 ## FOLDER STRUCTURE
 ```
 passive-income-executor/
 ├── CLAUDE.md              ← File ini (auto-loaded by Claude Code)
 ├── docs/plans/            ← Research documents (Part 1-4)
-├── scripts/               ← Automation scripts (cron, bots, etc)
+├── articles/              ← HTML articles for Blogger (siap post)
+├── scripts/               ← Automation scripts
+│   ├── blogger/           ← Blogger API auto-poster
+│   │   ├── post_to_blogger.py  ← Post HTML ke Blogger
+│   │   ├── auto_article.py     ← Generate + post via Ollama
+│   │   ├── client_secret.json  ← OAuth credentials (gitignored)
+│   │   └── token.json          ← Auth token (gitignored)
 │   ├── nostr/             ← Nostr bot & DVM scripts
 │   ├── ai-inference/      ← Ollama paywall middleware
 │   ├── content-machine/   ← Auto-publish scripts
@@ -173,7 +222,9 @@ passive-income-executor/
 ├── videos/
 │   ├── ready/             ← Generated shorts (MP4 + metadata)
 │   └── archive/           ← Already uploaded
+├── products/              ← Gumroad digital products
 ├── logs/                  ← Earnings & activity logs
+├── blogger.xml            ← Blogger template (jrdevhub theme)
 ├── .env                   ← Credentials (gitignored)
 └── .gitignore
 ```

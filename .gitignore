@@ -4,6 +4,10 @@
 *.key
 *.pem
 *.macaroon
+client_secret.json
+token.json
+scripts/blogger/client_secret.json
+scripts/blogger/token.json
 .solana-keypair.json
 .solana-stake-*.json
 
@@ -31,7 +35,6 @@ scripts/twitter/playwright_browser/
 scripts/twitter/chrome_profile/
 
 # Debug artifacts
-*.html
 logs/*.png
 websites/barangunik/scripts/shopee-debug.png
 
@@ -39,3 +42,8 @@ websites/barangunik/scripts/shopee-debug.png
 videos/ready/*.mp4
 videos/ready/*.txt
 videos/archive/
+
+# E-book build artifacts
+ebook/build/*.md
+ebook/output/*.docx
+ebook/output/*.pdf
