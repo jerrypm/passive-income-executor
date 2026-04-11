@@ -1,0 +1,64 @@
+/* General */
+"app_name" = "SwiftUI Starter Kit";
+"ok" = "OK";
+"cancel" = "Cancel";
+"error" = "Error";
+"retry" = "Retry";
+"loading" = "Loading...";
+
+/* Onboarding */
+"onboarding_title_1" = "Welcome";
+"onboarding_subtitle_1" = "Discover a new way to build amazing apps with SwiftUI.";
+"onboarding_title_2" = "Fast & Powerful";
+"onboarding_subtitle_2" = "Built with VIPER architecture for scalable and testable code.";
+"onboarding_title_3" = "Get Started";
+"onboarding_subtitle_3" = "Everything you need to launch your next iOS app.";
+"skip" = "Skip";
+"next" = "Next";
+"get_started" = "Get Started";
+
+/* Auth */
+"login" = "Log In";
+"register" = "Sign Up";
+"email" = "Email";
+"password" = "Password";
+"confirm_password" = "Confirm Password";
+"name" = "Full Name";
+"forgot_password" = "Forgot Password?";
+"dont_have_account" = "Don't have an account? Sign Up";
+"already_have_account" = "Already have an account? Log In";
+"send_reset_link" = "Send Reset Link";
+"reset_link_sent" = "Check your email for the password reset link.";
+
+/* Validation */
+"invalid_email" = "Please enter a valid email address";
+"password_too_short" = "Password must be at least 8 characters";
+"passwords_dont_match" = "Passwords don't match";
+"name_required" = "Name is required";
+
+/* Tabs & Home */
+"home" = "Home";
+"explore" = "Explore";
+"profile" = "Profile";
+"no_items" = "No items yet";
+"pull_to_refresh" = "Pull to refresh or tap retry";
+
+/* Settings */
+"settings" = "Settings";
+"notifications" = "Notifications";
+"theme" = "Theme";
+"language" = "Language";
+"about" = "About";
+"version" = "Version";
+"terms_of_service" = "Terms of Service";
+"privacy_policy" = "Privacy Policy";
+"logout" = "Log Out";
+"dark" = "Dark";
+"light" = "Light";
+"system" = "System";
+
+/* States */
+"something_went_wrong" = "Something went wrong";
+"no_connection" = "No internet connection";
+"empty_here" = "Nothing here yet";
+"coming_soon" = "Coming soon";

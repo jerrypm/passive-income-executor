@@ -1,0 +1,64 @@
+/* General */
+"app_name" = "SwiftUI Starter Kit";
+"ok" = "OK";
+"cancel" = "Batal";
+"error" = "Kesalahan";
+"retry" = "Coba Lagi";
+"loading" = "Memuat...";
+
+/* Onboarding */
+"onboarding_title_1" = "Selamat Datang";
+"onboarding_subtitle_1" = "Temukan cara baru membangun aplikasi luar biasa dengan SwiftUI.";
+"onboarding_title_2" = "Cepat & Powerful";
+"onboarding_subtitle_2" = "Dibangun dengan arsitektur VIPER untuk kode yang scalable dan testable.";
+"onboarding_title_3" = "Mulai Sekarang";
+"onboarding_subtitle_3" = "Semua yang kamu butuhkan untuk meluncurkan aplikasi iOS berikutnya.";
+"skip" = "Lewati";
+"next" = "Lanjut";
+"get_started" = "Mulai";
+
+/* Auth */
+"login" = "Masuk";
+"register" = "Daftar";
+"email" = "Email";
+"password" = "Kata Sandi";
+"confirm_password" = "Konfirmasi Kata Sandi";
+"name" = "Nama Lengkap";
+"forgot_password" = "Lupa Kata Sandi?";
+"dont_have_account" = "Belum punya akun? Daftar";
+"already_have_account" = "Sudah punya akun? Masuk";
+"send_reset_link" = "Kirim Link Reset";
+"reset_link_sent" = "Cek email kamu untuk link reset kata sandi.";
+
+/* Validation */
+"invalid_email" = "Masukkan alamat email yang valid";
+"password_too_short" = "Kata sandi minimal 8 karakter";
+"passwords_dont_match" = "Kata sandi tidak cocok";
+"name_required" = "Nama wajib diisi";
+
+/* Tabs & Home */
+"home" = "Beranda";
+"explore" = "Jelajah";
+"profile" = "Profil";
+"no_items" = "Belum ada item";
+"pull_to_refresh" = "Tarik untuk refresh atau ketuk coba lagi";
+
+/* Settings */
+"settings" = "Pengaturan";
+"notifications" = "Notifikasi";
+"theme" = "Tema";
+"language" = "Bahasa";
+"about" = "Tentang";
+"version" = "Versi";
+"terms_of_service" = "Syarat Layanan";
+"privacy_policy" = "Kebijakan Privasi";
+"logout" = "Keluar";
+"dark" = "Gelap";
+"light" = "Terang";
+"system" = "Sistem";
+
+/* States */
+"something_went_wrong" = "Terjadi kesalahan";
+"no_connection" = "Tidak ada koneksi internet";
+"empty_here" = "Belum ada apa-apa di sini";
+"coming_soon" = "Segera hadir";
