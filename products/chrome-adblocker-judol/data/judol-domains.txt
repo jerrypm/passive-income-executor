@@ -1,0 +1,115 @@
+# Judol (Indonesian online gambling) domain blocklist
+#
+# Format: one domain per line. Lines beginning with `#` are comments and
+# blank lines are ignored. This file is the human-editable source list;
+# a build script converts it into `rules/judol-domains.json` (DNR rules).
+#
+# Do NOT include protocol (http/https), paths, or wildcards — just the
+# bare apex domain. The DNR filter `||domain^` already matches all
+# subdomains automatically.
+#
+# Grouped by theme for readability. Order does not affect rule IDs beyond
+# the sequential numbering applied by the build step.
+
+# Slot sites
+slot88.com
+slot138.com
+slot168.com
+slot303.com
+slotgacor77.com
+slotgacor88.com
+slotgacor138.com
+slotdemo.net
+slotbonus.com
+slotpragmatic.com
+slotmania88.com
+slotterbaru.net
+slothoki88.com
+slotjackpot.com
+slotonline88.com
+slotresmi.com
+
+# Gacor / Maxwin sites
+gacor77.net
+gacor88.com
+gacormax.com
+maxwin138.com
+maxwin77.net
+maxwin888.com
+maxwinslot.com
+rtpgacor.com
+rtplive.net
+rtpmaxwin.com
+rtpslot88.com
+jackpotgacor.com
+
+# Togel sites
+bandartogel303.com
+bandartogel88.com
+togelonline77.com
+togelresmi.com
+togel4d.net
+togelhoki.com
+togelsingapore.net
+togelhongkong.net
+togelsidney.net
+togelmacau.com
+daftartogel.net
+
+# Bandar / Agen sites
+bandarjudi88.com
+bandarbola168.com
+bandarcasino.net
+bandarslot138.com
+agenjudi303.com
+agenbola88.net
+agenslotgacor.com
+agencasino168.com
+agenresmi.com
+
+# Situs / Daftar sites
+situsjudi.com
+situsjudi88.com
+situsjudibola.net
+situsslot138.com
+situsslotgacor.com
+situsresmi168.com
+daftarslot.com
+daftarjudi88.net
+daftarbola303.com
+daftarcasino.com
+
+# Judi online general
+judionline88.com
+judionline303.net
+judibola168.com
+judicasino88.com
+judislot138.net
+judiresmi.com
+judimania.com
+judihoki88.com
+
+# Bola / Sportsbook
+bola88.net
+bola168.com
+bolagacor.com
+bolaresmi.net
+sbobetjudi.com
+taruhanbola88.com
+livebola303.com
+
+# Casino sites
+casino88.net
+casino168.com
+casinoonline77.com
+casinogacor.com
+livecasino138.com
+casinoresmi.net
+
+# Jackpot / Bonus promo sites
+jackpot88.com
+jackpot168.net
+bonusjackpot.com
+bonusslot77.com
+promojudi88.com
+freebetjudi.com
