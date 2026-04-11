@@ -11,9 +11,13 @@ const RULE_TEMPLATE = {
   resourceTypes: ['main_frame', 'sub_frame', 'script', 'image', 'xmlhttprequest'],
 };
 
+// Chrome DNR enforces a 30,000 static rule ceiling per ruleset.
+// StevenBlack's porn-only list currently has ~76K domains; anything past
+// the first 30K gets dropped alphabetically. For full coverage, split into
+// multiple rulesets or set max_number_of_static_rules in manifest.json.
 const ADULT_MAX_RULES = 30000;
 const JUDOL_ID_START = 1;
-const ADULT_ID_START = 1000;
+const ADULT_ID_START = 100000;
 
 function parseJudolTxt(content) {
   return content
@@ -65,6 +69,14 @@ function buildAdultRules() {
   const src = readFileSync(resolve(root, 'data/adult-hosts-source.txt'), 'utf8');
   const domains = parseHostsFile(src);
   const truncated = domains.slice(0, ADULT_MAX_RULES);
+  if (domains.length > ADULT_MAX_RULES) {
+    const dropped = domains.length - ADULT_MAX_RULES;
+    console.warn(
+      `WARNING: dropped ${dropped} adult domains due to DNR per-ruleset limit ` +
+      `(${ADULT_MAX_RULES}). Consider splitting into multiple rulesets or raising ` +
+      `max_number_of_static_rules in manifest.json.`
+    );
+  }
   const rules = domainsToRules(truncated, ADULT_ID_START);
   writeFileSync(
     resolve(root, 'rules/adult-domains.json'),
