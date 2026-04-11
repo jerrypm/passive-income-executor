@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Judol & Adult Blocker",
+  "version": "1.0.0",
+  "description": "Block Indonesian online gambling (judol) ads and adult content across the web.",
+  "default_locale": "en",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "src/options/options.html",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "tabs",
+    "activeTab"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "judol",
+        "enabled": true,
+        "path": "rules/judol-domains.json"
+      },
+      {
+        "id": "adult",
+        "enabled": true,
+        "path": "rules/adult-domains.json"
+      }
+    ]
+  }
+}
