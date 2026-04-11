@@ -3,7 +3,6 @@
   "name": "Judol & Adult Blocker",
   "version": "1.0.0",
   "description": "Block Indonesian online gambling (judol) ads and adult content across the web.",
-  "default_locale": "en",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
