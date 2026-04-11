@@ -1,0 +1,83 @@
+:root {
+  --primary: #c62641;
+  --bg: #f8f8f8;
+  --card: #ffffff;
+  --text: #333;
+  --muted: #888;
+  --border: #e5e5e5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 40px 20px;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--card);
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+h1 { font-size: 24px; margin-bottom: 24px; }
+h2 { font-size: 16px; margin-bottom: 12px; color: var(--primary); }
+
+section {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+section:last-of-type { border-bottom: none; }
+
+label {
+  display: block;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.hint { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+.whitelist-add {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.whitelist-add input {
+  flex: 1; padding: 8px;
+  border: 1px solid var(--border); border-radius: 6px;
+}
+.whitelist-add button,
+.btn-secondary {
+  padding: 8px 16px;
+  background: var(--primary); color: white;
+  border: none; border-radius: 6px; cursor: pointer;
+}
+.btn-secondary { background: #888; }
+
+#whitelist-list {
+  list-style: none;
+}
+#whitelist-list li {
+  display: flex; justify-content: space-between;
+  padding: 8px; background: var(--bg);
+  border-radius: 4px; margin-bottom: 4px;
+}
+#whitelist-list button {
+  background: transparent; border: none;
+  color: var(--primary); cursor: pointer;
+}
+
+.stat-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; margin-bottom: 12px;
+}
+
+footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
