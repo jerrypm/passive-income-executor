@@ -1,0 +1,10 @@
+{
+  "name": "chrome-adblocker-judol",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:rules": "node scripts/build-rules.js",
+    "test": "node --test tests/"
+  }
+}
