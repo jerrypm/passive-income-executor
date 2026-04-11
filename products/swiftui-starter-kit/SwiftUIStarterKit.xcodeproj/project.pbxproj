@@ -7,14 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		143E185C332F0B8292163E07 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEB7D1DA3E9DBAB43A1A948 /* AppConstants.swift */; };
+		1E8D9E7C48EE47D9BC72D24C /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B046D003038FE7086FC51C /* View+Extensions.swift */; };
+		294AB023AF4DFADC2BD28EDD /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D74BE1F2982CFD3F68FB9 /* String+Extensions.swift */; };
+		3BC0043D0117F3F12499098A /* StorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B387FDB380FF17BE09672 /* StorageKeys.swift */; };
+		729ECA4ED87BFEA13803FB4F /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D63CE5F32AEB448DC1FCD2 /* Color+Extensions.swift */; };
 		D10F492BFE73B9C11CF2C26D /* SwiftUIStarterKitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77808246718C0FB9B51A740E /* SwiftUIStarterKitApp.swift */; };
 		FEE4F78A706BE96C94F21AC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D850E67922FA4D405DCE6DA3 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A0D74BE1F2982CFD3F68FB9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		10B046D003038FE7086FC51C /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		39D63CE5F32AEB448DC1FCD2 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		499B387FDB380FF17BE09672 /* StorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKeys.swift; sourceTree = "<group>"; };
 		5B68D826A99614800B1BE0AE /* SwiftUIStarterKit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SwiftUIStarterKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77808246718C0FB9B51A740E /* SwiftUIStarterKitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIStarterKitApp.swift; sourceTree = "<group>"; };
 		D850E67922FA4D405DCE6DA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EBEB7D1DA3E9DBAB43A1A948 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -30,7 +40,9 @@
 			isa = PBXGroup;
 			children = (
 				0EF98677B839F127A41BB7A9 /* App */,
+				CD7E364179C140827BCF2854 /* Constants */,
 				2E3BCFF9367D3D62C295535D /* Core */,
+				3110489759D80F647262CB68 /* Extensions */,
 				3459B393EB04F546328FC286 /* Modules */,
 				C17707C6AF5339B06B4756C0 /* Resources */,
 			);
@@ -43,6 +55,16 @@
 				E8B5438BE0A3C5766BCFF654 /* Localization */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		3110489759D80F647262CB68 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				39D63CE5F32AEB448DC1FCD2 /* Color+Extensions.swift */,
+				0A0D74BE1F2982CFD3F68FB9 /* String+Extensions.swift */,
+				10B046D003038FE7086FC51C /* View+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		3459B393EB04F546328FC286 /* Modules */ = {
@@ -74,6 +96,15 @@
 				D850E67922FA4D405DCE6DA3 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		CD7E364179C140827BCF2854 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				EBEB7D1DA3E9DBAB43A1A948 /* AppConstants.swift */,
+				499B387FDB380FF17BE09672 /* StorageKeys.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		E8B5438BE0A3C5766BCFF654 /* Localization */ = {
@@ -150,7 +181,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				143E185C332F0B8292163E07 /* AppConstants.swift in Sources */,
+				729ECA4ED87BFEA13803FB4F /* Color+Extensions.swift in Sources */,
+				3BC0043D0117F3F12499098A /* StorageKeys.swift in Sources */,
+				294AB023AF4DFADC2BD28EDD /* String+Extensions.swift in Sources */,
 				D10F492BFE73B9C11CF2C26D /* SwiftUIStarterKitApp.swift in Sources */,
+				1E8D9E7C48EE47D9BC72D24C /* View+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
