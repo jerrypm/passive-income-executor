@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1000 Expert Prompts — Cover</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,500&family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1280px;
+    height: 1600px;
+    background: #0f0f11;
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #f5f1e8;
+    overflow: hidden;
+  }
+  .cover {
+    position: relative;
+    width: 1280px;
+    height: 1600px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255,127,36,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 85%, rgba(198,38,65,0.12) 0%, transparent 50%),
+      linear-gradient(180deg, #14141a 0%, #0a0a0d 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 120px;
+  }
+
+  /* Constellation grid of 1000 tiny dots (40 cols × 25 rows) */
+  .constellation {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.45;
+  }
+  .constellation svg { width: 100%; height: 100%; }
+
+  /* Vignette for depth */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  .content { position: relative; z-index: 10; text-align: center; }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #ff7f24;
+    margin-bottom: 28px;
+  }
+
+  .number {
+    font-family: 'Playfair Display', serif;
+    font-size: 380px;
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: #f5f1e8;
+    margin-bottom: 10px;
+    text-shadow: 0 8px 40px rgba(255,127,36,0.15);
+  }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 124px;
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: #f5f1e8;
+    margin-top: 8px;
+    margin-bottom: 42px;
+    font-style: italic;
+  }
+  .title .amp { color: #ff7f24; font-weight: 400; }
+
+  .accent-line {
+    width: 140px;
+    height: 4px;
+    background: #ff7f24;
+    margin: 0 auto 36px auto;
+    box-shadow: 0 0 18px rgba(255,127,36,0.55);
+  }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 500;
+    font-style: italic;
+    color: #ff7f24;
+    margin-bottom: 18px;
+    letter-spacing: 0.01em;
+  }
+
+  .meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #9a9388;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Top and bottom brand bars */
+  .top-bar, .bottom-bar {
+    position: absolute;
+    left: 120px;
+    right: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6a6458;
+  }
+  .top-bar { top: 80px; }
+  .bottom-bar { bottom: 80px; }
+  .top-bar .dot, .bottom-bar .dot {
+    width: 8px;
+    height: 8px;
+    background: #ff7f24;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .bottom-bar .ten {
+    color: #ff7f24;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+
+  <!-- Constellation of 1000 tiny dots -->
+  <div class="constellation">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1600" preserveAspectRatio="xMidYMid slice">
+      <script type="application/x-ignore">
+        // 40 cols × 25 rows = 1000 dots
+      </script>
+    </svg>
+  </div>
+  <div class="vignette"></div>
+
+  <!-- Top brand bar -->
+  <div class="top-bar">
+    <span>The Pro Pack</span>
+    <span class="dot"></span>
+    <span>Edition I · 2026</span>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="eyebrow">Expert&nbsp;Prompts&nbsp;Collection</div>
+    <div class="number">1000</div>
+    <div class="title">Expert Prompts</div>
+    <div class="accent-line"></div>
+    <div class="subtitle">The Pro Pack for ChatGPT &amp; Claude</div>
+    <div class="meta">Framework-powered · Role-based · Zero fluff</div>
+  </div>
+
+  <!-- Bottom brand bar -->
+  <div class="bottom-bar">
+    <span>jrdevhub.com</span>
+    <span><span class="ten">10</span> categories · <span class="ten">1000</span> prompts</span>
+  </div>
+
+</div>
+
+<script>
+// Populate the SVG with 1000 dots (40 cols × 25 rows) with randomized opacity
+(function () {
+  const svg = document.querySelector('.constellation svg');
+  const cols = 40;
+  const rows = 25;
+  const cellW = 1280 / cols;
+  const cellH = 1600 / rows;
+  const ns = 'http://www.w3.org/2000/svg';
+  let count = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cx = cellW * c + cellW / 2 + (Math.random() - 0.5) * cellW * 0.35;
+      const cy = cellH * r + cellH / 2 + (Math.random() - 0.5) * cellH * 0.35;
+      const dot = document.createElementNS(ns, 'circle');
+      dot.setAttribute('cx', cx.toFixed(1));
+      dot.setAttribute('cy', cy.toFixed(1));
+      const bright = Math.random();
+      const rad = bright > 0.94 ? 2.4 : bright > 0.82 ? 1.6 : 1.0;
+      dot.setAttribute('r', rad);
+      const hue = bright > 0.94 ? '#ff7f24' : '#f5f1e8';
+      dot.setAttribute('fill', hue);
+      dot.setAttribute('opacity', (0.25 + bright * 0.7).toFixed(2));
+      svg.appendChild(dot);
+      count++;
+    }
+  }
+  window.__dotsReady = true;
+  document.title = 'Ready (' + count + ' dots)';
+})();
+</script>
+</body>
+</html>
