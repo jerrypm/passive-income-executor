@@ -1,1 +1,39 @@
-<!doctype html><html><body>Popup</body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Judol & Adult Blocker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Blocker</h1>
+      <label class="toggle">
+        <input type="checkbox" id="enabled-toggle" checked />
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="tab-count">0</div>
+        <div class="stat-label">This tab</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="total-count">0</div>
+        <div class="stat-label">All time</div>
+      </div>
+    </section>
+
+    <section class="site-controls">
+      <div class="current-site" id="current-site">—</div>
+      <button id="whitelist-btn" class="btn">Allow this site</button>
+    </section>
+
+    <footer>
+      <a href="#" id="options-link">Settings</a>
+    </footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
