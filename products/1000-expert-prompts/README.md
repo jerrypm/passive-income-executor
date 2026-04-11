@@ -8,25 +8,28 @@
 
 | File | Purpose |
 |------|------|
-| `1000-expert-prompts.md` | Master ebook — 1000 prompts + intro + TOC (3000+ lines) |
+| `1000-expert-prompts.md` | Master ebook — 1000 prompts + intro + TOC (3127 lines) |
+| `1000-expert-prompts.pdf` | Print-ready PDF, orange-accent styling, ~60 pages |
+| `1000-expert-prompts.html` | Self-contained styled HTML (open in browser) |
 | `HOW-TO-USE.md` | Quick-start guide teaching the four pillars of pro prompting |
 | `gumroad-listing.md` | Full Gumroad listing copy, title, description, launch thread |
-| `src/01-marketing-sales-copywriting.md` | Category 1 — 100 prompts |
-| `src/02-content-blogging-seo.md` | Category 2 — 100 prompts |
-| `src/03-business-strategy-startup.md` | Category 3 — 100 prompts |
-| `src/04-software-development.md` | Category 4 — 100 prompts |
-| `src/05-ai-automation-productivity.md` | Category 5 — 100 prompts |
-| `src/06-writing-editing-storytelling.md` | Category 6 — 100 prompts |
-| `src/07-social-media-growth.md` | Category 7 — 100 prompts |
-| `src/08-data-research-finance.md` | Category 8 — 100 prompts |
-| `src/09-design-branding.md` | Category 9 — 100 prompts |
-| `src/10-career-coaching-learning.md` | Category 10 — 100 prompts |
+| `src/01-marketing-sales-copywriting-100-prompts.md` | Category 1 |
+| `src/02-content-blogging-seo-100-prompts.md` | Category 2 |
+| `src/03-business-strategy-startup-100-prompts.md` | Category 3 |
+| `src/04-software-development-100-prompts.md` | Category 4 |
+| `src/05-ai-automation-productivity-100-prompts.md` | Category 5 |
+| `src/06-writing-editing-storytelling-100-prompts.md` | Category 6 |
+| `src/07-social-media-growth-100-prompts.md` | Category 7 |
+| `src/08-data-research-finance-100-prompts.md` | Category 8 |
+| `src/09-design-branding-100-prompts.md` | Category 9 |
+| `src/10-career-coaching-learning-100-prompts.md` | Category 10 |
 
 ## Pre-Launch Checklist
 
-- [ ] Convert `1000-expert-prompts.md` to PDF (pandoc or Typora)
+- [x] Build PDF (Chrome headless → `1000-expert-prompts.pdf`)
+- [x] Build HTML (`1000-expert-prompts.html`, styled with ebook CSS)
 - [ ] Generate cover image (Midjourney prompt in `gumroad-listing.md`)
-- [ ] Create ZIP bundle: master.md + PDF + HOW-TO-USE.md + 10 category files
+- [ ] Create ZIP bundle: master.md + PDF + HTML + HOW-TO-USE.md + 10 category files
 - [ ] Upload to Gumroad at zerix1.gumroad.com
 - [ ] Set price to $9, enable 14-day refund
 - [ ] Paste long description from `gumroad-listing.md`
@@ -35,22 +38,30 @@
 - [ ] Schedule launch tweet thread (8 tweets, already drafted)
 - [ ] Cross-post on LinkedIn, Nostr, dev.to, Hashnode
 
-## PDF Build Command
+## Rebuild Commands
 
 ```bash
 cd /Users/jeripurnamamaulid/Documents/14_Web-projects/passive-income-executor/products/1000-expert-prompts
 
-# Option 1 — pandoc (needs: brew install pandoc + basictex)
+# 1. Rebuild master markdown from src/
+cat src/01-*.md src/02-*.md src/03-*.md src/04-*.md src/05-*.md \
+    src/06-*.md src/07-*.md src/08-*.md src/09-*.md src/10-*.md > 1000-expert-prompts.md
+
+# 2. Rebuild styled HTML (ebook CSS in /tmp/ebook.css)
 pandoc 1000-expert-prompts.md \
-  -o 1000-expert-prompts.pdf \
+  -o 1000-expert-prompts.html \
+  --standalone \
   --toc \
   --toc-depth=2 \
-  -V geometry:margin=1in \
-  -V documentclass=book \
-  -V fontsize=11pt
+  --metadata title="1000 Expert Prompts" \
+  -c /tmp/ebook.css \
+  --embed-resources
 
-# Option 2 — markdown-pdf (node)
-npx markdown-pdf 1000-expert-prompts.md
+# 3. Rebuild PDF via Chrome headless (no LaTeX needed)
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --disable-gpu --no-pdf-header-footer \
+  --print-to-pdf=1000-expert-prompts.pdf \
+  "file://$(pwd)/1000-expert-prompts.html"
 ```
 
 ## Gumroad Upload Bundle Command

@@ -192,6 +192,7 @@ LABELS: tag1, tag2, tag3
 2. Ollama API Monetizer ($14) — https://zerix1.gumroad.com/l/pzesvw
 3. Nostr AI Toolkit ($19) — https://zerix1.gumroad.com/l/vrblqu
 4. InfiXOX Android Source ($14) — https://zerix1.gumroad.com/l/pheupx
+5. 1000 Expert Prompts ($9, launch) — Gumroad URL pending upload. Source: `products/1000-expert-prompts/`. 10 kategori × 100 prompt (Marketing/SEO/Business/Dev/AI/Writing/Social/Data/Design/Career). Role-based + framework-powered + variable-driven.
 
 ### Amazon Affiliate
 - Associate ID: `fullmoonmauli-20`

@@ -1,4 +1,10 @@
-## Marketing, Sales & Copywriting
+## 1 — Marketing, Sales & Copywriting
+### 100 Expert Prompts Inside
+
+> Brand positioning · sales letters · VSLs · Meta & Google ads · email sequences · pricing psychology · cold outbound · discovery calls · objection handling · VOC mining
+
+---
+
 
 ### 1. Brand Positioning Statement Builder
 **Prompt**: Act as a brand strategist who has led positioning for 3 unicorn SaaS companies. Using the Geoffrey Moore positioning framework, craft a positioning statement for [PRODUCT] serving [AUDIENCE] against [COMPETITOR]. Ask me 5 clarifying questions first about category, primary differentiator, proof points, and emotional payoff. Then output: (1) the full "For/Who/Is a/That/Unlike/Our product" statement, (2) 3 alternate versions ranked by boldness, and (3) a 1-sentence boardroom pitch.

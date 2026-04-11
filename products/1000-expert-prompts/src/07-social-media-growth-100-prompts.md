@@ -1,4 +1,10 @@
-## Social Media & Community Growth
+## 7 — Social Media & Community Growth
+### 100 Expert Prompts Inside
+
+> Twitter/X viral threads · LinkedIn long-form · Instagram carousels · Reels & TikTok scripts · YouTube titles & thumbnails · content pillars · community management · influencer outreach
+
+---
+
 
 ### 1. Viral Twitter Thread Architect
 **Prompt**: Act as a Twitter/X growth strategist who has scaled 20 accounts past 100k followers and dissected the top 500 viral threads of 2024. Write a thread of 8 tweets for [NICHE] targeting [TARGET_AUDIENCE]. Open with a curiosity-gap hook under 240 chars using the "unexpected contrast" formula, use one-line tweets, embed a mini-story at tweet 4 (pattern interrupt), and close with [CTA]. Output each tweet numbered 1/8 to 8/8 with character counts in brackets.

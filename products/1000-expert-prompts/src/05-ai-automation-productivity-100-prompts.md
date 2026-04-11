@@ -1,4 +1,10 @@
-## AI, Automation & Productivity
+## 5 — AI, Automation & Productivity
+### 100 Expert Prompts Inside
+
+> Meta-prompting · chain-of-thought · tree-of-thought · ReAct · agentic workflows · GTD · inbox triage · meeting prep · second brain · Zapier & n8n blueprints · Feynman learning
+
+---
+
 
 ### 1. Meta-Prompt Rewriter
 **Prompt**: Act as a senior prompt engineer who has shipped production LLM agents at Anthropic scale. Take my raw prompt [INPUT_PROMPT] targeting [GOAL] and rewrite it using role-setting, explicit constraints [CONSTRAINTS], few-shot examples, and chain-of-thought scaffolding. Identify 3 ambiguity risks, 3 failure modes, and propose mitigations. Output as a markdown table with columns: Original, Rewritten, Rationale, Token Delta, Expected Quality Lift (1-10).

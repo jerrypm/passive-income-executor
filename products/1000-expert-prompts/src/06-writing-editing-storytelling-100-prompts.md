@@ -1,4 +1,10 @@
-## Writing, Editing & Storytelling
+## 6 — Writing, Editing & Storytelling
+### 100 Expert Prompts Inside
+
+> 3-act structure · Save the Cat · Hero's Journey · character arcs · dialogue · worldbuilding · memoir · developmental editing · line edits · poetry · screenwriting
+
+---
+
 
 ### 1. Three-Act Structure Blueprint
 **Prompt**: Act as a developmental editor at a Big 5 publishing house who has shaped three NYT bestsellers. Using the classic 3-act structure, outline a [GENRE] novel starring [PROTAGONIST] facing [CONFLICT] in [SETTING]. Identify the inciting incident, first plot point, midpoint reversal, crisis, climax, and resolution with page-count targets for a [WORD_COUNT] manuscript. Output as a labeled beat-by-beat table with one-sentence purpose statements for each beat.

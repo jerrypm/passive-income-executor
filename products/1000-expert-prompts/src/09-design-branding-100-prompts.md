@@ -1,4 +1,10 @@
-## Design, Branding & Visual Identity
+## 9 — Design, Branding & Visual Identity
+### 100 Expert Prompts Inside
+
+> Brand identity systems · logo briefs · UX/UI wireframes · landing page CRO · mobile (HIG & Material) · Midjourney & DALL-E prompts · icon briefs · pitch decks · print design
+
+---
+
 
 ### 1. Full Brand Identity System
 **Prompt**: Act as a senior brand designer at a Pentagram-level studio with 12 years designing identity systems for Fortune 500 brands. Build a complete brand identity for [BRAND_NAME], a [INDUSTRY] company targeting [TARGET_USER] with a [BRAND_PERSONALITY] personality. Apply grid systems, golden ratio proportions, and WCAG AA color contrast. Output: brand positioning statement, logo concept rationale, primary + secondary color palette (hex + HSL), typography pairing with scale ratio, voice & tone guidelines, and three moodboard descriptors.

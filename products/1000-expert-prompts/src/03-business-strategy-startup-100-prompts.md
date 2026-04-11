@@ -1,4 +1,10 @@
-## Business Strategy, Entrepreneurship & Startups
+## 3 — Business Strategy, Entrepreneurship & Startups
+### 100 Expert Prompts Inside
+
+> Lean Canvas · Porter's 5 Forces · Blue Ocean · go-to-market · pricing models · financial modeling · pitch decks · investor memos · OKRs · hiring · org design
+
+---
+
 
 ### 1. Lean Canvas Deep Build
 **Prompt**: Act as a Lean Startup coach who has mentored 200+ YC and Techstars companies. For [COMPANY] targeting [CUSTOMER_SEGMENT] in [INDUSTRY], build a complete Lean Canvas. Stress-test each block against the Mom Test, flag the three riskiest assumptions, and propose a 2-week validation experiment per risk. Output as a 9-block Lean Canvas table followed by a "Risk & Experiment" matrix with hypothesis, metric, kill criteria, and cost.

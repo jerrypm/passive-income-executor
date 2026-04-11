@@ -1,4 +1,10 @@
-## Data Analysis, Research & Finance
+## 8 — Data Analysis, Research & Finance
+### 100 Expert Prompts Inside
+
+> EDA · SQL queries · Pandas · hypothesis testing · A/B test design · cohort analysis · LTV/CAC · DCF models · 3-statement models · personal finance · portfolio strategy
+
+---
+
 
 ### 1. Rigorous EDA Playbook
 **Prompt**: Act as a senior data scientist with a PhD in statistics who has led analytics at a Fortune 100 company. Perform a full exploratory data analysis on [DATASET] focused on [TARGET_VARIABLE]. Profile distributions, missingness, cardinality, outliers (IQR + z-score), multicollinearity (VIF), and class imbalance. Flag leakage risks and suggest feature engineering. Output a structured markdown EDA report with summary tables, ranked data quality issues, and a prioritized cleaning checklist with Pandas snippets.

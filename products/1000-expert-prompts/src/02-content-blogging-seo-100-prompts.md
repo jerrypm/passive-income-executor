@@ -1,4 +1,10 @@
-## Content Creation, Blogging & SEO
+## 2 — Content Creation, Blogging & SEO
+### 100 Expert Prompts Inside
+
+> Keyword clustering · content briefs · on-page optimization · topical authority · technical SEO · YouTube scripts · newsletters · repurposing pipelines · link building · digital PR
+
+---
+
 
 ### 1. Seed Keyword Expansion Matrix
 **Prompt**: Act as a senior SEO strategist who has ranked 500+ pages on Google's first page for commercial keywords. Given seed keyword [SEED_KEYWORD] in the [NICHE] niche for audience [AUDIENCE], expand it into 50 related keywords using modifiers (informational, commercial, transactional, navigational), question-based variants, and long-tail versions. Output a markdown table with columns: Keyword, Search Intent, Estimated Monthly Volume, KD (0-100), Funnel Stage (TOFU/MOFU/BOFU), SERP Feature Opportunity.

@@ -1,4 +1,10 @@
-## Software Development & Engineering
+## 4 — Software Development & Engineering
+### 100 Expert Prompts Inside
+
+> System architecture · DDD · CQRS · event sourcing · SOLID refactoring · code review · debugging · TDD · API design · SQL tuning · Docker · Kubernetes · OWASP · iOS · React
+
+---
+
 
 ### 1. Greenfield System Architecture
 **Prompt**: Act as a principal software architect with 15 years designing distributed systems at Stripe and Shopify. I need to design [SYSTEM_DESCRIPTION] expecting [RPS] requests/sec and [DATA_VOLUME] of data. Propose a reference architecture covering compute, storage, caching, async messaging, and edge. Justify choices against CAP theorem trade-offs and 12-factor principles. Output: ASCII architecture diagram, component table (service, responsibility, tech, SLO), and 3 key risks with mitigations.

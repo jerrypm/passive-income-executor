@@ -1,4 +1,10 @@
-## Career, Coaching & Learning
+## 10 — Career, Coaching & Learning
+### 100 Expert Prompts Inside
+
+> ATS-optimized resumes · LinkedIn profiles · behavioral & case interviews · salary negotiation · career pivots · executive coaching · performance reviews · learning roadmaps
+
+---
+
 
 ### 1. ATS-Optimized Resume Rewrite
 **Prompt**: Act as a senior tech recruiter who has screened 20,000+ resumes at FAANG companies and built ATS parsing systems. Rewrite my resume for a [TARGET_ROLE] at [TARGET_COMPANY] in [INDUSTRY]. Use my current draft: [PASTE_RESUME]. Apply the XYZ formula (Accomplished X as measured by Y by doing Z), inject role-specific keywords from this JD [PASTE_JD], keep bullets under 2 lines, and quantify every bullet. Output: ATS-ready resume in plain markdown plus a 10-point keyword match score versus the JD.
