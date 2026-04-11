@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mastering Claude Code — Cover</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1280px;
+    height: 1600px;
+    background: #0f0f11;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #f5f1e8;
+    overflow: hidden;
+  }
+  .cover {
+    position: relative;
+    width: 1280px;
+    height: 1600px;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(217,119,6,0.13) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(217,119,6,0.08) 0%, transparent 45%),
+      radial-gradient(ellipse at 60% 40%, rgba(251,191,36,0.05) 0%, transparent 40%),
+      linear-gradient(180deg, #13131a 0%, #0a0a0d 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 110px;
+  }
+
+  /* Star field */
+  .starfield {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.50;
+  }
+  .starfield svg { width: 100%; height: 100%; }
+
+  /* Faded code background */
+  .code-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 60px 80px;
+    opacity: 0.045;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+    color: #D97706;
+    line-height: 1.7;
+    pointer-events: none;
+    white-space: pre;
+    overflow: hidden;
+  }
+
+  /* Vignette */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.75) 100%);
+    pointer-events: none;
+  }
+
+  .content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Terminal icon area */
+  .terminal-icon {
+    margin: 0 auto 48px auto;
+    width: 110px;
+    height: 80px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .terminal-icon .term-box {
+    width: 110px;
+    height: 80px;
+    border: 3px solid #D97706;
+    border-radius: 10px;
+    background: rgba(217,119,6,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 28px rgba(217,119,6,0.25), inset 0 0 20px rgba(217,119,6,0.04);
+  }
+  .terminal-icon .term-prompt {
+    font-family: 'Courier New', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: #D97706;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 14px rgba(217,119,6,0.7);
+  }
+  .terminal-icon .term-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 30px;
+    background: #D97706;
+    margin-left: 3px;
+    vertical-align: middle;
+    box-shadow: 0 0 6px rgba(217,119,6,0.8);
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.48em;
+    text-transform: uppercase;
+    color: #D97706;
+    margin-bottom: 30px;
+  }
+
+  .title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 116px;
+    font-weight: 900;
+    line-height: 0.90;
+    letter-spacing: -0.03em;
+    color: #f5f1e8;
+    margin-bottom: 12px;
+    text-shadow: 0 6px 36px rgba(217,119,6,0.12);
+  }
+  .title .highlight { color: #D97706; }
+
+  .title-line2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 116px;
+    font-weight: 900;
+    line-height: 0.90;
+    letter-spacing: -0.03em;
+    color: #D97706;
+    margin-bottom: 40px;
+    text-shadow: 0 0 40px rgba(217,119,6,0.3);
+  }
+
+  .accent-line {
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #D97706, transparent);
+    margin: 0 auto 36px auto;
+    box-shadow: 0 0 16px rgba(217,119,6,0.5);
+  }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 400;
+    font-style: italic;
+    color: #e8d5b0;
+    margin-bottom: 18px;
+    letter-spacing: 0.01em;
+  }
+
+  .tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #9a9388;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    margin-bottom: 0;
+    padding: 0 40px;
+  }
+  .tagline .em {
+    color: #D97706;
+    font-weight: 600;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(217,119,6,0.35);
+    margin: 44px auto;
+  }
+
+  .author-line {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #7a7268;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* Top and bottom brand bars */
+  .top-bar, .bottom-bar {
+    position: absolute;
+    left: 110px;
+    right: 110px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #5a5450;
+  }
+  .top-bar { top: 76px; }
+  .bottom-bar { bottom: 76px; }
+  .bar-dot {
+    width: 7px;
+    height: 7px;
+    background: #D97706;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(217,119,6,0.6);
+  }
+  .bottom-bar .badge {
+    background: rgba(217,119,6,0.12);
+    border: 1px solid rgba(217,119,6,0.3);
+    border-radius: 24px;
+    padding: 10px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: #D97706;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+
+  <!-- Star field -->
+  <div class="starfield">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1600" preserveAspectRatio="xMidYMid slice" id="stars-svg"></svg>
+  </div>
+
+  <!-- Faded code background -->
+  <div class="code-bg" id="code-bg"></div>
+
+  <div class="vignette"></div>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <span>Developer Guide</span>
+    <span class="bar-dot"></span>
+    <span>Edition I &nbsp;·&nbsp; 2026</span>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="terminal-icon">
+      <div class="term-box">
+        <span class="term-prompt">&gt;_<span class="term-cursor"></span></span>
+      </div>
+    </div>
+
+    <div class="eyebrow">A Practical Guide for Developers</div>
+    <div class="title">Mastering</div>
+    <div class="title-line2">Claude Code</div>
+
+    <div class="accent-line"></div>
+
+    <div class="subtitle">From Zero to Expert</div>
+
+    <div class="tagline">
+      Including <span class="em">50 Hidden Features</span><br>
+      Most Developers Don't Know
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="author-line">jrdevhub.com</div>
+  </div>
+
+  <!-- Bottom badge bar -->
+  <div class="bottom-bar">
+    <span>jrdevhub.com</span>
+    <span class="badge">20 Chapters &nbsp;·&nbsp; 50 Expert Tips &nbsp;·&nbsp; Real-World Case Studies</span>
+  </div>
+
+</div>
+
+<script>
+// Populate star field
+(function () {
+  const svg = document.getElementById('stars-svg');
+  const ns = 'http://www.w3.org/2000/svg';
+  const cols = 40, rows = 25;
+  const cellW = 1280 / cols, cellH = 1600 / rows;
+  let count = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cx = cellW * c + cellW / 2 + (Math.random() - 0.5) * cellW * 0.4;
+      const cy = cellH * r + cellH / 2 + (Math.random() - 0.5) * cellH * 0.4;
+      const bright = Math.random();
+      const dot = document.createElementNS(ns, 'circle');
+      dot.setAttribute('cx', cx.toFixed(1));
+      dot.setAttribute('cy', cy.toFixed(1));
+      const rad = bright > 0.93 ? 2.2 : bright > 0.80 ? 1.5 : 0.9;
+      dot.setAttribute('r', rad);
+      const clr = bright > 0.93 ? '#D97706' : '#f5f1e8';
+      dot.setAttribute('fill', clr);
+      dot.setAttribute('opacity', (0.20 + bright * 0.65).toFixed(2));
+      svg.appendChild(dot);
+      count++;
+    }
+  }
+  document.title = 'Ready (' + count + ' stars)';
+})();
+
+// Populate faded code background
+(function () {
+  const lines = [
+    'claude --help',
+    '$ claude "refactor this function for clarity"',
+    'const result = await claude.complete({ prompt, maxTokens: 2048 });',
+    '> Read CLAUDE.md for project context',
+    '# .claude/settings.json',
+    '$ claude --model claude-opus-4 --print "summarize this file"',
+    'if (response.ok) { console.log(await response.json()); }',
+    'claude --dangerously-skip-permissions "run all tests"',
+    '> Using tool: Bash',
+    '$ git diff | claude "write a commit message"',
+    'ANTHROPIC_API_KEY=sk-ant-...',
+    '> Tool result: 42 files changed',
+    '$ claude "add unit tests for auth module"',
+    'const chain = new Chain([research, summarize, format]);',
+    '> Spawning subagent: code-reviewer',
+    '$ claude --context ./src "find all TODO comments"',
+    'hooks: { PreToolUse: "./scripts/lint.sh" }',
+    '> Read tool: /src/auth/middleware.ts (220 lines)',
+    'claude "fix the failing tests in __tests__/api.test.ts"',
+    '$ claude --output-format json "list all endpoints"',
+    '> Bash: npm test -- --coverage',
+    'allowedTools: ["Bash", "Read", "Write", "Glob", "Grep"]',
+    '$ claude "update README with latest API changes"',
+    '> Edit: /README.md (+45 lines, -12 lines)',
+    'export CLAUDE_MODEL="claude-sonnet-4-5"',
+  ];
+  const el = document.getElementById('code-bg');
+  // repeat lines to fill height
+  const repeated = [];
+  while (repeated.length < 90) repeated.push(...lines);
+  el.textContent = repeated.slice(0, 90).join('\n');
+})();
+</script>
+</body>
+</html>
