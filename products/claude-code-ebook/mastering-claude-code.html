@@ -491,6 +491,31 @@ Automate Everything</a></li>
 11: MCP Servers — Extend Claude Code Infinitely</a></li>
 <li><a href="#chapter-12-ide-integration" id="toc-chapter-12-ide-integration">Chapter 12: IDE Integration</a></li>
 </ul></li>
+<li><a href="#part-4-expert-secrets" id="toc-part-4-expert-secrets">Part
+4: Expert Secrets</a>
+<ul>
+<li><a href="#chapter-13-prompt-engineering-for-claude-code" id="toc-chapter-13-prompt-engineering-for-claude-code">Chapter 13:
+Prompt Engineering for Claude Code</a></li>
+<li><a href="#chapter-14-parallel-development-with-subagents-worktrees" id="toc-chapter-14-parallel-development-with-subagents-worktrees">Chapter
+14: Parallel Development with Subagents &amp; Worktrees</a></li>
+<li><a href="#chapter-15-custom-skills-superpowers" id="toc-chapter-15-custom-skills-superpowers">Chapter 15: Custom Skills
+&amp; Superpowers</a></li>
+<li><a href="#deploy" id="toc-deploy">Deploy</a></li>
+<li><a href="#post-deployment-verification" id="toc-post-deployment-verification">Post-deployment
+Verification</a></li>
+<li><a href="#report" id="toc-report">Report</a></li>
+</ul></li>
+<li><a href="#part-5-real-world-mastery" id="toc-part-5-real-world-mastery">Part 5: Real-World Mastery</a>
+<ul>
+<li><a href="#chapter-17-building-a-feature-start-to-finish" id="toc-chapter-17-building-a-feature-start-to-finish">Chapter 17:
+Building a Feature Start-to-Finish</a></li>
+<li><a href="#chapter-18-debugging-like-a-pro" id="toc-chapter-18-debugging-like-a-pro">Chapter 18: Debugging Like a
+Pro</a></li>
+<li><a href="#chapter-19-cost-optimization-efficiency" id="toc-chapter-19-cost-optimization-efficiency">Chapter 19: Cost
+Optimization &amp; Efficiency</a></li>
+<li><a href="#chapter-20-your-custom-setup-blueprint" id="toc-chapter-20-your-custom-setup-blueprint">Chapter 20: Your Custom
+Setup Blueprint</a></li>
+</ul></li>
 </ul>
 </nav>
 <h1 id="mastering-claude-code">Mastering Claude Code</h1>
@@ -4336,6 +4361,2267 @@ don’t expose. The pipe workflow alone —
 curve. You’ll find yourself reaching for it whenever you need something
 fast, scriptable, or precise.</p>
 </blockquote>
+<hr />
+<h1 id="part-4-expert-secrets">Part 4: Expert Secrets</h1>
+<h2 id="chapter-13-prompt-engineering-for-claude-code">Chapter 13:
+Prompt Engineering for Claude Code</h2>
+<p>The difference between a developer who gets mediocre results from
+Claude Code and one who gets exceptional results almost always comes
+down to prompting. Not because Claude Code requires special syntax or
+magic words, but because how you frame a request determines how much
+context Claude Code can leverage — and context is everything.</p>
+<p>This chapter covers the prompting patterns that expert developers use
+daily. These aren’t theoretical guidelines. They’re battle-tested
+techniques drawn from thousands of real development sessions.</p>
+<h3 id="how-claude-code-prompts-differ">How Claude Code Prompts
+Differ</h3>
+<p>If you’ve used ChatGPT, Claude.ai, or any web-based AI tool, you’ve
+learned a certain prompting style: describe what you want in detail,
+provide background information, maybe include code snippets. That style
+works against you in Claude Code.</p>
+<p>Claude Code is not a chatbot. It has tools. It can read your files,
+search your codebase, run commands, check git history, and inspect
+directory structures. It has persistent state — it remembers what you
+discussed earlier in the session. It knows which project you’re in, what
+language you’re using, and what framework your code is built on.</p>
+<p>This means you don’t need to provide context that Claude Code can
+discover on its own. Instead, you need to point it in the right
+direction and tell it what to accomplish.</p>
+<p><strong>Bad prompt:</strong></p>
+<pre><code>Write a function that validates email addresses. It should check for
+an @ symbol, a valid domain, and return true or false. Use TypeScript.</code></pre>
+<p>This is how you’d prompt a web chatbot. You’re describing the
+implementation because the chatbot can’t see your code. Claude Code can
+see your code.</p>
+<p><strong>Good prompt:</strong></p>
+<pre><code>Add email validation to the signup handler in src/auth/signup.ts.
+Use the same validation pattern as src/auth/utils.ts.</code></pre>
+<p>This prompt is shorter but far more effective. Claude Code will read
+both files, understand your existing validation patterns, and produce
+code that fits seamlessly into your codebase. The result will match your
+code style, your error handling patterns, your type conventions — all
+without you describing any of them.</p>
+<p>The shift is fundamental: <strong>stop describing the solution.
+Describe the goal and point to the context.</strong></p>
+<h3 id="the-5-principles-of-expert-prompting">The 5 Principles of Expert
+Prompting</h3>
+<p>After working with hundreds of developers’ Claude Code sessions,
+clear patterns emerge in what separates excellent prompts from average
+ones. These five principles account for the vast majority of quality
+difference.</p>
+<h4 id="principle-1-be-specific-about-location">Principle 1: Be Specific
+About Location</h4>
+<p>Claude Code can search your entire codebase, but telling it exactly
+where to work eliminates ambiguity and saves time. Include file paths,
+function names, and even line numbers when you know them.</p>
+<p><strong>Vague:</strong> “Fix the login bug.”</p>
+<p><strong>Specific:</strong> “Fix the race condition in
+<code>src/auth/login.ts</code> in the <code>handleSubmit</code> function
+— the loading state isn’t reset when the API call fails.”</p>
+<p>The specific prompt gets Claude Code working immediately. The vague
+prompt forces it to search for what “login bug” might mean, potentially
+finding the wrong issue or asking you clarifying questions.</p>
+<p>This principle applies to feature requests too:</p>
+<p><strong>Vague:</strong> “Add a dark mode toggle.”</p>
+<p><strong>Specific:</strong> “Add a dark mode toggle to the settings
+panel in <code>src/components/Settings.tsx</code>. Store the preference
+in the existing <code>usePreferences</code> hook from
+<code>src/hooks/usePreferences.ts</code>.”</p>
+<p>The more precisely you specify location, the fewer decisions Claude
+Code has to guess about — and the fewer guesses mean fewer mistakes.</p>
+<h4 id="principle-2-reference-existing-patterns">Principle 2: Reference
+Existing Patterns</h4>
+<p>Your codebase already has patterns — how you write API routes, how
+you structure components, how you handle errors. Telling Claude Code to
+follow existing patterns produces code that reads like a human on your
+team wrote it.</p>
+<pre><code>Add a PATCH /users/:id endpoint to src/api/users.ts.
+Follow the same pattern as the PATCH /posts/:id endpoint in src/api/posts.ts.</code></pre>
+<p>Claude Code reads the referenced file, extracts the pattern
+(middleware chain, validation approach, response format, error
+handling), and applies it to the new endpoint. The result is consistent
+with your codebase rather than consistent with some generic best
+practice that doesn’t match your style.</p>
+<p>This works at every scale:</p>
+<ul>
+<li><strong>Components:</strong> “Create a ProductCard component
+following the pattern of <code>UserCard</code> in
+<code>src/components/UserCard.tsx</code>.”</li>
+<li><strong>Tests:</strong> “Add tests for the payment module. Follow
+the test structure in <code>tests/auth.test.ts</code>.”</li>
+<li><strong>Migrations:</strong> “Add a <code>last_login</code> column
+to the users table. Follow the migration format in
+<code>migrations/003_add_email_verified.sql</code>.”</li>
+</ul>
+<p>When you don’t reference a pattern, Claude Code uses its general
+knowledge of best practices. When you do reference a pattern, it uses
+your team’s specific conventions. The latter is almost always
+better.</p>
+<h4 id="principle-3-state-the-why">Principle 3: State the Why</h4>
+<p>Including the reason behind your request helps Claude Code make
+better implementation decisions — especially when there are multiple
+valid approaches.</p>
+<p><strong>Without why:</strong> “Add caching to the user profile
+endpoint.”</p>
+<p><strong>With why:</strong> “Add caching to the user profile endpoint
+— we’re hitting the database 50 times per second for the same profiles
+during peak traffic. Use a 5-minute TTL since profiles rarely
+change.”</p>
+<p>The “why” tells Claude Code that this is a performance optimization,
+that the cache should be keyed per user, that staleness of up to 5
+minutes is acceptable, and that the primary concern is database load
+rather than response latency. All of that context is implicit in two
+sentences.</p>
+<p>Here’s another example:</p>
+<p><strong>Without why:</strong> “Extract this function into a separate
+module.”</p>
+<p><strong>With why:</strong> “Extract the PDF generation logic from
+<code>src/api/reports.ts</code> into <code>src/services/pdf.ts</code> —
+three other routes need PDF generation and they’re all duplicating this
+logic.”</p>
+<p>Now Claude Code knows to design the extracted module with a clean
+public API that works for multiple callers, not just the one it was
+extracted from.</p>
+<h4 id="principle-4-scope-your-request">Principle 4: Scope Your
+Request</h4>
+<p>The right-sized request is specific enough to be clear but broad
+enough to be useful. Too narrow and you end up micromanaging. Too broad
+and Claude Code has to make too many decisions without guidance.</p>
+<p><strong>Too narrow:</strong> “On line 47 of
+<code>src/api/users.ts</code>, change <code>findOne</code> to
+<code>findUnique</code>.”</p>
+<p>You could do this yourself faster than typing the prompt. Only use
+this level of granularity when you need Claude Code to understand the
+change in context of a larger task.</p>
+<p><strong>Too broad:</strong> “Refactor the entire backend to use the
+repository pattern.”</p>
+<p>This is a multi-day project with hundreds of decisions. Claude Code
+will either ask many clarifying questions or make assumptions you
+disagree with. Break it up.</p>
+<p><strong>Right-sized:</strong> “Refactor <code>src/api/users.ts</code>
+to use a repository pattern. Extract the database queries into
+<code>src/repositories/UserRepository.ts</code>. Keep the same API
+contract — no changes to request/response shapes.”</p>
+<p>This is one coherent unit of work with clear boundaries. Claude Code
+can complete it in a single session without guessing about scope.</p>
+<p>A good rule of thumb: if the task would take a human developer 15
+minutes to 2 hours, it’s probably right-sized for a single Claude Code
+prompt. Smaller tasks aren’t worth the overhead. Larger tasks should be
+broken into sequential prompts.</p>
+<h4 id="principle-5-give-success-criteria">Principle 5: Give Success
+Criteria</h4>
+<p>Tell Claude Code what “done” looks like. This is especially important
+for features with multiple edge cases or tasks where correctness matters
+more than speed.</p>
+<pre><code>Add a payment processing function to src/services/payment.ts.
+
+Test cases to cover:
+- Successful payment (charge amount, return confirmation)
+- Card declined (return specific error code)
+- Invalid amount (negative, zero, exceeds maximum)
+- Duplicate transaction ID (idempotency check)
+
+Run npm test after to verify everything passes.</code></pre>
+<p>The success criteria serve three purposes. First, they tell Claude
+Code what edge cases to handle in the implementation. Second, they
+define what tests to write. Third, the “run npm test” instruction makes
+Claude Code verify its own work before telling you it’s done.</p>
+<p>Without success criteria, Claude Code will handle the happy path and
+maybe one or two obvious error cases. With them, it builds a complete,
+production-quality implementation.</p>
+<h3 id="anti-patterns-to-avoid">Anti-Patterns to Avoid</h3>
+<p>Certain prompting habits actively reduce the quality of Claude Code’s
+output. Here are the most common ones.</p>
+<p><strong>Don’t start with “Can you…”</strong> — Claude Code doesn’t
+need politeness. “Can you add error handling to the login function?”
+becomes “Add error handling to the login function in
+<code>src/auth/login.ts</code>.” The direct version is clearer and gets
+better results. You’re not being rude — you’re being precise.</p>
+<p><strong>Don’t explain how Claude Code works to Claude Code.</strong>
+Prompts like “You have access to my filesystem, so please read the file
+first and then…” are wasted tokens. Claude Code knows what tools it has.
+Just state the goal.</p>
+<p><strong>Don’t paste errors without context.</strong> Pasting a stack
+trace with “fix this” sometimes works, but adding one sentence of
+context makes it work reliably: “Getting this error when running
+<code>npm test</code> after adding the new user endpoint” followed by
+the stack trace. The context tells Claude Code where to look and what
+changed.</p>
+<p><strong>Don’t ask Claude Code to “be careful” or
+“double-check.”</strong> These phrases don’t make Claude Code more
+careful. If you want verification, ask for specific verification: “Run
+the test suite after making changes” or “Verify the migration is
+reversible.” Actionable instructions beat vague caution.</p>
+<p><strong>Don’t bundle unrelated tasks.</strong> “Fix the login bug,
+add a dark mode toggle, and update the README” combines three
+independent tasks. Handle them in separate prompts. Each task gets full
+attention, and if one goes wrong, it doesn’t contaminate the others.</p>
+<p><strong>Don’t over-specify implementation details.</strong> “Use a
+for loop to iterate over the array and check each element” is
+micromanaging. “Filter users by active status” lets Claude Code choose
+the idiomatic approach for your language and codebase.</p>
+<h3 id="power-prompt-templates">Power Prompt Templates</h3>
+<p>These four templates cover the vast majority of development tasks.
+Adapt them to your needs.</p>
+<h4 id="bug-fix-template">Bug Fix Template</h4>
+<pre><code>Fix [symptom] in [file/function].
+Expected: [correct behavior]
+Actual: [what happens instead]
+Reproduce: [command or steps]</code></pre>
+<p><strong>Example:</strong></p>
+<pre><code>Fix the 500 error on POST /api/orders in src/api/orders.ts.
+Expected: Returns 201 with order confirmation.
+Actual: Crashes with &quot;Cannot read property &#39;id&#39; of undefined.&quot;
+Reproduce: npm test -- --grep &quot;create order&quot;</code></pre>
+<h4 id="feature-template">Feature Template</h4>
+<pre><code>Add [feature] to [location].
+Follow the pattern in [reference file].
+Include tests covering: [cases].
+Run [verification command] when done.</code></pre>
+<p><strong>Example:</strong></p>
+<pre><code>Add a PATCH /users/:id/avatar endpoint to src/api/users.ts.
+Follow the upload pattern in src/api/posts.ts (multer + S3).
+Include tests for: valid image, file too large, invalid format, unauthorized.
+Run npm test when done.</code></pre>
+<h4 id="refactor-template">Refactor Template</h4>
+<pre><code>Extract [what] from [source] into [destination].
+Reason: [why this refactor matters].
+Keep [constraints — what shouldn&#39;t change].</code></pre>
+<p><strong>Example:</strong></p>
+<pre><code>Extract email sending logic from src/api/auth.ts and src/api/orders.ts
+into src/services/email.ts.
+Reason: both files duplicate SMTP setup and template rendering.
+Keep the same function signatures — callers shouldn&#39;t need changes.</code></pre>
+<h4 id="debug-template">Debug Template</h4>
+<pre><code>Debugging [error/symptom] when [action/trigger].
+Context: [what changed recently or what you&#39;ve already checked].
+Find the root cause and fix it.</code></pre>
+<p><strong>Example:</strong></p>
+<pre><code>Debugging intermittent timeout on the /api/search endpoint.
+Context: started after adding pagination in commit abc123.
+Only happens when page &gt; 10. Already checked — DB query returns fast.
+Find the root cause and fix it.</code></pre>
+<h3 id="conversation-management">Conversation Management</h3>
+<p>How you manage your conversation with Claude Code is as important as
+individual prompts. Long conversations accumulate context, which is
+powerful — but they also accumulate noise.</p>
+<p><strong>Use <code>/compact</code> when context gets long.</strong>
+After 20-30 exchanges, your conversation carries a lot of history. The
+<code>/compact</code> command summarizes the conversation into key
+points and frees up context space. Use it when you notice Claude Code
+starting to lose track of earlier decisions or when responses slow
+down.</p>
+<p><strong>Start new conversations for new topics.</strong> If you’ve
+been debugging a database issue and now want to add a UI feature, start
+a fresh conversation. The database debugging context will only confuse
+the UI work. Use <code>claude</code> to start fresh, or
+<code>/clear</code> to reset in the same session.</p>
+<p><strong>Use <code>@filename</code> to bring files into
+context.</strong> When you mention a file path naturally, Claude Code
+reads it. But <code>@src/api/users.ts</code> explicitly loads the file
+into the conversation at that point, ensuring Claude Code has the latest
+version front and center.</p>
+<p><strong>Use <code>/cost</code> to monitor token usage.</strong> If
+you’re on a metered plan, <code>/cost</code> shows how much the current
+session has consumed. Useful for budgeting long sessions.</p>
+<p><strong>Keep prompts conversational within a session.</strong> Your
+first prompt in a session should be detailed (include file paths,
+context, success criteria). Follow-up prompts can be terse because
+Claude Code remembers the context: “Now add the same validation to the
+update endpoint” or “Also handle the case where the user doesn’t
+exist.”</p>
+<blockquote>
+<p><strong>Tip:</strong> The single most impactful change you can make
+to your prompting is adding file paths. “Fix the auth bug” might work.
+“Fix the auth bug in <code>src/auth/middleware.ts</code>” almost always
+works. When in doubt, include the path.</p>
+</blockquote>
+<hr />
+<h2 id="chapter-14-parallel-development-with-subagents-worktrees">Chapter
+14: Parallel Development with Subagents &amp; Worktrees</h2>
+<p>Most development work is sequential. You work on a feature, finish
+it, start the next one. Even with Claude Code, the default mode is one
+conversation, one task at a time. But many tasks have independent parts
+that could happen simultaneously — writing tests for module A while
+implementing module B, reviewing code in one area while refactoring
+another, researching an approach while building a prototype.</p>
+<p>Claude Code’s subagent system and git worktree integration unlock
+true parallel development. This chapter shows you how to run multiple
+Claude Code instances simultaneously, each working on independent tasks,
+without them interfering with each other.</p>
+<h3 id="the-problem-with-sequential-work">The Problem with Sequential
+Work</h3>
+<p>Consider a typical feature implementation:</p>
+<ol type="1">
+<li>Write the API endpoint (20 minutes)</li>
+<li>Write tests for the API endpoint (15 minutes)</li>
+<li>Update the frontend component (15 minutes)</li>
+<li>Write tests for the frontend component (10 minutes)</li>
+<li>Update the documentation (5 minutes)</li>
+</ol>
+<p>Sequential, that’s 65 minutes. But steps 3-5 don’t depend on steps
+1-2. The frontend work needs the API contract, not the implementation.
+The docs need the feature description, not the finished code. In theory,
+you could do steps 1-2 and 3-5 in parallel — cutting the wall-clock time
+significantly.</p>
+<p>Without tooling, parallelism is hard. You’d need multiple terminal
+windows, separate git branches, manual coordination. It’s more effort
+than it’s worth for most tasks. Subagents and worktrees make it
+effortless.</p>
+<h3 id="agent-tool-spawning-subagents">Agent Tool — Spawning
+Subagents</h3>
+<p>Claude Code can spawn specialized sub-agents: independent Claude Code
+instances that work on isolated tasks without polluting your main
+conversation’s context.</p>
+<p>When you ask Claude Code to handle something that benefits from
+isolation — a research question, a parallel task, a code review — it can
+delegate to a subagent. The subagent gets its own fresh context, works
+independently, and reports back when finished.</p>
+<p>You can trigger subagents explicitly:</p>
+<pre><code>Run tests for the auth module in the background while I work on the payment feature.</code></pre>
+<p>Claude Code spawns a subagent to run the tests. Your main
+conversation continues uninterrupted. When the tests finish, you’re
+notified with the results.</p>
+<p>Or implicitly — Claude Code sometimes recognizes that a task has
+independent sub-tasks and spawns agents on its own, especially in plan
+execution mode.</p>
+<p>Each subagent is fully isolated. It has its own conversation history,
+its own tool context, and its own working state. Changes one subagent
+makes to files are visible to others (they share the filesystem), but
+their conversation contexts don’t leak. This means a subagent
+researching your authentication architecture doesn’t fill your main
+conversation with hundreds of lines of code exploration.</p>
+<h3 id="agent-types">Agent Types</h3>
+<p>Not all subagents are the same. Different agent types are optimized
+for different kinds of work:</p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 36%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Type</th>
+<th>Purpose</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>general-purpose</code></td>
+<td>Multi-step tasks requiring tools</td>
+<td>Code changes, implementations, complex research</td>
+</tr>
+<tr>
+<td><code>Explore</code></td>
+<td>Codebase exploration and understanding</td>
+<td>“How does the auth system work?”, architecture questions</td>
+</tr>
+<tr>
+<td><code>Plan</code></td>
+<td>Architecture and design planning</td>
+<td>“Design the approach for adding multi-tenancy”</td>
+</tr>
+<tr>
+<td><code>code-reviewer</code></td>
+<td>Reviewing completed code changes</td>
+<td>Pre-commit review, PR review, security audit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Explore agents</strong> are lightweight. They read files and
+search code but don’t make changes. Use them when you need to understand
+something about your codebase without modifying it. They’re fast because
+they don’t need write permissions.</p>
+<p><strong>Plan agents</strong> produce structured plans — step-by-step
+implementation approaches with file lists, dependency analysis, and risk
+assessment. They don’t write code. They plan what code to write. Use
+them before starting complex features.</p>
+<p><strong>Code reviewer agents</strong> analyze changes with a critical
+eye. They look for bugs, performance issues, security vulnerabilities,
+and style inconsistencies. Spawn one after completing a feature to get a
+review before you commit.</p>
+<p><strong>General-purpose agents</strong> can do everything — read,
+write, run commands, make decisions. They’re the default when a task
+requires actual code changes.</p>
+<h3 id="background-agents">Background Agents</h3>
+<p>The most practical form of parallel development is background agents.
+You launch a task in the background and keep working in the foreground.
+When the background task finishes, you’re notified.</p>
+<p><strong>Launching from conversation:</strong></p>
+<pre><code>Run the full test suite in the background and report any failures.
+I&#39;ll keep working on the migration.</code></pre>
+<p>Claude Code spawns a background agent that runs the tests. Your
+conversation continues. When tests finish, you see the results
+inline.</p>
+<p><strong>Using Ctrl+B:</strong></p>
+<p>If you’re in the middle of a task and realize it’s going to take a
+while, press <code>Ctrl+B</code> to send it to the background. Claude
+Code continues working on that task in a background process, and your
+terminal is freed up to start a new conversation. You’re notified when
+the background task completes.</p>
+<p>This is surprisingly useful in practice. You ask Claude Code to
+refactor a large module, it starts working, and you realize you don’t
+need to watch it. <code>Ctrl+B</code> — now you can start a new
+<code>claude</code> session and work on something else while the
+refactor continues.</p>
+<p><strong>Checking status:</strong></p>
+<p>Background agents run independently. When they finish, Claude Code
+shows their results. If you’re in the middle of typing when a background
+agent completes, the notification waits until you’re at a natural break
+point.</p>
+<h3 id="git-worktrees-isolated-environments">Git Worktrees — Isolated
+Environments</h3>
+<p>Background agents share your filesystem. If agent A is editing
+<code>src/api/users.ts</code> while agent B is also editing
+<code>src/api/users.ts</code>, you have a conflict. Git worktrees solve
+this.</p>
+<p>A git worktree is an isolated copy of your repository in a separate
+directory, on a separate branch, but sharing the same git history. Think
+of it as a lightweight clone that doesn’t duplicate the entire
+<code>.git</code> directory.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--worktree</span> feature-auth</span></code></pre></div>
+<p>This creates a new worktree in a sibling directory (e.g.,
+<code>../myproject-feature-auth/</code>), checks out a new branch
+<code>feature-auth</code>, and starts Claude Code in that isolated
+directory. Everything you do in that session happens in the worktree —
+edits, commits, test runs — all isolated from your main working
+directory.</p>
+<p>When you’re done, the changes exist on the <code>feature-auth</code>
+branch. Merge them back to main via git merge or a pull request, just
+like any other branch.</p>
+<p><strong>Why worktrees instead of separate clones?</strong> Worktrees
+share the git object store. Creating one is instant — no network fetch,
+no disk duplication. They’re also aware of each other, so git prevents
+you from checking out the same branch in multiple worktrees (which would
+cause confusion).</p>
+<p><strong>The <code>.worktreeinclude</code> file:</strong> Your main
+directory might have gitignored files that the worktree needs —
+<code>.env</code> files, local configs, build caches. Create a
+<code>.worktreeinclude</code> file in your project root listing the
+gitignored files that should be copied into new worktrees:</p>
+<pre><code>.env
+.env.local
+node_modules/</code></pre>
+<p>When Claude Code creates a worktree, it copies these files over so
+the worktree environment matches your main one.</p>
+<h3 id="the-batch-command-parallel-changes-at-scale">The
+<code>/batch</code> Command — Parallel Changes at Scale</h3>
+<p>Sometimes you need the same type of change across many files or
+modules. Migrating a component library, updating API call patterns,
+converting class components to functional ones. The <code>/batch</code>
+command automates this at scale.</p>
+<pre><code>/batch migrate all Vue components in src/components/ to React</code></pre>
+<p>Here’s what happens: Claude Code analyzes the scope (finds all Vue
+components), creates a plan (one worktree per component or group of
+components), spawns subagents (each in its own worktree, each handling a
+subset of the migration), and opens pull requests (one per worktree,
+each independently reviewable).</p>
+<p>The power of <code>/batch</code> is that each subagent works in
+complete isolation. If the migration of <code>UserProfile.vue</code>
+fails, it doesn’t affect the migration of <code>Dashboard.vue</code>.
+Each PR can be reviewed, tested, and merged independently.</p>
+<p><code>/batch</code> can handle 5 to 30 parallel worktrees depending
+on your machine’s resources. For large-scale changes — framework
+migrations, API version upgrades, dependency replacements — this turns
+days of work into hours.</p>
+<p>Other practical <code>/batch</code> use cases:</p>
+<pre><code>/batch add error handling to all API routes in src/api/
+/batch add unit tests for all services in src/services/
+/batch update all imports from lodash to lodash-es
+/batch add TypeScript types to all .js files in src/utils/</code></pre>
+<p>Each of these spawns parallel agents, each in its own worktree, each
+producing an independent PR.</p>
+<h3 id="when-to-use-what">When to Use What</h3>
+<p>The parallel development toolkit has several options. Here’s a
+decision guide:</p>
+<p><strong>Quick answer or exploration</strong> — Use an Explore agent
+in the foreground. “How does the caching layer work?” doesn’t need
+background processing. Get the answer, move on.</p>
+<p><strong>Independent work that takes time</strong> — Use a
+general-purpose agent in the background. “Run the full test suite,”
+“Refactor the logging module,” “Add comprehensive tests to the payment
+service.” Send it to the background with <code>Ctrl+B</code> and keep
+working.</p>
+<p><strong>Feature work that might conflict with your current
+work</strong> — Use a worktree. If you’re editing
+<code>src/api/users.ts</code> and want Claude Code to also refactor
+<code>src/api/users.ts</code> in a different way, you need isolation.
+Worktrees give you separate branches and separate directories.</p>
+<p><strong>Mass changes across many files</strong> — Use
+<code>/batch</code>. When the same type of change applies to 10+ files
+or modules, <code>/batch</code> parallelizes the work and produces
+independent PRs.</p>
+<p><strong>Pre-commit review</strong> — Use a code-reviewer agent. After
+finishing a feature, spawn a reviewer to check your work before
+committing. It runs in the foreground (you want to read the review), but
+it doesn’t pollute your main conversation’s context.</p>
+<p><strong>Complex feature planning</strong> — Use a Plan agent before
+starting implementation. Have it analyze the codebase, identify
+dependencies, and produce a step-by-step plan. Then execute the plan
+yourself or hand it to an executing agent.</p>
+<h3 id="custom-subagents">Custom Subagents</h3>
+<p>You can define custom agent types with specialized instructions, tool
+restrictions, and behavioral guidelines. Create a markdown file in
+<code>.claude/agents/</code>:</p>
+<pre><code>.claude/agents/security-reviewer/AGENT.md</code></pre>
+<div class="sourceCode" id="cb170"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> security-reviewer</span></span>
+<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Reviews code changes for security vulnerabilities</span></span>
+<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> claude-sonnet-4-6</span></span>
+<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tools</span><span class="kw">:</span><span class="at"> Read Grep Glob</span></span>
+<span id="cb170-6"><a href="#cb170-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb170-7"><a href="#cb170-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-8"><a href="#cb170-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Review Checklist</span></span>
+<span id="cb170-9"><a href="#cb170-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-10"><a href="#cb170-10" aria-hidden="true" tabindex="-1"></a><span class="fu">When reviewing code, systematically check for</span><span class="kw">:</span></span>
+<span id="cb170-11"><a href="#cb170-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-12"><a href="#cb170-12" aria-hidden="true" tabindex="-1"></a><span class="at">1. **SQL Injection** — Parameterized queries? No string concatenation in SQL?</span></span>
+<span id="cb170-13"><a href="#cb170-13" aria-hidden="true" tabindex="-1"></a><span class="at">2. **XSS** — Output encoding? React&#39;s JSX auto-escaping intact?</span></span>
+<span id="cb170-14"><a href="#cb170-14" aria-hidden="true" tabindex="-1"></a><span class="at">3. **CSRF** — Token validation on state-changing endpoints?</span></span>
+<span id="cb170-15"><a href="#cb170-15" aria-hidden="true" tabindex="-1"></a><span class="at">4. **Auth bypass** — Every endpoint checks permissions?</span></span>
+<span id="cb170-16"><a href="#cb170-16" aria-hidden="true" tabindex="-1"></a><span class="at">5. **Secrets** — No hardcoded API keys, passwords, or tokens?</span></span>
+<span id="cb170-17"><a href="#cb170-17" aria-hidden="true" tabindex="-1"></a><span class="at">6. **Input validation** — All user input validated and sanitized?</span></span>
+<span id="cb170-18"><a href="#cb170-18" aria-hidden="true" tabindex="-1"></a><span class="at">7. **Rate limiting** — Abuse-prone endpoints rate-limited?</span></span>
+<span id="cb170-19"><a href="#cb170-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-20"><a href="#cb170-20" aria-hidden="true" tabindex="-1"></a><span class="fu">Report findings as</span><span class="kw">:</span></span>
+<span id="cb170-21"><a href="#cb170-21" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">CRITICAL</span><span class="kw">:</span><span class="at"> Must fix before merge</span></span>
+<span id="cb170-22"><a href="#cb170-22" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">WARNING</span><span class="kw">:</span><span class="at"> Should fix, but not blocking</span></span>
+<span id="cb170-23"><a href="#cb170-23" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">INFO</span><span class="kw">:</span><span class="at"> Suggestion for improvement</span></span></code></pre></div>
+<p>Now you can invoke this agent:</p>
+<pre><code>Use the security-reviewer agent to review my changes before I commit.</code></pre>
+<p>Claude Code spawns a subagent with the <code>security-reviewer</code>
+configuration. It only has read access (Read, Grep, Glob — no Edit, no
+Bash), so it can’t accidentally modify your code while reviewing it. It
+follows your specific review checklist rather than generic review
+heuristics.</p>
+<p>Custom agents are particularly powerful for teams. Define agents for
+your team’s specific concerns — performance review, accessibility audit,
+API contract verification — and every team member gets consistent,
+specialized review.</p>
+<p>The <code>model</code> field lets you choose the right model for the
+agent’s task. Use a faster, cheaper model for simple checks and a more
+capable model for complex analysis. The <code>tools</code> field
+restricts what the agent can do — a reviewer that can only read is safer
+than one that can also edit.</p>
+<blockquote>
+<p><strong>Tip:</strong> Start with background agents before exploring
+worktrees. The simplest parallel workflow is “run tests in the
+background while I keep coding.” Once that feels natural, add worktrees
+for feature isolation. <code>/batch</code> is the advanced tool — reach
+for it when you have 10+ similar changes to make. Build your parallelism
+skills incrementally.</p>
+</blockquote>
+<hr />
+<h2 id="chapter-15-custom-skills-superpowers">Chapter 15: Custom Skills
+&amp; Superpowers</h2>
+<p>Every developer has workflows they repeat. Deploy to production.
+Review a pull request. Set up a new microservice. Debug a performance
+issue. These workflows have steps, checks, and decisions that you’ve
+refined over time — but they live in your head or in scattered
+documentation.</p>
+<p>Skills turn these workflows into reusable recipes that Claude Code
+follows precisely. Instead of remembering “run tests, then build, then
+deploy, then verify the health endpoint, then check the logs,” you
+invoke a skill and Claude Code executes the entire workflow. Skills are
+one of Claude Code’s most underused features, and for teams, they’re
+transformative.</p>
+<h3 id="what-skills-are">What Skills Are</h3>
+<p>A skill is a markdown file with structured instructions that Claude
+Code loads and follows when invoked. Think of skills as “runbooks for
+AI” — step-by-step procedures that Claude Code executes with full access
+to your codebase and tools.</p>
+<p>Skills differ from CLAUDE.md instructions in two important ways.
+First, skills are loaded on demand — they don’t consume context until
+you invoke them. Second, skills have metadata that controls when and how
+they run, including tool permissions, model selection, and activation
+conditions.</p>
+<p>You invoke skills with a slash command:</p>
+<pre><code>/deploy</code></pre>
+<p>Or by describing a task that matches a skill’s description — Claude
+Code recognizes the match and loads the appropriate skill
+automatically.</p>
+<h3 id="built-in-skills">Built-in Skills</h3>
+<p>Claude Code ships with a library of built-in skills that cover common
+development workflows. You don’t need to create these — they’re
+available immediately.</p>
+<p><strong><code>/brainstorming</code></strong> — Structured creative
+exploration. Before building a feature, this skill guides you through
+requirements gathering, constraint identification, and approach
+evaluation. It prevents the common mistake of jumping into code before
+understanding what you’re building.</p>
+<pre><code>/brainstorming — I need to add multi-tenancy to our SaaS app</code></pre>
+<p>The skill asks targeted questions: What isolation level do you need?
+Shared database or separate? How do tenants authenticate? What data is
+tenant-specific vs global? By the end, you have a clear specification
+rather than a vague idea.</p>
+<p><strong><code>/writing-plans</code></strong> — Detailed
+implementation plans. Takes a feature specification and produces a
+step-by-step plan with file changes, dependency analysis, risk
+assessment, and testing strategy. The plan is concrete enough to hand to
+an executing agent or follow manually.</p>
+<p><strong><code>/executing-plans</code></strong> — Step-by-step plan
+execution with review checkpoints. Reads a plan (from a file or
+conversation) and executes it incrementally, pausing at checkpoints for
+your review. Useful for complex changes where you want to verify each
+stage before proceeding.</p>
+<p><strong><code>/test-driven-development</code></strong> —
+Red-green-refactor cycle. Writes failing tests first, then implements
+the code to make them pass, then refactors. This skill enforces TDD
+discipline even when you’re tempted to skip straight to
+implementation.</p>
+<p><strong><code>/systematic-debugging</code></strong> — Methodical
+investigation framework. Instead of random hypothesis testing, this
+skill follows a structured debugging process: reproduce, isolate,
+identify root cause, verify fix, check for similar issues. It prevents
+the common trap of fixing symptoms instead of causes.</p>
+<p><strong><code>/verification-before-completion</code></strong> —
+Verify before claiming done. This skill runs after implementation to
+confirm that everything actually works — tests pass, the feature behaves
+correctly, edge cases are handled. It catches the “it compiles so it
+must work” false confidence.</p>
+<p><strong><code>/simplify</code></strong> — Reviews recent changes for
+unnecessary complexity, code duplication, and optimization
+opportunities. A post-implementation cleanup pass that catches
+over-engineering.</p>
+<p><strong><code>/batch</code></strong> — Parallel changes across
+multiple worktrees, as covered in Chapter 14.</p>
+<p>These built-in skills chain naturally. A typical workflow for a new
+feature:</p>
+<pre><code>/brainstorming → /writing-plans → /executing-plans → /verification-before-completion</code></pre>
+<p>Each skill builds on the output of the previous one. Brainstorming
+produces requirements. Writing-plans produces a plan from those
+requirements. Executing-plans implements the plan. Verification confirms
+it works.</p>
+<h3 id="how-skills-work-under-the-hood">How Skills Work Under the
+Hood</h3>
+<p>A skill is a markdown file with optional YAML frontmatter. When
+invoked, Claude Code loads the file’s content as instructions and
+follows them for the duration of the task. The instructions can include
+steps, decision trees, checklists, and code templates.</p>
+<p>Here’s the structure:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> my-skill</span></span>
+<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> What this skill does (Claude reads this to match tasks)</span></span>
+<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a><span class="fu">allowed-tools</span><span class="kw">:</span><span class="at"> Bash(npm *) Bash(git *) Edit Read</span></span>
+<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb175-6"><a href="#cb175-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb175-7"><a href="#cb175-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Instructions</span></span>
+<span id="cb175-8"><a href="#cb175-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb175-9"><a href="#cb175-9" aria-hidden="true" tabindex="-1"></a><span class="at">The actual workflow steps go here.</span></span>
+<span id="cb175-10"><a href="#cb175-10" aria-hidden="true" tabindex="-1"></a><span class="at">Claude Code follows these as its guide.</span></span></code></pre></div>
+<p>The frontmatter controls metadata. The markdown body contains the
+workflow. Claude Code reads both and executes the workflow using the
+permitted tools.</p>
+<p>Skills are loaded only when invoked — they don’t consume context
+during normal conversation. This means you can have dozens of skills
+defined without any performance penalty. Only the active skill’s
+instructions occupy context space.</p>
+<h3 id="creating-your-own-skills">Creating Your Own Skills</h3>
+<p>Custom skills live in your home directory or your project:</p>
+<ul>
+<li><strong>Personal skills:</strong>
+<code>~/.claude/skills/skill-name/SKILL.md</code></li>
+<li><strong>Project skills:</strong>
+<code>.claude/skills/skill-name/SKILL.md</code></li>
+</ul>
+<p>Personal skills are available in every project. Project skills are
+available only in that project and can be committed to git for the whole
+team.</p>
+<p>Here’s a practical example — a deployment skill:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> deploy</span></span>
+<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Deploy the application to production</span></span>
+<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a><span class="fu">allowed-tools</span><span class="kw">:</span><span class="at"> Bash(npm *) Bash(git *) Bash(curl *) Read</span></span>
+<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Pre-deployment Checks</span></span>
+<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a><span class="fu">1. Verify all tests pass</span><span class="kw">:</span></span>
+<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a><span class="at">   ```bash</span></span>
+<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a><span class="at">   npm test</span></span></code></pre></div>
+<p>If any test fails, STOP and report the failure. Do not proceed.</p>
+<ol start="2" type="1">
+<li><p>Verify the build succeeds:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run build</span></code></pre></div></li>
+<li><p>Check for uncommitted changes:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--porcelain</span></span></code></pre></div>
+<p>If there are uncommitted changes, STOP and ask the user to commit
+first.</p></li>
+<li><p>Verify you’re on the main branch:</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">--show-current</span></span></code></pre></div>
+<p>If not on main, STOP and warn the user.</p></li>
+</ol>
+<h2 id="deploy">Deploy</h2>
+<ol start="5" type="1">
+<li><p>Deploy:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run deploy</span></code></pre></div></li>
+</ol>
+<h2 id="post-deployment-verification">Post-deployment Verification</h2>
+<ol start="6" type="1">
+<li><p>Wait 30 seconds for deployment to propagate.</p></li>
+<li><p>Check the health endpoint:</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sf</span> https://api.example.com/health</span></code></pre></div>
+<p>If the health check fails, immediately report and suggest
+rollback.</p></li>
+<li><p>Check the version endpoint:</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sf</span> https://api.example.com/version</span></code></pre></div>
+<p>Verify the deployed version matches the current git commit.</p></li>
+</ol>
+<h2 id="report">Report</h2>
+<p>Summarize: what was deployed, which commit, health check status, any
+warnings.</p>
+<pre><code>
+Now `/deploy` executes this entire workflow. Every deployment follows the same process — tests, build, branch check, deploy, health verification. No steps forgotten, no checks skipped.
+
+### Skill Features in Depth
+
+The frontmatter supports several powerful features:
+
+| Feature | Purpose | Example |
+|---------|---------|---------|
+| `description` | Tells Claude when to use the skill | `&quot;Deploy to production with safety checks&quot;` |
+| `allowed-tools` | Pre-approve tools (no permission prompts) | `Bash(npm *) Edit Read Grep` |
+| `model` | Use a specific model for this skill | `claude-sonnet-4-6` |
+| `effort` | Set reasoning effort level | `high` |
+| `context: fork` | Run in an isolated subagent | Skill doesn&#39;t pollute main context |
+| `paths` | Only activate for matching file paths | `[&quot;src/api/**&quot;, &quot;src/services/**&quot;]` |
+| `disable-model-invocation` | Only the user can invoke, not Claude | Prevents accidental invocation |
+
+**`allowed-tools`** is particularly important. When a skill specifies allowed tools, those tools don&#39;t require user approval while the skill is active. Your deployment skill can run `npm test`, `npm run build`, and `npm run deploy` without pausing for permission at each step. This makes skills feel smooth and automatic rather than interrupted by approval dialogs.
+
+Tool patterns support globs: `Bash(npm *)` allows any npm command. `Bash(git *)` allows any git command. `Bash(curl https://api.example.com/*)` allows curl but only to your API domain. This gives you fine-grained control over what the skill can do.
+
+**`context: fork`** runs the skill in a subagent. The skill&#39;s execution doesn&#39;t fill your main conversation with tool calls and intermediate output. You see the final result, not the journey. Use this for skills that involve many steps and produce a lot of intermediate output.
+
+**`paths`** restricts when the skill activates. A skill with `paths: [&quot;*.test.ts&quot;, &quot;*.spec.ts&quot;]` only triggers when you&#39;re working on test files. This prevents skills from activating in the wrong context.
+
+**`disable-model-invocation`** prevents Claude Code from invoking the skill on its own. Without this flag, Claude Code might automatically use a skill when it recognizes a matching task. With the flag, only explicit `/skill-name` invocations trigger it. Use this for destructive skills (deployment, database migrations) where you want human intent.
+
+### Dynamic Context in Skills
+
+Skills can include live data from your environment using shell execution syntax. When Claude Code loads the skill, it runs the embedded commands and injects their output into the instructions.
+
+```markdown
+---
+name: review-pr
+description: Review the current pull request
+allowed-tools: Read Grep Glob Bash(gh *)
+---
+
+## PR Context
+
+- **Diff:** !`gh pr diff`
+- **PR description:** !`gh pr view`
+- **Comments:** !`gh pr view --comments`
+- **CI status:** !`gh pr checks`
+
+## Review Instructions
+
+Review the diff above for:
+1. Logic errors and edge cases
+2. Security vulnerabilities
+3. Performance concerns
+4. Test coverage gaps
+5. Code style consistency
+
+Provide feedback organized by severity: critical, warning, suggestion.</code></pre>
+<p>The <code>!</code> backtick syntax executes the command when the
+skill loads. By the time Claude Code starts following the instructions,
+it has the full PR diff, description, comments, and CI status in
+context. The review is grounded in actual PR data, not hypothetical
+code.</p>
+<p>This makes skills context-aware. A deployment skill can check the
+current branch and environment. A review skill can load the actual diff.
+A debugging skill can capture recent error logs. The skill’s
+instructions adapt to the current state of your project.</p>
+<h3 id="string-substitutions">String Substitutions</h3>
+<p>Skills support variable substitutions for dynamic behavior:</p>
+<ul>
+<li><strong><code>$ARGUMENTS</code></strong> — Everything the user typed
+after the skill name. <code>/deploy staging</code> makes
+<code>$ARGUMENTS</code> equal to <code>&quot;staging&quot;</code>.</li>
+<li><strong><code>$0</code></strong> — The full argument string (alias
+for <code>$ARGUMENTS</code>).</li>
+<li><strong><code>$1</code>, <code>$2</code>, …</strong> — Individual
+arguments, space-separated. <code>/deploy staging --force</code> makes
+<code>$1</code> = <code>&quot;staging&quot;</code> and <code>$2</code> =
+<code>&quot;--force&quot;</code>.</li>
+<li><strong><code>${CLAUDE_SESSION_ID}</code></strong> — Unique ID for
+the current session. Useful for creating unique filenames or log
+entries.</li>
+<li><strong><code>${CLAUDE_SKILL_DIR}</code></strong> — The directory
+containing the skill file. Useful for referencing helper scripts or
+templates that ship alongside the skill.</li>
+</ul>
+<p>Here’s a skill that uses arguments:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> new-service</span></span>
+<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Scaffold a new microservice</span></span>
+<span id="cb184-4"><a href="#cb184-4" aria-hidden="true" tabindex="-1"></a><span class="fu">allowed-tools</span><span class="kw">:</span><span class="at"> Bash(*) Edit Write Read</span></span>
+<span id="cb184-5"><a href="#cb184-5" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb184-6"><a href="#cb184-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-7"><a href="#cb184-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Create Service: $1</span></span>
+<span id="cb184-8"><a href="#cb184-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-9"><a href="#cb184-9" aria-hidden="true" tabindex="-1"></a><span class="fu">1. Create directory structure</span><span class="kw">:</span></span></code></pre></div>
+<p>src/services/$1/ ├── index.ts ├── routes.ts ├── service.ts ├──
+types.ts └── <strong>tests</strong>/ └── service.test.ts ```</p>
+<ol start="2" type="1">
+<li><p>Use the template files in ${CLAUDE_SKILL_DIR}/templates/ as
+starting points.</p></li>
+<li><p>Register the service in src/services/index.ts.</p></li>
+<li><p>Add a health check route at GET /$1/health.</p></li>
+</ol>
+<pre><code>
+Invoking `/new-service payments` scaffolds a complete payments microservice. The skill knows where to put it, what files to create, and how to register it — all from the instructions.
+
+### When Skills Shine
+
+Skills deliver the most value in four scenarios:
+
+**Repeatable workflows.** Deployment, release management, database migration, environment setup. Any workflow you do more than twice should be a skill. The first time you write the skill takes 10 minutes. Every subsequent execution saves 15-30 minutes and eliminates human error.
+
+**Team standards.** When your team has specific processes — PR review checklists, code style requirements, architecture patterns — skills encode them into executable instructions. New team members don&#39;t need to learn the process from documentation. They invoke the skill and Claude Code guides them through it.
+
+**Complex processes with many steps.** Some workflows have 10+ steps, conditional branches, and verification checks. Humans forget steps. Humans skip checks. Skills don&#39;t. A deployment skill that checks 8 things before deploying will check 8 things every time.
+
+**Onboarding.** New developers on a team can invoke skills to understand how things work. `/setup-dev-environment` configures everything. `/architecture-overview` explains the codebase. `/add-feature` scaffolds a new feature following team conventions. Skills accelerate onboarding from weeks to days.
+
+### Building a Skill Library
+
+Start with one skill for your most painful repeated workflow. Deploy it, use it for a week, refine it based on experience. Then add a second skill for your second-most painful workflow. Build your library incrementally rather than trying to skill-ify everything at once.
+
+A typical mature skill library:
+</code></pre>
+<p>~/.claude/skills/ ├── deploy/SKILL.md ← Production deployment ├──
+new-component/SKILL.md ← Scaffold React component ├──
+new-api-route/SKILL.md ← Scaffold API endpoint ├──
+review-security/SKILL.md ← Security-focused review └──
+debug-performance/SKILL.md ← Performance investigation</p>
+<p>.claude/skills/ (project-specific, committed to git) ├──
+setup-dev/SKILL.md ← Dev environment setup ├── run-migrations/SKILL.md ←
+Database migration workflow └── release/SKILL.md ← Release process</p>
+<pre><code>
+Personal skills in `~/.claude/skills/` travel with you across projects. Project skills in `.claude/skills/` travel with the repository and are shared with the team. The combination gives you personal productivity and team consistency.
+
+&gt; **Tip:** When writing a skill, be explicit about failure conditions. Don&#39;t just say &quot;run the tests.&quot; Say &quot;run the tests. If any test fails, STOP and report the failure. Do not proceed to the next step.&quot; Claude Code follows instructions literally — if you don&#39;t specify what to do on failure, it might continue past a broken step. Every step in a skill should have a clear success condition and a clear failure action.
+
+---
+
+
+## Chapter 16: 50 Hidden Tips &amp; Tricks Most Developers Don&#39;t Know
+
+This is the chapter you came for. These aren&#39;t in the getting-started guide. They&#39;re collected from expert usage, documentation deep-dives, and real-world workflows. If you already know more than ten of these, you&#39;re in the top 1% of Claude Code users.
+
+### Speed &amp; Efficiency
+
+**1. The `!` prefix runs shell commands inline.**
+Type `!` followed by any shell command and the output lands directly in your conversation context. Claude sees it immediately and can act on it. Faster than switching terminals and pasting output.
+</code></pre>
+<p>! git log –oneline -5 ! ls src/components/ ! npm test – –grep
+“auth”</p>
+<pre><code>
+**2. `/fast` uses the same model — it&#39;s not a downgrade.**
+Many think fast mode switches to a weaker model. It doesn&#39;t — same Claude, optimized for faster output with slightly less thoroughness. Use it for straightforward tasks like renaming variables or adding imports. Switch back for architecture decisions.
+</code></pre>
+<p>/fast rename the variable <code>data</code> to
+<code>userProfile</code> across all files in src/</p>
+<pre><code>
+**3. `Shift+Tab` cycles models instantly.**
+Switch between Opus, Sonnet, and Haiku mid-conversation without restarting. Use Haiku for quick questions, Sonnet for standard tasks, Opus for complex architecture. Haiku costs roughly 1/60th of Opus — strategic switching cuts your bill dramatically.
+</code></pre>
+<p>Shift+Tab → cycles: Opus → Sonnet → Haiku → Opus</p>
+<pre><code>
+**4. `/compact` accepts a focus argument.**
+Most developers use `/compact` bare and let Claude decide what to keep. Add a focus argument to control what matters most during compression. Without it, Claude might discard exactly the context you need next.
+</code></pre>
+<p>/compact focus on the authentication refactor and the database schema
+changes /compact keep all the API endpoint signatures and test
+results</p>
+<pre><code>
+**5. Pipe mode for one-shot queries.**
+The `-p` flag pipes stdin directly into Claude and prints the result to stdout. No interactive session needed. This is transformative for integrating Claude into shell workflows — it composes with any Unix tool.
+
+```bash
+git diff | claude -p &quot;review this diff for bugs&quot;
+cat error.log | claude -p &quot;what&#39;s causing these failures?&quot;
+git log --oneline -20 | claude -p &quot;categorize these commits&quot; | pbcopy</code></pre>
+<p><strong>6. <code>claude --print</code> for non-interactive
+scripting.</strong> Pass a prompt directly and get the result on stdout.
+No interactive session, no stdin needed. The <code>-o json</code> flag
+forces JSON output for script consumption.</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--print</span> <span class="st">&quot;what node version does this project use?&quot;</span></span>
+<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--print</span> <span class="at">-o</span> json <span class="st">&quot;list all TODO comments in src/&quot;</span> <span class="op">&gt;</span> todos.json</span></code></pre></div>
+<p><strong>7. Resume any conversation with
+<code>--resume</code>.</strong> Every conversation is automatically
+saved. Resume with full context — files read, decisions made, plans
+discussed — exactly where you left off. You can close your terminal,
+reboot your machine, or switch projects and pick up right where you
+were. Name important sessions so you can find them later.</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--resume</span>                    <span class="co"># resume last conversation</span></span>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">-r</span>                          <span class="co"># shorthand</span></span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--resume</span> <span class="st">&quot;auth-refactor&quot;</span>    <span class="co"># resume a named session</span></span></code></pre></div>
+<p><strong>8. <code>@filename</code> forces a file into
+context.</strong> The <code>@</code> prefix explicitly loads a file into
+context. Use it when Claude’s suggestions don’t match your conventions —
+force it to see the reference file. You can reference multiple files in
+one prompt.</p>
+<pre><code>@src/auth/middleware.ts why doesn&#39;t the new route handler follow this pattern?
+@src/types.ts @src/schema.ts add a new User type matching the database schema</code></pre>
+<p><strong>9. Edit is 10x cheaper than Write.</strong> Edit sends only
+the diff. Write sends the entire file. For a 500-line file where you’re
+changing 3 lines, Edit transmits ~10 lines while Write transmits all
+500. Reinforce this in your CLAUDE.md:</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Rules</span></span>
+<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Always use Edit for modifying existing files</span>
+<span id="cb194-3"><a href="#cb194-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Only use Write for creating new files</span></code></pre></div>
+<p><strong>10. Parallel tool calls happen automatically.</strong> When
+Claude needs to read 5 files, it reads all 5 simultaneously — not
+sequentially. You don’t configure this; it’s built into the
+architecture. The same applies to searches: multiple grep operations
+fire in parallel. Give Claude the full list and it analyzes everything
+together in one round-trip.</p>
+<pre><code>Check these files for inconsistent error handling:
+src/api/users.ts, src/api/orders.ts, src/api/payments.ts,
+src/api/inventory.ts, src/api/notifications.ts</code></pre>
+<h3 id="configuration-secrets">Configuration Secrets</h3>
+<p><strong>11. Three layers of settings merge top-down.</strong> Claude
+Code has three config files that merge in a specific order.
+Understanding this hierarchy is essential for teams. Project settings
+override global and are shared via git. Local settings override
+everything and stay private.</p>
+<pre><code>~/.claude/settings.json          # Global (your machine)
+.claude/settings.json            # Project (commit this to git!)
+.claude/settings.local.json      # Local (gitignored, personal overrides)</code></pre>
+<p><strong>12. Allowlist specific commands with regex.</strong>
+<code>permissions.allow</code> accepts patterns, not just exact strings.
+Auto-approve safe command families while keeping destructive ones
+gated.</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read&quot;</span><span class="ot">,</span> <span class="st">&quot;Glob&quot;</span><span class="ot">,</span> <span class="st">&quot;Grep&quot;</span><span class="ot">,</span></span>
+<span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(npm test *)&quot;</span><span class="ot">,</span></span>
+<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git (add|commit|status|diff|log) *)&quot;</span><span class="ot">,</span></span>
+<span id="cb197-7"><a href="#cb197-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(cargo (build|test|clippy) *)&quot;</span></span>
+<span id="cb197-8"><a href="#cb197-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb197-9"><a href="#cb197-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb197-10"><a href="#cb197-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>The git pattern allows common operations but still requires approval
+for <code>git reset --hard</code> or <code>git push --force</code>.</p>
+<p><strong>13. <code>.claudeignore</code> hides files from
+Claude.</strong> Create a <code>.claudeignore</code> file in your
+project root with the same syntax as <code>.gitignore</code>. Claude
+won’t read, search, or reference matching files. This reduces noise,
+protects sensitive data, and keeps context focused. A 50,000-file
+monorepo with proper <code>.claudeignore</code> behaves like a focused
+2,000-file project.</p>
+<pre><code># .claudeignore
+node_modules/
+dist/
+build/
+*.lock
+*.min.js
+coverage/
+.env*
+vendor/</code></pre>
+<p><strong>14. Custom keybindings.</strong> Remap any shortcut in
+<code>~/.claude/keybindings.json</code>. Supports modifiers and VS
+Code-style chord bindings (press one combo, release, press another).</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb199-2"><a href="#cb199-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;ctrl+l&quot;</span><span class="fu">,</span> <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;clear&quot;</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb199-3"><a href="#cb199-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;ctrl+k ctrl+c&quot;</span><span class="fu">,</span> <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;compact&quot;</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb199-4"><a href="#cb199-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;ctrl+shift+p&quot;</span><span class="fu">,</span> <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;plan&quot;</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb199-5"><a href="#cb199-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;ctrl+d&quot;</span><span class="fu">,</span> <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;diff&quot;</span> <span class="fu">}</span></span>
+<span id="cb199-6"><a href="#cb199-6" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>15. Auto-format every file Claude edits.</strong> One
+PostToolUse hook and every file Claude modifies gets auto-formatted.
+Replace <code>prettier</code> with <code>black</code>,
+<code>gofmt</code>, or <code>rustfmt</code> as needed.</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb200-2"><a href="#cb200-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb200-3"><a href="#cb200-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;PostToolUse&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb200-4"><a href="#cb200-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb200-5"><a href="#cb200-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;matcher&quot;</span><span class="fu">:</span> <span class="st">&quot;Edit|Write&quot;</span><span class="fu">,</span></span>
+<span id="cb200-6"><a href="#cb200-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb200-7"><a href="#cb200-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">{</span></span>
+<span id="cb200-8"><a href="#cb200-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb200-9"><a href="#cb200-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;prettier --write $CLAUDE_FILE_PATH&quot;</span></span>
+<span id="cb200-10"><a href="#cb200-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb200-11"><a href="#cb200-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb200-12"><a href="#cb200-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb200-13"><a href="#cb200-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb200-14"><a href="#cb200-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb200-15"><a href="#cb200-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>16. Desktop notifications when Claude needs
+attention.</strong> Set up a Notification hook and get alerted when
+Claude pauses for input. On Linux, replace <code>osascript</code> with
+<code>notify-send</code>.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Notification&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb201-4"><a href="#cb201-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb201-5"><a href="#cb201-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;matcher&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span><span class="fu">,</span></span>
+<span id="cb201-6"><a href="#cb201-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb201-7"><a href="#cb201-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">{</span></span>
+<span id="cb201-8"><a href="#cb201-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb201-9"><a href="#cb201-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;osascript -e &#39;display notification </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_NOTIFICATION</span><span class="ch">\&quot;</span><span class="st"> with title </span><span class="ch">\&quot;</span><span class="st">Claude Code</span><span class="ch">\&quot;</span><span class="st">&#39;&quot;</span></span>
+<span id="cb201-10"><a href="#cb201-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb201-11"><a href="#cb201-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb201-12"><a href="#cb201-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb201-13"><a href="#cb201-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb201-14"><a href="#cb201-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb201-15"><a href="#cb201-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>17. Project-scoped MCP servers vs global ones.</strong> MCP
+servers in <code>.claude/settings.json</code> are project-scoped — they
+load only when you’re in that project and are shared with your team via
+git. MCP in <code>~/.claude/settings.json</code> loads everywhere.
+Connection strings and secrets go in <code>settings.local.json</code>
+(gitignored). This gives your team shared tooling with private
+credentials.</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">.claude/settings.json</span> <span class="er">(committed,</span> <span class="er">shared</span> <span class="er">with</span> <span class="er">team)</span></span>
+<span id="cb202-2"><a href="#cb202-2" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb202-3"><a href="#cb202-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb202-4"><a href="#cb202-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;team-database&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb202-5"><a href="#cb202-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;npx&quot;</span><span class="fu">,</span></span>
+<span id="cb202-6"><a href="#cb202-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;@team/db-mcp-server&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb202-7"><a href="#cb202-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;env&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;DB_URL&quot;</span><span class="fu">:</span> <span class="st">&quot;${DB_URL}&quot;</span> <span class="fu">}</span></span>
+<span id="cb202-8"><a href="#cb202-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb202-9"><a href="#cb202-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb202-10"><a href="#cb202-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>18. <code>claude config set</code> from the
+terminal.</strong> Configure without editing JSON. Respects the
+three-layer hierarchy — without <code>--global</code>, writes to project
+config; with it, writes to <code>~/.claude/settings.json</code>.</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> config set permissions.allow <span class="st">&#39;[&quot;Read&quot;,&quot;Glob&quot;,&quot;Grep&quot;]&#39;</span></span>
+<span id="cb203-2"><a href="#cb203-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> config set <span class="at">--global</span> theme <span class="st">&quot;dark&quot;</span></span>
+<span id="cb203-3"><a href="#cb203-3" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> config list</span></code></pre></div>
+<p><strong>19. Multiple CLAUDE.md files merge automatically.</strong>
+Claude Code loads and merges instructions from multiple locations.
+Global for personal preferences, project for team conventions,
+subdirectory for module-specific rules.</p>
+<pre><code>~/.claude/CLAUDE.md              # Global (all projects)
+./CLAUDE.md                      # Project root (team conventions)
+./src/CLAUDE.md                  # Subdirectory (module-specific rules)</code></pre>
+<p><strong>20. Path-specific rules with frontmatter.</strong> Create
+markdown files in <code>.claude/rules/</code> with <code>paths:</code>
+frontmatter. These rules only activate when Claude works on matching
+files. Non-matching rules are invisible — they consume zero context.
+This scales beautifully for large projects with varied conventions
+across modules.</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;src/api/**/*.ts&quot;</span><span class="kw">]</span></span>
+<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a><span class="at">All API handlers must validate input using Zod schemas.</span></span>
+<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a><span class="at">Return standardized error responses using ApiError class.</span></span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;**/*.test.ts&quot;</span><span class="kw">]</span></span>
+<span id="cb206-3"><a href="#cb206-3" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb206-4"><a href="#cb206-4" aria-hidden="true" tabindex="-1"></a><span class="at">Use describe/it blocks. Mock external services, never hit real APIs.</span></span></code></pre></div>
+<h3 id="advanced-workflows">Advanced Workflows</h3>
+<p><strong>21. <code>/init</code> generates your CLAUDE.md
+automatically.</strong> Scans your project structure, package.json, git
+history, and coding patterns — then generates a comprehensive CLAUDE.md
+file. The result includes detected language conventions, testing
+frameworks, build commands, and common patterns. Usually 60-70% correct
+out of the box. Always review and customize.</p>
+<pre><code>/init</code></pre>
+<p><strong>22. Plan mode prevents wrong paths.</strong> For complex
+tasks, ask Claude to plan before coding. It produces a structured
+breakdown — files to change, order of operations, risks, and testing
+strategy — without modifying anything. Much cheaper to revise a plan
+than to undo a half-completed refactor.</p>
+<pre><code>Plan a refactor of the authentication system to support OAuth2.
+Don&#39;t change any code yet — just outline the approach.</code></pre>
+<p><strong>23. Background agents with <code>Ctrl+B</code>.</strong> Send
+a task to a background agent that works independently while you continue
+your main conversation. Perfect for mechanical tasks while you focus on
+creative work.</p>
+<pre><code>Main conversation: &quot;Building the payment integration...&quot;
+Ctrl+B: &quot;Update all copyright headers to 2026&quot;
+# Notification appears when done</code></pre>
+<p><strong>24. <code>/branch</code> forks your conversation.</strong>
+Try two approaches without losing progress. Creates a named checkpoint
+you can return to if the current path doesn’t work.</p>
+<pre><code>/branch explore-option-A
+# ... try approach A, doesn&#39;t work? ...
+/resume explore-option-A
+# ... try approach B from the same starting point</code></pre>
+<p><strong>25. <code>/rewind</code> jumps to any checkpoint.</strong>
+Not just undo — jump to any previous point in the conversation. Think of
+it as <code>git checkout</code> for conversations. Context from that
+point forward is discarded; you restart from a known good state.</p>
+<pre><code>/rewind
+# Shows a list of checkpoints — select where to return</code></pre>
+<p><strong>26. Claude reads images natively.</strong> Pass a path to any
+PNG/JPG and Claude sees it visually. This unlocks workflows that would
+otherwise require manual description: “recreate this UI,” “what’s wrong
+with this layout,” “match this design.” Claude analyzes visual
+composition — colors, spacing, typography — and generates matching code.
+Not pixel-perfect, but gets you 80% in one shot.</p>
+<pre><code>@screenshots/target-design.png recreate this layout in React with Tailwind CSS</code></pre>
+<p><strong>27. Claude reads PDFs with page ranges.</strong> Work
+directly from specs and documentation in PDF format. Max 20 pages per
+request — for longer docs, read in chunks.</p>
+<pre><code>Read pages 12-18 of docs/api-specification.pdf and implement
+the user endpoints described there.</code></pre>
+<p><strong>28. Side questions with minimal context pollution.</strong>
+Need a quick answer mid-task without derailing focus? Frame it as a side
+question. Keeps your main conversation thread clean.</p>
+<pre><code>Quick aside: what&#39;s the syntax for TypeScript conditional types?</code></pre>
+<p><strong>29. <code>/context</code> visualizes your context
+window.</strong> Shows a breakdown of what’s consuming context —
+CLAUDE.md, history, file contents, tool outputs — with capacity
+warnings. When approaching 60%, use <code>/compact</code> proactively
+(tip #4).</p>
+<pre><code>/context</code></pre>
+<p><strong>30. <code>/diff</code> for visual change review.</strong> See
+all session modifications in visual diff format. Your pre-commit review
+— catch anything unexpected before Claude commits.</p>
+<pre><code>/diff
+# Shows a colored diff of all changes in the session</code></pre>
+<h3 id="hidden-power">Hidden Power</h3>
+<p><strong>31. The hook feedback loop.</strong> PostToolUse hooks create
+automatic feedback loops: Claude edits, hook runs linter, linter reports
+error, Claude sees it, fixes it, hook runs again, passes. Fully
+automatic, typically resolves in 1-2 iterations.</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb217-1"><a href="#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb217-2"><a href="#cb217-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb217-3"><a href="#cb217-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;PostToolUse&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb217-4"><a href="#cb217-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb217-5"><a href="#cb217-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;matcher&quot;</span><span class="fu">:</span> <span class="st">&quot;Edit|Write&quot;</span><span class="fu">,</span></span>
+<span id="cb217-6"><a href="#cb217-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb217-7"><a href="#cb217-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">{</span></span>
+<span id="cb217-8"><a href="#cb217-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb217-9"><a href="#cb217-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;eslint --fix $CLAUDE_FILE_PATH &amp;&amp; eslint $CLAUDE_FILE_PATH&quot;</span></span>
+<span id="cb217-10"><a href="#cb217-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb217-11"><a href="#cb217-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb217-12"><a href="#cb217-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb217-13"><a href="#cb217-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb217-14"><a href="#cb217-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb217-15"><a href="#cb217-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>32. Hooks override ALL permission modes.</strong> Hooks
+returning exit code 2 block operations even with
+<code>--dangerously-skip-permissions</code>. Hooks sit above the
+permission system, not below it — the ultimate safety net. This hook
+prevents writing to any <code>.env</code> file, period. No flag can
+bypass it.</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb218-1"><a href="#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb218-2"><a href="#cb218-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb218-3"><a href="#cb218-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;PreToolUse&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb218-4"><a href="#cb218-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb218-5"><a href="#cb218-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;matcher&quot;</span><span class="fu">:</span> <span class="st">&quot;Write&quot;</span><span class="fu">,</span></span>
+<span id="cb218-6"><a href="#cb218-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb218-7"><a href="#cb218-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">{</span></span>
+<span id="cb218-8"><a href="#cb218-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb218-9"><a href="#cb218-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;if echo $CLAUDE_FILE_PATH | grep -q &#39;.env&#39;; then exit 2; fi&quot;</span></span>
+<span id="cb218-10"><a href="#cb218-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb218-11"><a href="#cb218-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb218-12"><a href="#cb218-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb218-13"><a href="#cb218-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb218-14"><a href="#cb218-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb218-15"><a href="#cb218-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>33. Claude never amends commits unless explicitly
+asked.</strong> When a pre-commit hook fails, the commit didn’t happen.
+If Claude used <code>--amend</code> on retry, it would modify the
+previous (unrelated) commit. So Claude always creates a new commit.
+Intentional and non-configurable — prevents data loss.</p>
+<pre><code># After a failed pre-commit hook:
+git add fixed-file.ts
+git commit -m &quot;fix: resolve lint errors&quot;   # NEW commit, not --amend</code></pre>
+<p><strong>34. Context compression triggers at ~60%, not 95%.</strong>
+Automatic compression is aggressive — starts around 60% utilization, not
+near capacity. If you wait for it, Claude decides what to keep.
+Proactive compression is a strategy; automatic compression is a safety
+net.</p>
+<pre><code>/compact focus on: the API redesign decisions, the new schema,
+and the migration strategy we discussed</code></pre>
+<p><strong>35. Sub-agents for codebase exploration.</strong> Instead of
+manually searching through files, describe what you want to understand.
+Claude launches a focused investigation — searching, reading, following
+imports, checking test files for behavior clues, and synthesizing across
+multiple files. Far more effective than manual grep-and-read cycles.</p>
+<pre><code>Figure out how the payment processing pipeline works end-to-end.
+Trace from the API endpoint through to the database write.</code></pre>
+<p><strong>36. <code>--max-budget-usd</code> sets a hard spending
+limit.</strong> Cap session spending. Once reached, the session ends
+gracefully. Set low for exploration, higher for known-complex tasks.
+Essential for teams managing shared budgets.</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb222-1"><a href="#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--max-budget-usd</span> 2.00</span>
+<span id="cb222-2"><a href="#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--max-budget-usd</span> 0.50   <span class="co"># tight budget for quick tasks</span></span></code></pre></div>
+<p><strong>37. <code>--json-schema</code> forces structured
+output.</strong> Constrains output to match your JSON schema exactly. No
+markdown, no extra text — just valid, parseable JSON. Combine with
+<code>--print</code> for automated pipelines.</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb223-1"><a href="#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">-p</span> <span class="at">--json-schema</span> <span class="st">&#39;{</span></span>
+<span id="cb223-2"><a href="#cb223-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;type&quot;: &quot;object&quot;,</span></span>
+<span id="cb223-3"><a href="#cb223-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &quot;properties&quot;: {</span></span>
+<span id="cb223-4"><a href="#cb223-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;bugs&quot;: { &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; } },</span></span>
+<span id="cb223-5"><a href="#cb223-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;severity&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;low&quot;,&quot;medium&quot;,&quot;high&quot;] }</span></span>
+<span id="cb223-6"><a href="#cb223-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb223-7"><a href="#cb223-7" aria-hidden="true" tabindex="-1"></a><span class="st">}&#39;</span> <span class="st">&quot;analyze src/auth.ts for bugs&quot;</span></span></code></pre></div>
+<p><strong>38. <code>/schedule</code> runs tasks on Anthropic’s
+cloud.</strong> Schedule Claude on a cron — even when your computer is
+off. Runs on Anthropic infrastructure with access to your connected
+repositories. Tasks can create issues, leave PR comments, or post
+summaries depending on what you configure.</p>
+<pre><code>/schedule &quot;review all open PRs and comment&quot; every weekday at 9am
+/schedule &quot;check for outdated dependencies&quot; every monday at 8am</code></pre>
+<p><strong>39. Extended cloud planning with deep reasoning.</strong>
+Cloud-based planning gives Claude up to 30 minutes of reasoning time.
+For decisions that affect months of development — service boundaries,
+database architecture, major migrations.</p>
+<pre><code>/ultraplan migrate our monolith to microservices —
+analyze all 200 endpoints and propose service boundaries</code></pre>
+<p><strong>40. <code>/batch</code> for mass parallel changes.</strong>
+Spawns multiple parallel agents in separate git worktrees. Each handles
+a subset of files; results are presented as individual reviewable
+changes. For a 50-file migration, hours become minutes.</p>
+<pre><code>/batch update all test files from Jest to Vitest syntax
+/batch add input validation to every API endpoint</code></pre>
+<h3 id="pro-patterns">Pro Patterns</h3>
+<p><strong>41. “Follow the pattern in X” is the most powerful
+prompt.</strong> Reference an existing file and Claude replicates its
+structure, naming conventions, error handling, and style perfectly.
+Claude reads the reference file, extracts the pattern — imports,
+middleware chain, validation approach, response format — and applies it
+to the new code. Produces more consistent output than any amount of
+detailed description.</p>
+<pre><code>Create a new API endpoint for /api/orders.
+Follow the exact pattern in src/api/users.ts.</code></pre>
+<p><strong>42. Start conversations scoped to a single concern.</strong>
+Don’t let one conversation handle auth, database optimization, and UI
+styling. Short, focused conversations produce better results than
+marathon multi-topic sessions. When in doubt, start fresh.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb228-1"><a href="#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Session 1: Auth refactor</span></span>
+<span id="cb228-2"><a href="#cb228-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> → <span class="st">&quot;refactor the authentication middleware...&quot;</span></span>
+<span id="cb228-3"><a href="#cb228-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Session 2: Database optimization (new conversation)</span></span>
+<span id="cb228-4"><a href="#cb228-4" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> → <span class="st">&quot;optimize the slow queries in reports...&quot;</span></span></code></pre></div>
+<p><strong>43. <code>!git diff</code> as context is better than
+explanation.</strong> Instead of describing what changed, show Claude
+the actual diff. More accurate and complete than verbal explanation.</p>
+<pre><code>!git diff HEAD~3
+Review these changes. Are there any bugs or missed edge cases?
+
+!git diff main..feature-branch
+Write a comprehensive PR description for these changes.</code></pre>
+<p><strong>44. When you deny a tool call, explain why.</strong> A bare
+denial forces Claude to guess what went wrong. An explained denial
+teaches it your preference immediately and adjusts behavior for the rest
+of the conversation. It’s the fastest way to steer Claude’s
+approach.</p>
+<pre><code># Weak:
+[Deny]
+
+# Strong:
+[Deny] — Don&#39;t use Write. Use Edit instead — I want the minimal diff.
+[Deny] — That file is auto-generated. Modify src/schema.prisma instead.</code></pre>
+<p><strong>45. Token cost scales with file size — use offset and
+limit.</strong> Reading a 5,000-line file consumes real tokens. If you
+only need 50 lines, say so. Dramatically cheaper and keeps context
+cleaner.</p>
+<pre><code>Read lines 200-250 of src/services/payment.ts — the refund handling logic.</code></pre>
+<p><strong>46. <code>claude doctor</code> diagnoses configuration
+problems.</strong> Checks authentication, config files, MCP servers, and
+dependencies. Catches expired tokens, misconfigured settings, and
+incompatible versions. Run it first, debug second.</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb232-1"><a href="#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> doctor</span></code></pre></div>
+<p><strong>47. <code>.worktreeinclude</code> copies gitignored files to
+worktrees.</strong> When <code>/batch</code> spawns agents in worktrees,
+gitignored files like <code>.env</code> don’t copy — because they’re
+gitignored. Add them to <code>.worktreeinclude</code> at your project
+root. Without this, parallel agents fail because they can’t find
+environment variables or generated files.</p>
+<pre><code># .worktreeinclude
+.env
+.env.local
+src/generated/prisma-client/</code></pre>
+<p><strong>48. Track your usage with <code>/stats</code>.</strong> See
+session counts, token consumption, costs, and streaks. Helps you
+understand usage patterns and discover which task types cost more than
+expected.</p>
+<pre><code>/stats</code></pre>
+<p><strong>49. Pre-commit hooks create an automatic quality
+gate.</strong> Claude respects git hooks. If a hook fails — linting,
+type checking, test execution — Claude sees the error output, fixes the
+issue, stages the fix, and retries the commit. All without your
+intervention. Strict hooks don’t slow Claude down; they make its output
+more reliable.</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb235-1"><a href="#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .husky/pre-commit</span></span>
+<span id="cb235-2"><a href="#cb235-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run lint</span>
+<span id="cb235-3"><a href="#cb235-3" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run typecheck</span>
+<span id="cb235-4"><a href="#cb235-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> test <span class="at">--</span> <span class="at">--bail</span></span></code></pre></div>
+<p><strong>50. Combine everything into a personalized AI development
+environment.</strong> The real power of Claude Code isn’t any single
+feature — it’s the combination. CLAUDE.md defines your conventions.
+Memory preserves knowledge across sessions. Hooks enforce standards
+automatically. MCP servers connect external tools. Skills encode your
+workflows. Path-specific rules adapt behavior per module. A fully
+configured setup doesn’t feel like a tool; it feels like a team member
+who knows your codebase and improves with every session. Chapter 20
+shows the complete blueprint for building this from scratch.</p>
+<pre><code>CLAUDE.md          → What Claude should know
+Memory             → What Claude should remember
+Hooks              → What Claude must always do
+MCP Servers        → What Claude can access
+Skills             → How Claude should work
+Settings layers    → How your team configures it all</code></pre>
+<h1 id="part-5-real-world-mastery">Part 5: Real-World Mastery</h1>
+<h2 id="chapter-17-building-a-feature-start-to-finish">Chapter 17:
+Building a Feature Start-to-Finish</h2>
+<p>Everything in this book so far has been modular — individual
+techniques, commands, and configurations you can learn in isolation.
+This chapter puts them all together. We’re going to walk through
+building a real feature with Claude Code, from blank slate to merged
+pull request, showing the exact conversation flow at each stage.</p>
+<p>The feature: add user notification preferences to a Next.js
+application. Users should be able to toggle email, push, and SMS
+notifications independently for three categories — marketing, product
+updates, and security alerts. The backend needs API routes, database
+schema changes, input validation, and tests.</p>
+<p>This is a realistic mid-complexity feature. Not a trivial CRUD
+endpoint, not a massive architecture overhaul. The kind of thing a
+developer builds several times a week.</p>
+<h3 id="phase-1-planning">Phase 1: Planning</h3>
+<p>You open your terminal in the project directory and start Claude
+Code.</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb237-1"><a href="#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/acme-app</span>
+<span id="cb237-2"><a href="#cb237-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span></span></code></pre></div>
+<p>The first prompt sets the direction:</p>
+<pre><code>Plan notification preferences for our app. Users should toggle
+email/push/SMS per category (marketing, updates, security).
+I need: database schema, API routes, validation.
+Look at our existing code structure before proposing anything.</code></pre>
+<p>Notice what this prompt does. It describes the feature clearly but
+doesn’t dictate implementation. The instruction to “look at existing
+code structure” is critical — it tells Claude Code to investigate before
+proposing.</p>
+<p>Claude Code reads your <code>package.json</code>, scans the
+<code>src/</code> directory, checks <code>prisma/schema.prisma</code>
+for your existing data model, and reads a few existing API routes to
+understand your conventions. It comes back with a plan:</p>
+<pre><code>Based on your codebase:
+- Database: Prisma with PostgreSQL
+- API routes: Next.js App Router in src/app/api/
+- Validation: Zod schemas in src/lib/validations/
+- Auth: NextAuth with session middleware
+
+Proposed plan:
+1. Add NotificationPreference model to Prisma schema
+2. Create migration
+3. Add Zod validation schema
+4. Create GET /api/notifications/preferences
+5. Create PUT /api/notifications/preferences
+6. Add tests following patterns in tests/api/
+
+Data model:
+- userId (relation to User)
+- channel (email | push | sms)
+- category (marketing | updates | security)
+- enabled (boolean)
+- Unique constraint on [userId, channel, category]</code></pre>
+<p>You review the plan. The data model makes sense — a separate row per
+channel-category combination rather than a JSON blob. This is queryable,
+indexable, and clean. But you want one adjustment:</p>
+<pre><code>Good plan. One change: use PATCH instead of PUT — we want partial
+updates so the client can toggle a single preference without sending all of them.</code></pre>
+<p>Claude Code acknowledges and adjusts. The plan is now locked in.
+Total time: about 2 minutes. You haven’t written a line of code, but
+you’ve agreed on the data model, API design, and file locations. This
+prevents the expensive mistake of building something and then realizing
+the approach is wrong.</p>
+<h3 id="phase-2-tests-first">Phase 2: Tests First</h3>
+<p>With the plan agreed, you shift to test-driven development:</p>
+<pre><code>Write tests for notification preferences. Follow the patterns
+in tests/api/user.test.ts. Cover:
+- GET returns all preferences for authenticated user
+- GET returns 401 for unauthenticated request
+- PATCH updates a single preference
+- PATCH validates channel and category values
+- PATCH returns 401 for unauthenticated request
+- PATCH returns 400 for invalid input</code></pre>
+<p>Claude Code reads <code>tests/api/user.test.ts</code> to understand
+your test conventions — the testing library (likely Vitest or Jest), how
+you set up test fixtures, how you mock authentication, and how you
+structure describe/it blocks. Then it creates
+<code>tests/api/notification-preferences.test.ts</code>.</p>
+<p>The test file follows your existing patterns exactly: same import
+style, same helper functions for authenticated requests, same assertion
+patterns. It covers all six cases you specified.</p>
+<p>You run the tests:</p>
+<pre><code>! npm test -- tests/api/notification-preferences.test.ts</code></pre>
+<p>All six tests fail. This is exactly what you want. Failing tests are
+your specification — they define precisely what the implementation must
+do. Each red test is a requirement waiting to be fulfilled.</p>
+<pre><code>6 tests, 0 passed, 6 failed
+- NotificationPreference model not found (schema doesn&#39;t exist yet)
+- Route /api/notifications/preferences not found (404)</code></pre>
+<p>Good. The failures confirm the tests are pointing at the right
+things. Move on.</p>
+<h3 id="phase-3-implementation">Phase 3: Implementation</h3>
+<p>Now you build incrementally, starting from the foundation:</p>
+<pre><code>Implement starting with the Prisma schema. Add the NotificationPreference
+model as we planned.</code></pre>
+<p>Claude Code edits <code>prisma/schema.prisma</code>, adding the model
+with the userId relation, the channel and category enums, the enabled
+boolean, and the unique constraint. Then it generates the migration:</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb245-1"><a href="#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npx</span> prisma migrate dev <span class="at">--name</span> add-notification-preferences</span></code></pre></div>
+<p>You run tests again:</p>
+<pre><code>! npm test -- tests/api/notification-preferences.test.ts</code></pre>
+<p>Two tests now have different errors — they can see the model but
+can’t find the API route. Progress.</p>
+<pre><code>Now the API routes. Create GET and PATCH for /api/notifications/preferences.
+Follow the auth middleware pattern in src/app/api/user/route.ts.</code></pre>
+<p>Claude Code reads the reference file, sees how authentication is
+handled (checking the session, returning 401 if missing), and creates
+<code>src/app/api/notifications/preferences/route.ts</code> with both
+handlers.</p>
+<p>The GET handler queries all preferences for the authenticated user.
+If no preferences exist yet (new user), it returns defaults — all
+channels enabled for security, all disabled for marketing, a sensible
+default set.</p>
+<p>The PATCH handler accepts a body with <code>channel</code>,
+<code>category</code>, and <code>enabled</code>, finds or creates the
+matching preference row, and updates it.</p>
+<p>Run the tests:</p>
+<pre><code>! npm test -- tests/api/notification-preferences.test.ts</code></pre>
+<pre><code>6 tests, 4 passed, 2 failed</code></pre>
+<p>Four passing. The two failures are the validation tests — the PATCH
+handler doesn’t yet reject invalid channel or category values. It
+accepts anything and lets the database complain with an ugly error
+instead of a clean 400 response.</p>
+<h3 id="phase-4-iterate">Phase 4: Iterate</h3>
+<p>This is where TDD pays off. The failing tests tell you exactly what’s
+missing:</p>
+<pre><code>Add Zod validation to the PATCH handler. Reject invalid channel
+and category values with a 400 response. Use the validation
+pattern from src/lib/validations/user.ts.</code></pre>
+<p>Claude Code creates a Zod schema in
+<code>src/lib/validations/notification-preferences.ts</code>:</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb251-1"><a href="#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { z } <span class="im">from</span> <span class="st">&quot;zod&quot;</span><span class="op">;</span></span>
+<span id="cb251-2"><a href="#cb251-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb251-3"><a href="#cb251-3" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> updatePreferenceSchema <span class="op">=</span> z<span class="op">.</span><span class="fu">object</span>({</span>
+<span id="cb251-4"><a href="#cb251-4" aria-hidden="true" tabindex="-1"></a>  channel<span class="op">:</span> z<span class="op">.</span><span class="fu">enum</span>([<span class="st">&quot;email&quot;</span><span class="op">,</span> <span class="st">&quot;push&quot;</span><span class="op">,</span> <span class="st">&quot;sms&quot;</span>])<span class="op">,</span></span>
+<span id="cb251-5"><a href="#cb251-5" aria-hidden="true" tabindex="-1"></a>  category<span class="op">:</span> z<span class="op">.</span><span class="fu">enum</span>([<span class="st">&quot;marketing&quot;</span><span class="op">,</span> <span class="st">&quot;updates&quot;</span><span class="op">,</span> <span class="st">&quot;security&quot;</span>])<span class="op">,</span></span>
+<span id="cb251-6"><a href="#cb251-6" aria-hidden="true" tabindex="-1"></a>  enabled<span class="op">:</span> z<span class="op">.</span><span class="fu">boolean</span>()<span class="op">,</span></span>
+<span id="cb251-7"><a href="#cb251-7" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>Then it updates the PATCH handler to validate the request body
+against this schema before processing, returning a 400 with specific
+error messages when validation fails.</p>
+<p>Run the tests one more time:</p>
+<pre><code>! npm test -- tests/api/notification-preferences.test.ts</code></pre>
+<pre><code>6 tests, 6 passed</code></pre>
+<p>All green. But you’re not done. Run the full test suite to check for
+regressions:</p>
+<pre><code>! npm test</code></pre>
+<pre><code>147 tests, 147 passed</code></pre>
+<p>Clean. Your new feature doesn’t break anything existing.</p>
+<p>One more thing — you notice an edge case the original test plan
+missed:</p>
+<pre><code>Add one more test: PATCH should return 404 if the user account
+doesn&#39;t exist (deleted user with stale session). Add handling
+in the route too.</code></pre>
+<p>Claude Code adds the test and the corresponding guard in the handler.
+Seven tests, seven passing. Full suite still green.</p>
+<h3 id="phase-5-polish-commit">Phase 5: Polish &amp; Commit</h3>
+<p>The feature is complete and tested. Time to ship:</p>
+<pre><code>Commit all notification preference changes with a descriptive message.</code></pre>
+<p>Claude Code stages the relevant files — the Prisma schema, migration,
+API route, validation schema, and test file — and creates a commit:</p>
+<pre><code>feat: add notification preferences API
+
+Add GET/PATCH /api/notifications/preferences endpoints.
+Users can toggle email/push/SMS per category (marketing,
+updates, security). Includes Zod validation and full test
+coverage.</code></pre>
+<p>The commit message follows your project’s conventional commits format
+because Claude Code read your git history during the planning phase and
+matched the pattern.</p>
+<p>Now create the pull request:</p>
+<pre><code>Create a PR targeting main. Summarize what we built.</code></pre>
+<p>Claude Code pushes the branch and creates the PR with a clear title
+and body describing the changes, the API contract, and the test
+coverage.</p>
+<p>The entire feature — from planning to pull request — took about 15
+minutes. A developer working alone might spend 45-90 minutes on the same
+feature. The time savings compound: build three features like this per
+day and you’re saving 1.5 to 3.5 hours daily.</p>
+<h3 id="lessons-from-this-workflow">Lessons From This Workflow</h3>
+<p><strong>Plan before you build.</strong> The 2-minute planning phase
+prevented wrong turns that would have cost 20 minutes to fix. Claude
+Code’s plan was 90% right; your one adjustment (PUT to PATCH) caught a
+design issue before any code existed.</p>
+<p><strong>Reference existing patterns.</strong> Every prompt pointed
+Claude Code at an existing file to follow. The tests matched your test
+conventions. The API routes matched your route conventions. The
+validation matched your validation conventions. The result reads like a
+team member wrote it, not an AI tool.</p>
+<p><strong>TDD caught edge cases.</strong> Writing tests first revealed
+that the PATCH handler needed input validation — something easy to
+forget when building implementation-first. The tests served as both a
+specification and a safety net.</p>
+<p><strong>Multiple small prompts beat one massive prompt.</strong> Five
+focused prompts produced better results than a single “build
+notification preferences with tests, validation, and a PR” mega-prompt
+would have. Each prompt had clear scope, and you could verify and adjust
+between steps.</p>
+<p><strong>The progression matters.</strong> Plan, then test, then
+implement, then iterate, then commit. This order works because each
+phase builds on the verified output of the previous phase. Skipping the
+plan leads to rework. Skipping tests leads to bugs. Skipping iteration
+leads to incomplete features.</p>
+<p>This is the workflow that expert Claude Code users follow for every
+non-trivial feature. It feels slower at first — why plan when you could
+just start building? — but it’s consistently faster end-to-end because
+you never build the wrong thing and you never ship untested code.</p>
+<hr />
+<h2 id="chapter-18-debugging-like-a-pro">Chapter 18: Debugging Like a
+Pro</h2>
+<p>Most developers approach debugging with Claude Code backwards. They
+paste an error, say “fix this,” and accept whatever Claude Code
+suggests. Sometimes this works. Often it produces a fix that addresses
+the symptom while leaving the root cause intact — or worse, introduces a
+new bug while silencing the original one.</p>
+<p>Expert debugging with Claude Code follows a different pattern. It’s
+methodical, evidence-driven, and produces fixes that actually solve the
+problem. This chapter teaches that pattern.</p>
+<h3 id="the-expert-debugging-mindset">The Expert Debugging Mindset</h3>
+<p>The core principle is simple: <strong>don’t guess,
+investigate.</strong> When something breaks, the natural instinct is to
+hypothesize immediately. “It’s probably a null check.” “I bet the
+database connection timed out.” “Must be a CORS issue.” Resist this
+instinct.</p>
+<p>Instead, let Claude Code gather evidence before proposing anything.
+Claude Code can read files, search patterns, trace imports, check git
+history, and run commands — all faster than you can manually
+investigate. Your job is to point it at the problem and let it work.</p>
+<p>The difference in practice:</p>
+<p><strong>Guessing approach:</strong></p>
+<pre><code>The login is broken. Probably a session issue. Fix the session handling.</code></pre>
+<p>Claude Code modifies session handling based on your guess. If the
+guess is wrong, you’ve now changed working code and still have the
+original bug.</p>
+<p><strong>Investigation approach:</strong></p>
+<pre><code>Login returns 500 since this morning. Here&#39;s the error:
+! npm test -- --grep &quot;login&quot; 2&gt;&amp;1 | tail -20</code></pre>
+<p>Claude Code sees the actual error, reads the relevant files, traces
+the call stack, and finds the root cause — which might be session
+handling, or might be something completely different. The fix addresses
+what’s actually broken.</p>
+<h3 id="the-5-step-debugging-workflow">The 5-Step Debugging
+Workflow</h3>
+<p>This workflow applies to every bug, from a one-line typo to a
+multi-service race condition. The steps scale with the complexity of the
+problem.</p>
+<h4 id="step-1-reproduce">Step 1: Reproduce</h4>
+<p>Before anything else, give Claude Code a way to see the failure. The
+best reproduction is a failing test or a command that triggers the
+error.</p>
+<pre><code>Getting &quot;TypeError: Cannot read properties of undefined (reading &#39;email&#39;)&quot;
+when creating a new user. Reproduce:
+! npm test -- tests/api/users.test.ts -t &quot;create user&quot; 2&gt;&amp;1 | tail -30</code></pre>
+<p>The <code>!</code> prefix runs the command inline and puts the output
+directly into your conversation. Claude Code sees the exact error, the
+stack trace, and the test context. The <code>2&gt;&amp;1</code> captures
+stderr (where most error output goes), and <code>tail -30</code> keeps
+the output focused on the relevant part.</p>
+<p>If you don’t have a failing test, describe the steps:</p>
+<pre><code>Bug: clicking &quot;Save&quot; on the profile page shows a spinner forever.
+No error in browser console. Network tab shows POST /api/profile
+returns 200 but the response body is empty.</code></pre>
+<p>The reproduction tells Claude Code three things: what should happen,
+what actually happens, and where to start looking.</p>
+<p><strong>If you can’t reproduce it, say so.</strong> “This happens
+intermittently — about 1 in 10 requests” is valuable information. Claude
+Code will look for race conditions, timing issues, or non-deterministic
+behavior rather than straightforward logic errors.</p>
+<h4 id="step-2-investigate">Step 2: Investigate</h4>
+<p>This is the step most developers skip — and it’s the most important
+one. Let Claude Code explore before it proposes anything.</p>
+<pre><code>Investigate the root cause. Read the relevant files, trace the call stack,
+and check recent git changes. Don&#39;t propose a fix yet.</code></pre>
+<p>The explicit “don’t propose a fix yet” is important. Without it,
+Claude Code might jump to a solution after reading one file. With it,
+Claude Code reads the handler, the service layer, the database query,
+checks the types, reviews recent commits, and builds a complete
+picture.</p>
+<p>During investigation, Claude Code typically:</p>
+<ul>
+<li>Reads the file where the error originates</li>
+<li>Traces imports to find where data flows from</li>
+<li>Checks the database schema or type definitions</li>
+<li>Searches for similar patterns that work correctly</li>
+<li>Reviews recent commits that might have introduced the change</li>
+<li>Reads test files to understand expected behavior</li>
+</ul>
+<p>Let this process run. The investigation might reveal that the “bug”
+is actually three bugs, or that the error message is misleading, or that
+the real problem is in a completely different file from where the error
+surfaces.</p>
+<h4 id="step-3-hypothesize">Step 3: Hypothesize</h4>
+<p>After investigation, Claude Code proposes a root cause. This is where
+you apply critical thinking. Don’t accept the first hypothesis
+unchallenged.</p>
+<pre><code>What evidence supports that hypothesis? What would disprove it?</code></pre>
+<p>This question forces Claude Code to justify its reasoning with
+specific evidence from the codebase rather than general plausibility. A
+strong hypothesis looks like:</p>
+<blockquote>
+<p>“The error occurs because <code>getUserProfile()</code> in
+<code>src/services/user.ts</code> returns <code>null</code> when the
+user doesn’t have a profile row, but the caller in
+<code>src/app/api/profile/route.ts</code> (line 23) destructures
+<code>.email</code> without a null check. This was introduced in commit
+<code>a3f2c1d</code> three days ago when the profile query was
+refactored — the old version returned a default object, the new version
+returns null.”</p>
+</blockquote>
+<p>A weak hypothesis looks like:</p>
+<blockquote>
+<p>“The error is probably because the user object is undefined
+somewhere. Let me add a null check.”</p>
+</blockquote>
+<p>The strong hypothesis identifies the exact file, line, commit, and
+mechanism. The weak one guesses. If Claude Code gives you a weak
+hypothesis, push back:</p>
+<pre><code>That&#39;s too vague. Which specific function returns undefined?
+Show me the line where it breaks.</code></pre>
+<h4 id="step-4-fix-minimally">Step 4: Fix Minimally</h4>
+<p>Once the root cause is confirmed, apply the smallest possible fix.
+Not a refactor. Not “improvements while we’re here.” The minimal change
+that fixes the bug.</p>
+<pre><code>Fix it with the smallest change possible. Don&#39;t refactor anything else.</code></pre>
+<p>This constraint is essential. When Claude Code fixes a bug, it
+sometimes wants to “improve” surrounding code — rename variables,
+extract functions, add error handling to unrelated paths. Every
+additional change is a potential new bug and makes the fix harder to
+review.</p>
+<p>A good bug fix changes 1-5 lines. It should be obvious from the diff
+what was wrong and what was fixed. If the fix requires changing 50
+lines, either the root cause analysis was wrong or the problem is
+architectural — in which case, fix the immediate bug minimally and plan
+the refactor separately.</p>
+<pre><code>Fix the null check in the profile handler. If getUserProfile()
+returns null, return a 404 response instead of destructuring.</code></pre>
+<p>Claude Code adds a guard clause — three lines of code. The fix is
+clear, reviewable, and precisely targeted.</p>
+<h4 id="step-5-verify">Step 5: Verify</h4>
+<p>Run the failing test to confirm the fix works, then run the full
+suite to check for regressions.</p>
+<pre><code>Run the failing test, then the full suite.
+! npm test -- tests/api/users.test.ts -t &quot;create user&quot;
+! npm test</code></pre>
+<p>Both must pass. If the targeted test passes but the full suite
+reveals a new failure, the fix is incomplete or has side effects. Go
+back to Step 2 and investigate the new failure.</p>
+<p>Verification is non-negotiable. “It looks correct” is not
+verification. “All 147 tests pass” is verification.</p>
+<h3 id="common-debugging-patterns">Common Debugging Patterns</h3>
+<p>Different bugs call for different initial prompts. Here are the
+patterns that work best for common scenarios.</p>
+<p><strong>Runtime error with stack trace:</strong></p>
+<pre><code>Getting this error in production. Here&#39;s the stack trace:
+[paste the full stack trace]
+Find the root cause — don&#39;t just add a try-catch around it.</code></pre>
+<p>The “don’t just add a try-catch” instruction prevents Claude Code
+from wrapping the problem instead of solving it.</p>
+<p><strong>Test passes locally, fails in CI:</strong></p>
+<pre><code>This test passes on my machine but fails in CI. Here&#39;s the CI output:
+[paste CI log]
+Check for environment-dependent behavior: env vars, file paths,
+timing assumptions, or dependency version differences.</code></pre>
+<p>Common causes: hardcoded paths, timezone assumptions, missing
+environment variables, different Node.js versions, test ordering
+dependencies.</p>
+<p><strong>Something changed and you don’t know what:</strong></p>
+<pre><code>The search endpoint was working yesterday and returns empty results today.
+! git log --oneline -10
+! git diff HEAD~5 -- src/api/search.ts src/services/search.ts</code></pre>
+<p>Feeding the recent git history and diffs directly into context lets
+Claude Code see exactly what changed. Often the bug is visible in the
+diff.</p>
+<p><strong>Confusing or misleading error message:</strong></p>
+<pre><code>Getting &quot;ECONNREFUSED&quot; on the payment endpoint but the payment
+service is running. Read the error source code to understand
+what actually triggers this error — the message might be misleading.</code></pre>
+<p>Some errors have generic messages that don’t describe the actual
+cause. Asking Claude Code to read the source of the error (the library
+code that throws it) often reveals the real trigger.</p>
+<p><strong>Performance issue:</strong></p>
+<pre><code>The /api/reports endpoint takes 12 seconds for large date ranges.
+Profile the database queries and identify which one is slow.
+Check for missing indexes.</code></pre>
+<p>Be specific about what “slow” means — include the actual timing and
+the conditions that trigger it. “It’s slow” gives Claude Code nothing to
+work with. “12 seconds for date ranges over 90 days” gives it a clear
+investigation path.</p>
+<h3 id="the-systematic-debugging-skill">The Systematic Debugging
+Skill</h3>
+<p>Claude Code includes a built-in skill for disciplined debugging:</p>
+<pre><code>/systematic-debugging</code></pre>
+<p>This skill enforces the 5-step workflow as a structured process. It
+prevents the common trap of jumping to fixes before completing
+investigation. The skill guides you through reproduction, evidence
+gathering, hypothesis formation, minimal fix application, and
+verification — with explicit checkpoints between each stage.</p>
+<p>Use it when you catch yourself wanting to skip straight to “just fix
+it.” The skill adds about 2 minutes of discipline that saves 20 minutes
+of chasing wrong hypotheses.</p>
+<h3 id="anti-patterns-that-make-debugging-worse">Anti-Patterns That Make
+Debugging Worse</h3>
+<p>These habits are common and they all reduce debugging
+effectiveness.</p>
+<p><strong>“Fix it” without sharing the error.</strong> Claude Code
+can’t debug what it can’t see. Always include the error message, stack
+trace, or reproduction steps. If you don’t have them, your first prompt
+should be: “Help me reproduce this — the search feature sometimes
+returns wrong results but I don’t have a consistent repro.”</p>
+<p><strong>Guessing the cause in your prompt.</strong> “The bug is
+probably in the database query — fix it” sends Claude Code down a
+specific path that might be wrong. “The endpoint returns wrong results —
+investigate” lets Claude Code follow the evidence wherever it leads.</p>
+<p><strong>Accepting the first suggestion without evidence.</strong>
+Claude Code’s first hypothesis might be wrong. Before applying a fix,
+ask: “What evidence from the codebase supports this diagnosis?” If
+Claude Code can’t point to specific lines, the hypothesis is a
+guess.</p>
+<p><strong>Adding try-catch everywhere.</strong> This is the debugging
+equivalent of putting tape over your car’s warning light. The error goes
+away — but the problem remains, now silently. If Claude Code suggests
+wrapping something in try-catch, ask: “What error are we catching and
+why does it occur? Can we prevent it instead of catching it?”</p>
+<p><strong>Adding logging “just in case.”</strong> Scattering
+<code>console.log</code> statements is a legacy debugging technique from
+before AI-assisted development. Claude Code can read the code and trace
+the data flow without executing it. Logging makes sense when you need
+runtime values that can’t be inferred from code reading — but for most
+bugs, Claude Code can identify the issue through static analysis
+alone.</p>
+<p><strong>Fixing the symptom instead of the cause.</strong> If a
+function returns <code>undefined</code> and you add a fallback default,
+the function still returns <code>undefined</code> — you’ve just hidden
+it. Fix why it returns <code>undefined</code>. The extra 5 minutes of
+investigation saves hours of cascading bugs downstream.</p>
+<p>The developers who get the most value from Claude Code during
+debugging are the ones who treat it as an investigator rather than a
+fixer. Point it at the problem, let it gather evidence, challenge its
+hypothesis, and only then apply the minimal fix. This approach is slower
+for trivial bugs (where “fix it” would have worked) but dramatically
+faster for everything else — and it never makes things worse.</p>
+<hr />
+<h2 id="chapter-19-cost-optimization-efficiency">Chapter 19: Cost
+Optimization &amp; Efficiency</h2>
+<p>Claude Code is powerful, but it’s not free. Whether you’re on a
+subscription plan or paying per token via API key, understanding how
+costs work — and how to minimize them without reducing quality — is a
+practical skill that pays for itself immediately.</p>
+<p>This chapter gives you the concrete strategies that experienced users
+rely on to keep costs low while maintaining high output. No vague advice
+— specific techniques with measurable impact.</p>
+<h3 id="understanding-token-costs">Understanding Token Costs</h3>
+<p>Every interaction with Claude Code consumes tokens. A token is
+roughly 3-4 characters of English text. Your costs come from two
+categories:</p>
+<p><strong>Input tokens</strong> — everything Claude Code reads: your
+prompts, file contents, CLAUDE.md instructions, conversation history,
+tool outputs, and MCP server responses. This is the context that Claude
+Code uses to understand your request.</p>
+<p><strong>Output tokens</strong> — everything Claude Code produces:
+responses, code it writes, commands it runs, tool calls it makes. Output
+tokens are more expensive than input tokens, typically 3-5x the cost per
+token.</p>
+<p>This ratio matters. Reading a 500-line file (input) costs far less
+than Claude Code writing a 500-line file from scratch (output).
+Strategies that reduce output tokens save more than strategies that
+reduce input tokens by the same amount.</p>
+<p>Track your spending with built-in commands:</p>
+<pre><code>/cost</code></pre>
+<p>This shows total tokens consumed and estimated cost for the current
+session. Check it periodically during long sessions — costs can
+accumulate faster than you expect when Claude Code is reading many files
+or generating long outputs.</p>
+<p>For hard limits, set a budget cap when starting a session:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb277-1"><a href="#cb277-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">--max-budget-usd</span> 5.00</span></code></pre></div>
+<p>The session ends gracefully when the budget is reached. Set low
+budgets for exploration sessions (browsing code, asking questions) and
+higher budgets for implementation sessions (building features, running
+tests).</p>
+<h3 id="the-8020-of-cost-reduction">The 80/20 of Cost Reduction</h3>
+<p>Five techniques account for the vast majority of cost savings. Master
+these first.</p>
+<p><strong>1. Read less: use offset and limit.</strong></p>
+<p>When you know which part of a file you need, tell Claude Code exactly
+where to look. Reading a 2,000-line file when you only need lines
+150-200 wastes tokens on 1,950 irrelevant lines.</p>
+<pre><code>Read lines 150-200 of src/services/payment.ts — the refund logic.</code></pre>
+<p>Claude Code reads 50 lines instead of 2,000. If you do this ten times
+per session across different files, the savings are substantial.</p>
+<p><strong>2. Edit, don’t Write.</strong></p>
+<p>The Edit tool sends only the diff — the old text being replaced and
+the new text replacing it. The Write tool sends the entire file
+contents. For a 400-line file where you’re changing 5 lines, Edit
+transmits roughly 15 lines while Write transmits all 400.</p>
+<p>Reinforce this in your CLAUDE.md:</p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb279-1"><a href="#cb279-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Always use Edit for modifying existing files</span>
+<span id="cb279-2"><a href="#cb279-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Only use Write for creating new files</span></code></pre></div>
+<p>This single rule can cut output token costs by 30-50% for sessions
+heavy on file modifications.</p>
+<p><strong>3. Compact proactively.</strong></p>
+<p>The <code>/compact</code> command summarizes your conversation
+history into key points and frees up context space. Don’t wait for
+auto-compression — it triggers around 60% context utilization and Claude
+Code decides what to keep.</p>
+<pre><code>/compact focus on the API changes and test results</code></pre>
+<p>The focus argument tells Claude Code what matters most. Without it,
+Claude Code might discard the exact context you need for your next
+prompt. Compact every 15-20 exchanges or whenever you notice the
+conversation getting long.</p>
+<p><strong>4. Start fresh conversations.</strong></p>
+<p>Long conversations carry all their history as input tokens. Every
+prompt in a 50-exchange conversation pays for the accumulated context of
+the previous 49 exchanges (compressed, but still substantial).</p>
+<p>When you finish one task and start another, begin a new conversation.
+Don’t reuse a debugging session for feature development. Don’t keep a
+morning session alive into the afternoon. Fresh conversations have
+minimal context overhead.</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb281-1"><a href="#cb281-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finished debugging? Start fresh for the next task.</span></span>
+<span id="cb281-2"><a href="#cb281-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span></span></code></pre></div>
+<p><strong>5. Choose the right model for the task.</strong></p>
+<p>Not every task needs the most powerful model. Claude Code supports
+model switching mid-session with <code>Shift+Tab</code>. Match the model
+to the task complexity.</p>
+<h3 id="model-selection-strategy">Model Selection Strategy</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 63%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Task</th>
+<th>Recommended Model</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“What does this function do?”</td>
+<td>Haiku</td>
+<td>Simple comprehension, fast response</td>
+</tr>
+<tr>
+<td>“Add a CRUD endpoint”</td>
+<td>Sonnet</td>
+<td>Standard coding, good balance</td>
+</tr>
+<tr>
+<td>“Refactor the auth architecture”</td>
+<td>Opus</td>
+<td>Complex reasoning, many files</td>
+</tr>
+<tr>
+<td>“Fix this typo”</td>
+<td>Haiku</td>
+<td>Trivial change, minimal reasoning</td>
+</tr>
+<tr>
+<td>“Debug a race condition”</td>
+<td>Opus</td>
+<td>Deep reasoning, subtle causation</td>
+</tr>
+<tr>
+<td>“Write unit tests”</td>
+<td>Sonnet</td>
+<td>Pattern-following, moderate complexity</td>
+</tr>
+<tr>
+<td>“Rename a variable across files”</td>
+<td>Haiku</td>
+<td>Mechanical, no judgment needed</td>
+</tr>
+<tr>
+<td>“Design the database schema”</td>
+<td>Opus</td>
+<td>Architectural decisions, trade-offs</td>
+</tr>
+</tbody>
+</table>
+<p>The cost difference is significant. Haiku costs roughly 1/60th of
+Opus per token. A 10-minute session with Haiku for quick questions costs
+what 10 seconds of Opus output costs. Using Opus to fix a typo is like
+hiring an architect to change a lightbulb.</p>
+<p>The practical workflow: start your session with Sonnet (the default).
+Switch to Haiku with <code>Shift+Tab</code> for quick lookups and simple
+changes. Switch to Opus for the hard problems — architecture decisions,
+complex debugging, multi-file refactors. Switch back to Sonnet when the
+hard part is done.</p>
+<h3 id="prompt-efficiency">Prompt Efficiency</h3>
+<p>The way you write prompts directly affects token consumption. Vague
+prompts cause back-and-forth exchanges (each one consuming tokens).
+Specific prompts get results in one shot.</p>
+<p><strong>Expensive approach (3 exchanges):</strong></p>
+<pre><code>Exchange 1: &quot;Fix the bug in the user service.&quot;
+Exchange 2: &quot;The one where it returns null instead of throwing.&quot;
+Exchange 3: &quot;In the getUserById function, line 45.&quot;</code></pre>
+<p><strong>Cheap approach (1 exchange):</strong></p>
+<pre><code>&quot;Fix getUserById in src/services/user.ts (line 45) — it returns null
+instead of throwing NotFoundError when the user doesn&#39;t exist.&quot;</code></pre>
+<p>The single specific prompt costs roughly one-third of the
+three-exchange version because it avoids two rounds of input context
+being re-sent.</p>
+<p>Include these elements when possible: - <strong>File paths</strong> —
+eliminates searching - <strong>Line numbers</strong> — eliminates
+scrolling - <strong>Expected vs actual behavior</strong> — eliminates
+guessing - <strong>Reference files</strong> — eliminates asking for
+clarification</p>
+<p>Every clarifying question Claude Code asks is a round trip that
+doubles the cost of that interaction. Front-load the context and
+eliminate the questions.</p>
+<h3 id="subscription-vs-api-key">Subscription vs API Key</h3>
+<p>Claude Code offers two pricing approaches. Understanding when each
+makes sense prevents overpaying.</p>
+<p><strong>Subscription plans:</strong> - <strong>Pro
+($20/month):</strong> Includes a daily message allowance. Best for
+moderate, consistent usage — a few tasks per day. Messages reset daily.
+If you hit the limit, you wait or upgrade. - <strong>Max
+($100-200/month):</strong> Higher daily limits, priority access to
+powerful models. Best for professional developers who use Claude Code as
+their primary coding tool throughout the day.</p>
+<p><strong>API key (pay-per-token):</strong> - No message limits — pay
+exactly for what you use - Costs vary by model: Haiku is very cheap,
+Opus is premium - No daily resets — use as much or as little as needed -
+Best for variable usage patterns or heavy burst usage</p>
+<p><strong>Rule of thumb:</strong> Track your API spending for a month.
+If you’re consistently spending over $100/month on API tokens, the Max
+plan likely saves money. If you spend $20-50/month, Pro might be
+sufficient. If you use Claude Code sporadically (a few sessions per
+week), API key is cheapest because you only pay for what you use.</p>
+<p>You can check subscription usage with:</p>
+<pre><code>/stats</code></pre>
+<p>This shows session counts, token consumption, and usage patterns.
+Review it weekly to understand whether your plan matches your actual
+usage.</p>
+<h3 id="hidden-cost-traps">Hidden Cost Traps</h3>
+<p>Certain patterns silently inflate your token costs. Watch for
+these.</p>
+<p><strong>Large files in context.</strong>
+<code>package-lock.json</code> can be 50,000+ lines. If Claude Code
+reads it (or if it’s accidentally included via a broad search), you’ve
+consumed a massive number of input tokens for minimal value. Use
+<code>.claudeignore</code> to exclude generated files:</p>
+<pre><code># .claudeignore
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+*.min.js
+*.min.css
+dist/
+build/
+coverage/
+node_modules/</code></pre>
+<p>This single file can cut per-session costs by 10-20% depending on
+your project structure.</p>
+<p><strong>Re-reading the same files.</strong> In a long conversation,
+Claude Code might read the same file multiple times as earlier reads get
+compressed out of context. If you know you’ll reference a file
+repeatedly, mention it once at the start and use <code>/compact</code>
+with instructions to preserve its contents.</p>
+<p><strong>Write instead of Edit.</strong> Already covered, but worth
+repeating because it’s the single most common cost waste. Every time
+Claude Code uses Write to modify an existing file, you pay for the
+entire file as output tokens. A 300-line file modified via Write costs
+60x more in output tokens than the same change via Edit (5 lines of
+diff).</p>
+<p><strong>Overly broad searches.</strong> “Search the entire codebase
+for anything related to authentication” might read hundreds of files.
+“Search <code>src/auth/</code> for the session validation logic” reads
+three. Guide Claude Code to the right directory and it won’t need to
+search broadly.</p>
+<p><strong>Long conversations without compaction.</strong> After 30+
+exchanges, your conversation history might consume 50,000+ tokens of
+input on every single prompt. That’s 50,000 tokens of context being
+re-processed every time you type a one-line request. Use
+<code>/compact</code> or start fresh.</p>
+<p><strong>Unnecessary code generation.</strong> If Claude Code offers
+to generate boilerplate that your framework provides (scaffolding
+commands, template generators), ask it to use the framework’s generator
+instead. <code>npx prisma generate</code> produces the Prisma client in
+milliseconds and zero output tokens. Having Claude Code write the
+equivalent code manually costs tokens and produces an inferior
+result.</p>
+<h3 id="cost-effective-workflows">Cost-Effective Workflows</h3>
+<p>Combining these techniques into daily habits produces consistent
+savings.</p>
+<p><strong>Morning startup:</strong> Fresh conversation. Sonnet model.
+State the day’s goal clearly. Include file paths.</p>
+<p><strong>Quick questions mid-task:</strong> Switch to Haiku. Ask the
+question. Switch back.</p>
+<p><strong>Complex implementation:</strong> Stay on Sonnet. Reference
+existing patterns. Use Edit not Write. Compact every 20 exchanges.</p>
+<p><strong>Architecture decisions:</strong> Switch to Opus for the
+planning phase. Get the plan approved. Switch to Sonnet for
+implementation.</p>
+<p><strong>End of day:</strong> Check <code>/cost</code>. Review where
+tokens went. Identify any wasteful patterns to avoid tomorrow.</p>
+<p>The goal isn’t to minimize spending at the expense of productivity. A
+$5 session that saves you 3 hours of work is excellent value. The goal
+is to stop spending $5 on work that should cost $0.50 — by being
+specific, staying focused, and matching the model to the task.</p>
+<hr />
+<h2 id="chapter-20-your-custom-setup-blueprint">Chapter 20: Your Custom
+Setup Blueprint</h2>
+<p>You’ve learned the individual pieces — CLAUDE.md, memory, hooks, MCP
+servers, skills, permissions, prompt patterns, debugging workflows, cost
+management. This final chapter ties them all together into a complete,
+personalized setup that makes Claude Code feel less like a tool and more
+like a team member who knows your codebase, your preferences, and your
+workflows.</p>
+<p>The difference between a beginner and an expert Claude Code user
+isn’t knowledge. It’s configuration. The expert configured their
+environment once and benefits from it every single session. This chapter
+gives you the blueprint to do the same.</p>
+<h3 id="the-complete-setup-checklist">The Complete Setup Checklist</h3>
+<p>Work through this list over the coming weeks. You don’t need to do
+everything at once — each item adds value independently.</p>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>Global <code>CLAUDE.md</code> with
+your personal preferences and coding style</label></li>
+<li><label><input type="checkbox"></input>Project <code>CLAUDE.md</code> with
+project-specific rules, conventions, and architecture notes</label></li>
+<li><label><input type="checkbox"></input>Permission allowlists for commands
+you run frequently (<code>npm test</code>, <code>git commit</code>,
+etc.)</label></li>
+<li><label><input type="checkbox"></input><code>.claudeignore</code> to
+exclude generated files, lock files, and build artifacts</label></li>
+<li><label><input type="checkbox"></input>PostToolUse hook for automatic code
+formatting on every edit</label></li>
+<li><label><input type="checkbox"></input>At least one MCP server connected
+(database, GitHub, or project-specific)</label></li>
+<li><label><input type="checkbox"></input>Custom keybindings for your
+most-used actions</label></li>
+<li><label><input type="checkbox"></input>Auto-memory enabled for persistent
+context across sessions</label></li>
+<li><label><input type="checkbox"></input>One custom skill for your most
+repeated workflow</label></li>
+<li><label><input type="checkbox"></input>Three-layer settings hierarchy
+configured (global, project, local)</label></li>
+</ul>
+<p>Each checked box removes friction from your daily workflow.
+Permissions stop interrupting you. Formatting happens automatically.
+Memory means you never re-explain your project. The compound effect is
+substantial.</p>
+<h3 id="starter-global-claude.md-template">Starter Global CLAUDE.md
+Template</h3>
+<p>This file lives at <code>~/.claude/CLAUDE.md</code> and applies to
+every project you open. Keep it focused on universal preferences —
+language, style, and behavior that don’t change between projects.</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb286-1"><a href="#cb286-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Global Preferences</span></span>
+<span id="cb286-2"><a href="#cb286-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb286-3"><a href="#cb286-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coding Style</span></span>
+<span id="cb286-4"><a href="#cb286-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use TypeScript strict mode. No <span class="in">`any`</span> types.</span>
+<span id="cb286-5"><a href="#cb286-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Prefer <span class="in">`const`</span> over <span class="in">`let`</span>. Never use <span class="in">`var`</span>.</span>
+<span id="cb286-6"><a href="#cb286-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use early returns over nested if-else.</span>
+<span id="cb286-7"><a href="#cb286-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Descriptive variable names. No single-letter variables except loop counters.</span>
+<span id="cb286-8"><a href="#cb286-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb286-9"><a href="#cb286-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Behavior</span></span>
+<span id="cb286-10"><a href="#cb286-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Always use Edit for modifying existing files, Write only for new files.</span>
+<span id="cb286-11"><a href="#cb286-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Run tests after making changes. Don&#39;t tell me it &quot;should work.&quot;</span>
+<span id="cb286-12"><a href="#cb286-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>When committing, use conventional commits (feat:, fix:, refactor:, etc.).</span>
+<span id="cb286-13"><a href="#cb286-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Keep explanations brief. I&#39;ll ask if I need more detail.</span>
+<span id="cb286-14"><a href="#cb286-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb286-15"><a href="#cb286-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Don&#39;t</span></span>
+<span id="cb286-16"><a href="#cb286-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don&#39;t add comments explaining obvious code.</span>
+<span id="cb286-17"><a href="#cb286-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don&#39;t refactor unrelated code when fixing a bug.</span>
+<span id="cb286-18"><a href="#cb286-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don&#39;t use console.log for debugging — use proper error handling.</span>
+<span id="cb286-19"><a href="#cb286-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don&#39;t create documentation files unless I ask for them.</span></code></pre></div>
+<p>This template is 15 lines of actual rules. Every rule is actionable
+and specific. “Use early returns over nested if-else” changes how Claude
+Code writes every function. “Always use Edit for modifying existing
+files” saves tokens on every file change. These rules compound across
+thousands of interactions.</p>
+<p>Customize this template to match your real preferences. If you prefer
+Python, replace the TypeScript rules. If you like verbose explanations,
+remove the brevity rule. The template is a starting point, not a
+prescription.</p>
+<h3 id="starter-settings.json-template">Starter Settings.json
+Template</h3>
+<p>This file lives at <code>.claude/settings.json</code> in your project
+root. Commit it to git so your team shares the same configuration.</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb287-1"><a href="#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb287-2"><a href="#cb287-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb287-3"><a href="#cb287-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb287-4"><a href="#cb287-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read&quot;</span><span class="ot">,</span></span>
+<span id="cb287-5"><a href="#cb287-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Glob&quot;</span><span class="ot">,</span></span>
+<span id="cb287-6"><a href="#cb287-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Grep&quot;</span><span class="ot">,</span></span>
+<span id="cb287-7"><a href="#cb287-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(npm test *)&quot;</span><span class="ot">,</span></span>
+<span id="cb287-8"><a href="#cb287-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(npm run lint *)&quot;</span><span class="ot">,</span></span>
+<span id="cb287-9"><a href="#cb287-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(npm run build *)&quot;</span><span class="ot">,</span></span>
+<span id="cb287-10"><a href="#cb287-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(npx prisma *)&quot;</span><span class="ot">,</span></span>
+<span id="cb287-11"><a href="#cb287-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git (add|commit|status|diff|log|push|branch) *)&quot;</span></span>
+<span id="cb287-12"><a href="#cb287-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb287-13"><a href="#cb287-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb287-14"><a href="#cb287-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb287-15"><a href="#cb287-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;PostToolUse&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb287-16"><a href="#cb287-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb287-17"><a href="#cb287-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;matcher&quot;</span><span class="fu">:</span> <span class="st">&quot;Edit|Write&quot;</span><span class="fu">,</span></span>
+<span id="cb287-18"><a href="#cb287-18" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb287-19"><a href="#cb287-19" aria-hidden="true" tabindex="-1"></a>          <span class="fu">{</span></span>
+<span id="cb287-20"><a href="#cb287-20" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb287-21"><a href="#cb287-21" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;prettier --write $CLAUDE_FILE_PATH 2&gt;/dev/null || true&quot;</span></span>
+<span id="cb287-22"><a href="#cb287-22" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb287-23"><a href="#cb287-23" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb287-24"><a href="#cb287-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb287-25"><a href="#cb287-25" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb287-26"><a href="#cb287-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb287-27"><a href="#cb287-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb287-28"><a href="#cb287-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;postgres&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb287-29"><a href="#cb287-29" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;npx&quot;</span><span class="fu">,</span></span>
+<span id="cb287-30"><a href="#cb287-30" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;-y&quot;</span><span class="ot">,</span> <span class="st">&quot;@modelcontextprotocol/server-postgres&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb287-31"><a href="#cb287-31" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;env&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb287-32"><a href="#cb287-32" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;DATABASE_URL&quot;</span><span class="fu">:</span> <span class="st">&quot;${DATABASE_URL}&quot;</span></span>
+<span id="cb287-33"><a href="#cb287-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb287-34"><a href="#cb287-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb287-35"><a href="#cb287-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb287-36"><a href="#cb287-36" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>This template does three things. The permission allowlist
+auto-approves safe commands — reading files, running tests, building,
+and standard git operations — so Claude Code doesn’t pause for approval
+on routine actions. The PostToolUse hook runs Prettier on every file
+Claude Code edits, ensuring consistent formatting without you thinking
+about it. The MCP server connects Claude Code to your PostgreSQL
+database so it can inspect schemas, run queries, and understand your
+data model directly.</p>
+<p>Replace <code>prettier</code> with your formatter
+(<code>black</code>, <code>gofmt</code>, <code>rustfmt</code>). Replace
+<code>postgres</code> with your database. Adjust the git pattern if you
+want tighter restrictions (removing <code>push</code>, for example, to
+require manual approval for pushes).</p>
+<p>The <code>|| true</code> after the prettier command prevents the hook
+from blocking Claude Code if formatting fails (for example, on a
+non-code file). Without it, a formatter error on a markdown file would
+halt the session.</p>
+<h3 id="recommended-mcp-servers-by-stack">Recommended MCP Servers by
+Stack</h3>
+<p>MCP servers extend what Claude Code can access. The right servers
+depend on your technology stack.</p>
+<p><strong>Web development (Next.js, React, Node.js):</strong> -
+<strong>GitHub MCP</strong> — Create PRs, manage issues, review code,
+check CI status without leaving Claude Code - <strong>PostgreSQL/MySQL
+MCP</strong> — Query your database, inspect schemas, understand data
+relationships - <strong>Puppeteer MCP</strong> — Browser automation for
+testing UI flows, taking screenshots, verifying deployments</p>
+<p><strong>Mobile development (iOS, Android, React Native):</strong> -
+<strong>GitHub MCP</strong> — Same benefits as web - <strong>Firebase
+MCP</strong> — Manage Firestore collections, check authentication setup,
+review security rules - <strong>SQLite MCP</strong> — Inspect local
+databases, debug data persistence issues</p>
+<p><strong>Data science and ML:</strong> - <strong>SQLite MCP</strong> —
+Query local datasets, inspect feature stores - <strong>Filesystem
+MCP</strong> — Navigate large data directories, manage experiment
+outputs - <strong>Custom analysis MCP</strong> — Wrap your analysis
+scripts as MCP tools for repeatable investigations</p>
+<p><strong>DevOps and infrastructure:</strong> - <strong>GitHub
+MCP</strong> — Monitor deployments, review infrastructure PRs -
+<strong>Docker MCP</strong> — Manage containers, inspect logs, debug
+service connectivity - <strong>AWS/GCP/Azure MCP</strong> — Check cloud
+resources, review configurations, monitor costs</p>
+<p>Start with one MCP server — whichever addresses your biggest daily
+friction point. GitHub is the most universally useful. Add more as you
+discover needs.</p>
+<h3 id="building-your-setup-over-time">Building Your Setup Over
+Time</h3>
+<p>Don’t configure everything in one sitting. Build your setup
+progressively, validating each addition before layering the next.</p>
+<p><strong>Week 1: Foundation.</strong> Create your global
+<code>CLAUDE.md</code> with 5-10 personal rules. Create a project
+<code>CLAUDE.md</code> with your project’s key conventions. Add a basic
+permission allowlist for read operations and test commands. This alone
+transforms the experience — Claude Code follows your style and stops
+interrupting for routine approvals.</p>
+<p><strong>Week 2: Formatting hook.</strong> Add the PostToolUse hook
+for your formatter. From this point on, every file Claude Code touches
+is automatically formatted. No more inconsistent code style. No more
+manual formatting passes. This is the single highest-ROI configuration
+you can add.</p>
+<p><strong>Week 3: MCP servers.</strong> Connect your primary database
+and GitHub. Claude Code can now query your data model directly (no more
+“what columns does the users table have?”) and manage PRs without
+leaving the terminal. These two connections eliminate the most common
+context-switching interruptions.</p>
+<p><strong>Week 4: Keybindings and workflow optimization.</strong>
+Customize keybindings for actions you repeat often. Review your first
+month’s usage — which prompts do you type repeatedly? Which tasks follow
+the same pattern? Identify candidates for skills.</p>
+<p><strong>Month 2: First custom skill.</strong> Take your most repeated
+workflow — deployment, PR review, feature scaffolding — and encode it as
+a skill. Use it for two weeks. Refine based on experience. A single
+well-built skill saves 10-20 minutes per use.</p>
+<p><strong>Month 3: Advanced automation.</strong> Set up scheduled
+agents for recurring tasks (dependency updates, daily PR reviews). Add
+path-specific rules for different parts of your codebase. Connect
+additional MCP servers. At this point, your setup is mature and Claude
+Code operates with deep knowledge of your project, your tools, and your
+preferences.</p>
+<h3 id="before-and-after">Before and After</h3>
+<p>The difference between an unconfigured and a configured Claude Code
+setup is stark. Here’s what changes.</p>
+<p><strong>Before — out of the box:</strong> - Claude Code asks
+permission for every <code>npm test</code>, every
+<code>git status</code>, every file read - Code it writes uses its own
+style conventions, not yours - Every new session starts from zero — no
+memory of your project, your preferences, or previous decisions - You
+manually format code after every edit - You switch to a browser for
+GitHub operations, database queries, and documentation lookups - Generic
+responses that don’t account for your project’s architecture or
+conventions</p>
+<p><strong>After — fully configured:</strong> - Routine commands run
+automatically; permissions only pause for genuinely dangerous operations
+- Every line of code matches your team’s style because CLAUDE.md defines
+it and hooks enforce it - Memory persists across sessions — Claude Code
+remembers your architecture decisions, naming conventions, ongoing work,
+and known issues - Code is auto-formatted the instant Claude Code saves
+a file - GitHub PRs, database queries, and external tools are accessible
+directly from the conversation - Responses are project-aware: Claude
+Code knows your framework, your patterns, your testing conventions, and
+your deployment process - One-keypress commits, one-command deployments,
+automated quality checks</p>
+<p>The unconfigured experience feels like working with a capable
+stranger. The configured experience feels like working with a team
+member who has read your entire codebase, attended every architecture
+meeting, and remembers everything.</p>
+<h3 id="the-compound-effect">The Compound Effect</h3>
+<p>Each individual configuration saves a small amount of time.
+Permission allowlist: 2 seconds per approval, maybe 50 approvals per day
+— less than 2 minutes saved. Formatting hook: 5 seconds per manual
+format, 30 times per day — 2.5 minutes. Memory: 1 minute re-explaining
+context per session, 5 sessions per day — 5 minutes.</p>
+<p>Individually, these feel insignificant. Combined, they save 30-45
+minutes per day. Over a month, that’s 10-15 hours. Over a year, it’s
+25-35 full working days. And the quality improvement compounds too —
+consistent formatting, persistent memory, and project-aware responses
+mean fewer bugs, less rework, and cleaner code.</p>
+<p>The developers who report the highest satisfaction with Claude Code
+aren’t the ones using the most advanced features. They’re the ones with
+the best configurations. They spent 2 hours setting things up and now
+save 30 minutes every day, forever.</p>
+<h3 id="your-next-step">Your Next Step</h3>
+<p>Close this book. Open your terminal. Create
+<code>~/.claude/CLAUDE.md</code> with five rules that matter to you.
+That’s it — five rules. Use Claude Code for a day with those rules
+active and notice the difference.</p>
+<p>Then add a permission allowlist. Then a formatting hook. Then a
+project CLAUDE.md. Each addition takes 5 minutes and improves every
+session that follows.</p>
+<p>You now have everything you need to use Claude Code at an expert
+level. The knowledge is in the previous 19 chapters. The execution
+starts with one file, five rules, and the decision to configure your
+tools instead of accepting their defaults.</p>
+<p>The difference between a developer and a 10x developer has never been
+typing speed. It’s tooling, automation, and the discipline to invest 10
+minutes of setup for 10 hours of payoff.</p>
+<p>Configure once. Benefit forever.</p>
 <hr />
 </body>
 </html>
