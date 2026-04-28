@@ -11,7 +11,7 @@
 
 ### Why "I" Wins
 
-When CoSchedule and independent writers analyzed viral Medium headlines over 2025 and into 2026, one pattern showed up more consistently than any other: the presence of a first-person pronoun. Not a clickbait phrase. Not a power word. Just "I."
+When independent writers analyzed viral Medium headlines over 2025 and into 2026, one pattern showed up more consistently than any other: the presence of a first-person pronoun. Not a clickbait phrase. Not a power word. Just "I."
 
 [An analysis of 100 viral Medium headlines](https://medium.com/write-a-catalyst/i-analyzed-100-viral-medium-headlines-these-5-patterns-repeated-eba1b71f302f) found that personal-experience listicles dominated the top-performing tier. Titles like "10 Things I Learned After Three Years of Writing on Medium" outperformed structurally similar titles without the "I" by a meaningful margin. The pattern repeated across tech, finance, career, and lifestyle niches.
 
@@ -84,7 +84,7 @@ Most writers would trim 14 to 12 or round up to 15. The decision to keep it at 1
 
 This is the "I use" frame in its purest form — the title says explicitly that a specific person uses these things, not that they are important in the abstract. The earnings are lower than the SwiftUI pair, not because the title performed worse, but because the audience for plain Swift articles is smaller on Medium than for SwiftUI. The read ratio at 38% is still solid.
 
-The pattern across all three: even numbers plus first-person framing plus niche specificity. None of these titles used the word "best," "ultimate," "amazing," or any other superlative. They relied entirely on specificity and personal credibility.
+The pattern across all three: even numbers plus first-person framing plus niche specificity. None of these titles used superlatives or hype-loaded adjectives. They relied entirely on specificity and personal credibility.
 
 The takeaway is not that odd numbers are wrong — the data showing ~20% higher CTR for odd numbers holds in aggregate. The takeaway is that first-person framing combined with authentic counting consistently overrides that baseline. Write the list you actually have. Name it with the number you actually counted.
 
