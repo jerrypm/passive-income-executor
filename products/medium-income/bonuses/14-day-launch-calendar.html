@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medium Income 2026 · 14-Day Launch Calendar</title>
+<style>
+  /* =====================================================
+     RESET & BASE
+  ===================================================== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* =====================================================
+     PAGE WRAPPER
+  ===================================================== */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 12mm 14mm 10mm;
+    background: #faf9f6;
+  }
+
+  /* =====================================================
+     HEADER
+  ===================================================== */
+  .header {
+    text-align: center;
+    margin-bottom: 10mm;
+    padding-bottom: 5mm;
+    border-bottom: 2px solid #e8e4dc;
+  }
+
+  .header-title {
+    font-size: 18pt;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+
+  .header-title span.medium-green {
+    color: #1a8917;
+  }
+
+  .header-subtitle {
+    font-size: 8pt;
+    color: #888;
+    margin-top: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-subtitle a {
+    color: #ff7f24;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* =====================================================
+     GRID
+  ===================================================== */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+  }
+
+  /* =====================================================
+     DAY CARD
+  ===================================================== */
+  .card {
+    background: #fff;
+    border: 1.5px solid #ddd8ce;
+    border-radius: 6px;
+    padding: 4mm 5mm;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* subtle left accent stripe on all cards */
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #ddd8ce;
+    border-radius: 6px 0 0 6px;
+  }
+
+  /* ---- Day 7 — rest day ---- */
+  .card.rest {
+    background: #fff8f0;
+    border-color: #f0c898;
+  }
+  .card.rest::before {
+    background: #ff7f24;
+    opacity: 0.55;
+  }
+  .card.rest .card-day {
+    color: #c86400;
+  }
+
+  /* ---- Day 14 — published ---- */
+  .card.published {
+    background: #f2fbf2;
+    border: 2px solid #1a8917;
+  }
+  .card.published::before {
+    background: #1a8917;
+    opacity: 0.85;
+  }
+  .card.published .card-day {
+    color: #156b12;
+  }
+
+  /* =====================================================
+     CARD INTERNALS
+  ===================================================== */
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+
+  .card-day {
+    font-size: 13pt;
+    font-weight: 800;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  .card-time {
+    font-size: 7pt;
+    color: #aaa;
+    letter-spacing: 0.03em;
+    margin-left: auto;
+    white-space: nowrap;
+    padding-top: 1px;
+  }
+
+  .card-focus {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+
+  .card-output {
+    font-size: 7.5pt;
+    color: #666;
+    line-height: 1.3;
+  }
+
+  .card-output::before {
+    content: "Output: ";
+    font-weight: 600;
+    color: #999;
+  }
+
+  /* ---- rest day badge ---- */
+  .badge-rest {
+    display: inline-block;
+    font-size: 6.5pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c86400;
+    background: #ffe8cc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 3px;
+  }
+
+  /* ---- published badge ---- */
+  .badge-published {
+    display: inline-block;
+    font-size: 6.5pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #156b12;
+    background: #cff2cf;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 3px;
+  }
+
+  /* =====================================================
+     FOOTER
+  ===================================================== */
+  .footer {
+    margin-top: 8mm;
+    text-align: center;
+    font-size: 7pt;
+    color: #bbb;
+    border-top: 1px solid #e8e4dc;
+    padding-top: 4mm;
+  }
+
+  .footer strong {
+    color: #ff7f24;
+  }
+
+  /* =====================================================
+     PRINT RULES
+  ===================================================== */
+  @media print {
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 100%;
+      min-height: unset;
+      padding: 0;
+      margin: 0;
+    }
+
+    .card {
+      break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-title">
+      Medium Income 2026 &middot;
+      <span class="medium-green">14-Day Launch Calendar</span>
+    </div>
+    <div class="header-subtitle">
+      Your first Medium article, step by step &nbsp;|&nbsp;
+      <a href="https://jrdevhub.com">jrdevhub.com</a>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- Day 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 1</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Pick niche + target publication</div>
+      <div class="card-output">Niche locked, 3 publications shortlisted</div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 2</div>
+        <div class="card-time">45 min</div>
+      </div>
+      <div class="card-focus">Brainstorm 10 title candidates</div>
+      <div class="card-output">List of 10, picked 1</div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 3</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Outline using Ch 5 skeleton</div>
+      <div class="card-output">7-section outline filled</div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 4</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Write opening + first 2 sections</div>
+      <div class="card-output">~600 words drafted</div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 5</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Write middle 3 sections</div>
+      <div class="card-output">~700 more words drafted</div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 6</div>
+        <div class="card-time">45 min</div>
+      </div>
+      <div class="card-focus">Write closing + CTA + friend-link footer</div>
+      <div class="card-output">Full draft complete</div>
+    </div>
+
+    <!-- Day 7 — REST DAY -->
+    <div class="card rest">
+      <div class="badge-rest">Rest Day</div>
+      <div class="card-header">
+        <div class="card-day">Day 7</div>
+        <div class="card-time">0 min</div>
+      </div>
+      <div class="card-focus">REST DAY — do not touch the draft</div>
+      <div class="card-output">Distance gained</div>
+    </div>
+
+    <!-- Day 8 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 8</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Edit pass 1 — structure</div>
+      <div class="card-output">Restructured if needed</div>
+    </div>
+
+    <!-- Day 9 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 9</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Edit pass 2 — line edit</div>
+      <div class="card-output">Tightened draft</div>
+    </div>
+
+    <!-- Day 10 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 10</div>
+        <div class="card-time">30 min</div>
+      </div>
+      <div class="card-focus">Source images, add captions + credits</div>
+      <div class="card-output">Images placed</div>
+    </div>
+
+    <!-- Day 11 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 11</div>
+        <div class="card-time">1 hr</div>
+      </div>
+      <div class="card-focus">Format in Medium, add Friend Link</div>
+      <div class="card-output">Ready to submit</div>
+    </div>
+
+    <!-- Day 12 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 12</div>
+        <div class="card-time">15 min</div>
+      </div>
+      <div class="card-focus">Submit to chosen publication</div>
+      <div class="card-output">Submitted</div>
+    </div>
+
+    <!-- Day 13 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-day">Day 13</div>
+        <div class="card-time">15 min</div>
+      </div>
+      <div class="card-focus">Draft your second article's title</div>
+      <div class="card-output">Title #2 ready</div>
+    </div>
+
+    <!-- Day 14 — PUBLISHED -->
+    <div class="card published">
+      <div class="badge-published">Published!</div>
+      <div class="card-header">
+        <div class="card-day">Day 14</div>
+        <div class="card-time">15 min</div>
+      </div>
+      <div class="card-focus">Published — share on ONE platform</div>
+      <div class="card-output">Published + shared</div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>Medium Income 2026</strong> &nbsp;|&nbsp; Bonus Resource &nbsp;|&nbsp;
+    jrdevhub.com &nbsp;|&nbsp; &copy; 2026 All rights reserved
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
