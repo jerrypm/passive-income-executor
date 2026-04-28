@@ -9,7 +9,7 @@
 
 - **Complete beginners** who have never published a single story on Medium — you will go from zero account to first payout in this guide.
 - **Returning writers** who had a Medium account before 2023, posted a few times, then stepped away — the Partner Program rules changed significantly and what you remember may no longer be accurate.
-- **Non-US and non-UK writers** in Asia, Africa, Europe, and Latin America who have seen conflicting advice online and wonder whether the program even pays out in their country (it does — 100+ countries are supported via Stripe Express).
+- **Non-US and non-UK writers** in Asia, Africa, Europe, and Latin America who have Googled 'does Medium pay outside the US' and gotten six different answers and wonder whether the program even pays out in their country (it does — 100+ countries are supported via Stripe Express).
 - **Niche experts** — developers, designers, UX writers, indie coaches, and subject-matter specialists — who want to monetize the knowledge they already have instead of learning an entirely new skill.
 - **Side-income seekers** whose immediate goal is straightforward: earn the first $100 per month from writing, prove the model works, and then decide whether to scale.
 
@@ -60,14 +60,14 @@ You do not need to read this cover to cover before you start. The chapters are s
 
 ## Table of Contents
 
-1. [The 2026 Medium Economy](#the-2026-medium-economy) — *what changed since 2023, Friend tier 4× math, AI policy*
+1. [The 2026 Medium Economy](#the-2026-medium-economy) — *what changed since 2023, Friend tier payout multiplier, AI policy*
 2. [Eligibility Without Confusion](#eligibility-without-confusion) — *6 stories, 3 months, 100+ supported countries, common rejection traps*
 3. [Setting Up Your Profile to Convert](#setting-up-your-profile-to-convert) — *bio formula, photo, pinned story, custom domain*
 4. [The Number+Hook Title Formula](#the-numberhook-title-formula) — *why "I" wins, $67.99 case study, 6 hook patterns*
 5. [The 7-Part Article Skeleton](#the-7-part-article-skeleton) — *opening, subheads, images, code, CTA, friend-link footer + 8 niche templates*
 6. [Your First Article in 14 Days](#your-first-article-in-14-days) — *day-by-day calendar from blank doc to publication*
 7. [Publications: Pitch & Get In](#publications-pitch-get-in) — *3 tiers, top 30 paying publications, pitch template*
-8. [Engagement Mechanics](#engagement-mechanics) — *read time vs claps, Friend Links, Feb 2026 conversion bonus*
+8. [Engagement Mechanics](#engagement-mechanics) — *read time vs claps, Friend Links, new-member conversion bonus*
 9. [Stripe Payout Worldwide](#stripe-payout-worldwide) — *Stripe Express setup, country-by-country tax notes, $10 minimum*
 10. [The 90-Day Calendar](#the-90-day-calendar) — *week-by-week posting cadence, topic clustering*
 11. [Repurpose: Medium → Gumroad Funnel](#repurpose-medium-gumroad-funnel) — *turn 1 hit listicle into 1 paid PDF*
