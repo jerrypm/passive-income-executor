@@ -64,10 +64,10 @@ The most common rejection cause. The application asks for a payment method to ve
 If Stripe Express does not operate in your country, Medium cannot pay you. Check https://stripe.com/global before anything else — it is a prerequisite, not a formality.
 
 **3. "Insufficient unique value."**
-This is a vague rejection label that has appeared more frequently since late 2025. In practice it means a human reviewer — or an assisted review process — judged your published stories as derivative: listicles that read like dozens of others, summaries of well-known topics with no original perspective, or content that feels interchangeable with what already exists on the platform. The fix is publishing at least two stories that could not have been written by anyone else — personal experience, specific data you gathered, an analysis grounded in your own professional context.
+This is a vague rejection label that has appeared more frequently since late 2025. In practice it means a human reviewer judged your published stories as derivative: listicles that read like dozens of others, summaries of well-known topics with no original perspective, or content that feels interchangeable with what already exists on the platform. The fix is publishing at least two stories that could not have been written by anyone else — personal experience, specific data you gathered, an analysis grounded in your own professional context.
 
 **4. Flagged AI-generated writing.**
-Medium does not accept stories generated entirely by AI. Writing that reads as AI-assisted — uniform sentence rhythm, no first-person specificity, vague transitions — increasingly triggers this flag even on lightly edited drafts. Revise until the writing has a clear human voice with personal detail before applying.
+Medium does not accept stories generated entirely by AI. Writers in MPP forums have reported that the AI flag triggers even on lightly edited drafts — uniform sentence rhythm, no first-person specificity, and vague transitions are the patterns most commonly cited. Revise until the writing has a clear human voice with personal detail before applying.
 
 **5. Profile incomplete.**
 No profile photo, no bio, and no pinned story sends a signal that the account is not ready for a professional program. Medium reviewers look at your full profile as context for the application. An anonymous-looking profile with minimal configuration gets rejected at a higher rate than one that looks like a real person is running it.
@@ -86,8 +86,6 @@ Use the 30-day window productively:
 **Improve your two weakest stories.** Rewrite them with a sharper opening, a more specific personal angle, and a cleaner conclusion. Do not delete and republish — update the existing story to preserve the original publication date.
 
 **Fill in every profile gap.** Add a profile photo, write a bio, and pin the story you consider your strongest work. These take under an hour and are entirely within your control.
-
-**Verify your membership is active.** Confirm your paid membership is current and will not lapse during the review window. A membership that expires while your application is under review is a preventable rejection.
 
 ---
 
@@ -109,7 +107,7 @@ Click "Apply now" from the landing page. Medium may show a brief requirements ch
 
 **Medium username.** Your @handle, pre-filled. Confirms which profile is being evaluated.
 
-**Country of residence.** Choose the country where you currently live — this must match the country you use when setting up Stripe Express. Residency determines payout eligibility, not citizenship.
+**Country of residence.** Choose the country where you currently live — this must match the country you use when setting up Stripe Express.
 
 **Confirmation checkboxes.** Two checkboxes: one confirming you are 18 or older, one confirming you agree to the MPP terms. The terms cover earnings calculation, the paying-member requirement, and what happens if your membership lapses — worth a quick read.
 
@@ -130,7 +128,7 @@ Run through this checklist the day before you submit your application. Everythin
 - [ ] **Bio filled in** — use the formula from Chapter 3: one sentence on who you are, one sentence on what you write, one optional sentence on your background or credibility. Chapter 3 walks through this in detail.
 - [ ] **At least 6 stories published** — verify by opening your public profile page in a private browser window and counting visible stories. Aim for 8–10 to give reviewers a comfortable sample.
 - [ ] **One story pinned** — your strongest piece should be pinned to the top of your profile. This is the first thing a reviewer sees. If none of your current stories feel strong enough to pin, that is a signal to revise one before applying.
-- [ ] **At least one story published in the last 30 days** — an account that has been silent for months reads as inactive. Publish something in the four weeks before your application, even if it is a shorter piece. It demonstrates the account is a going concern.
+- [ ] **At least one story published in the last 30 days** — based on rejection reports from MPP forums, posting at least one story in the 30 days before applying appears to reduce rejection risk, though Medium has not officially documented this as a requirement. Publishing something recent signals the account is active.
 
 Once all five items are checked, your application is ready to submit.
 
