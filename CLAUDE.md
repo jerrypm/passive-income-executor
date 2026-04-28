@@ -194,6 +194,7 @@ LABELS: tag1, tag2, tag3
 4. InfiXOX Android Source ($14) — https://zerix1.gumroad.com/l/pheupx
 5. 1000 Expert Prompts ($9, launch) — Gumroad URL pending upload. Source: `products/1000-expert-prompts/`. 10 kategori × 100 prompt (Marketing/SEO/Business/Dev/AI/Writing/Social/Data/Design/Career). Role-based + framework-powered + variable-driven.
 6. Mastering Claude Code ($19) — Gumroad URL pending upload. Source: `products/claude-code-ebook/`. 20 chapters, 50 hidden tips, beginner-to-expert guide. 36K words, 156 pages PDF.
+7. Medium Income 2026 ($19, launch) — Gumroad URL pending upload. Source: `products/medium-income/`. 12 chapters, ~100-130pp PDF, beginner playbook for the 2026 Partner Program. Worldwide framing (100+ countries post-2024 expansion).
 
 ### Amazon Affiliate
 - Associate ID: `fullmoonmauli-20`
