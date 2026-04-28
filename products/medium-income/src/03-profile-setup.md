@@ -4,7 +4,7 @@
 
 - The bio formula that tells a visitor in three seconds whether your stories are for them
 - Profile photo rules that actually matter versus the ones that do not
-- Why pinning a story before you apply to the MPP is one of the highest-leverage things you can do
+- Why pinning a story before you apply to the MPP is one of the highest-impact steps you can do
 - How to pick three topic tags that give Medium's recommendation engine something useful to work with
 
 ---
