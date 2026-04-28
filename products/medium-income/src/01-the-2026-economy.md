@@ -36,7 +36,7 @@ But not all paying readers are worth the same to you as a writer. Medium has two
 
 **Member tier:** $5 per month, or $50 per year. This is Medium's standard paid subscription.
 
-**Friend of Medium tier:** $15 per month, or $150 per year. This is the premium subscription. When a Friend of Medium reads your story, approximately four times more of their subscription dollar passes to you per minute of read time compared to a Member.
+**Friend of Medium tier:** $15 per month, or $150 per year. This is the premium subscription. When a Friend of Medium reads your story, approximately four times as much per minute of read time of their subscription dollar passes to you compared to a Member.
 
 ![Monthly: $5 Member, $15 Friend](../images/05-pricing-monthly.png)
 *Monthly: $5 Member, $15 Friend.*
@@ -44,7 +44,7 @@ But not all paying readers are worth the same to you as a writer. Medium has two
 ![Annual: $50 Member, $150 Friend — saves up to $30](../images/06-pricing-annual.png)
 *Annual: $50 Member, $150 Friend — saves up to $30.*
 
-Here is a worked example to make this concrete. Suppose you publish a 1,500-word article — roughly a six-minute read. One Member reads it start to finish. One Friend of Medium reads it start to finish. Both spent the same six minutes on your story. But from the Friend's read, you earn approximately four times more than from the Member's read.
+Here is a worked example to make this concrete. Suppose you publish a 1,500-word article — roughly a six-minute read. One Member reads it start to finish. One Friend of Medium reads it start to finish. Both spent the same six minutes on your story. But from the Friend's read, you earn approximately four times as much as from the Member's read.
 
 You do not control who subscribes at which tier. What you can control is writing stories that attract and retain engaged readers at any tier. The Friend multiplier is not a strategy — it is a reminder that your earnings are a function of genuine reading time, not clicks or page views. A reader who opens your story and leaves in thirty seconds earns you almost nothing. A reader who reads to the end earns you far more, regardless of their tier.
 
@@ -63,17 +63,19 @@ This is significant because it aligns your earnings with one of Medium's core bu
 The full details are documented in Medium's official blog post announcing the change:
 https://medium.com/blog/partner-program-update-starting-february-17-were-rewarding-stories-that-bring-in-new-members-3e84d2eb6e68
 
+Medium has not published the exact bonus amount per conversion; it varies by story and is not broken out in the writer dashboard, but it does add a separate line item to the monthly earnings report when conversions occur.
+
 The practical implication for your writing: stories that are genuinely useful to readers who have never paid for Medium — tutorials, clear explainers, answers to specific questions — are more likely to prompt conversions than stories written primarily for existing subscribers. Writing for the uninitiated reader is not just good editorial practice; in 2026, it is also better monetization strategy.
 
 ---
 
 ### The Boost Program Decline
 
-The Boost Nomination Program still exists in 2026. When a Medium curator "Boosts" a story, that story receives elevated distribution — shown to more readers across the platform. Being Boosted was, for a period, a meaningful earnings event.
+The Boost Nomination Program still exists in 2026. When a Medium curator "Boosts" a story, that story receives elevated distribution — shown to more readers across the platform. Being Boosted was, through most of 2023 and into early 2024, a meaningful earnings event.
 
 It is now much less so.
 
-The payout bonus attached to a Boosted story has fallen sharply. In 2024, a Boost typically added approximately 30% more earnings on top of a story's organic read-time revenue. By 2025, that figure had dropped to around 7%. In early 2026, following Medium's January 2026 rebalance of its payout algorithm, Boost bonuses fell further. The rebalance shifted weight away from Boost and toward two other signals: base reading time and new-member conversions (the February 17 mechanic described in the previous section).
+The payout bonus attached to a Boosted story has fallen sharply. In 2024, a Boost typically added approximately 30% more earnings on top of a story's organic read-time revenue (based on community reports tracked by Medium writer forums and personal observation). By 2025, that figure had dropped to around 7% by the same measures. In early 2026, following Medium's January 2026 rebalance of its payout algorithm, Boost bonuses fell further. The rebalance shifted weight away from Boost and toward two other signals: base reading time and new-member conversions (the February 17 mechanic described in the previous section).
 
 This does not mean you should write stories that avoid Boost eligibility. A Boosted story still reaches more readers, which means more read time, which means more earnings — just through the standard read-time mechanism rather than through a large bonus multiplier. Being Boosted is still a good outcome.
 
@@ -109,8 +111,8 @@ Before you invest time building a Medium writing practice, you deserve to see re
 
 Here are the numbers from my own account. I have been writing on Medium since 2017. As of April 2026, I have 1,171 followers. My monthly earnings over the eighteen months from October 2024 through April 2026 are shown below.
 
-![Real monthly earnings, Oct 2024 → Apr 2026. The honest range is $17–$92.](../images/07-earnings-history.png)
-*Real monthly earnings, Oct 2024 → Apr 2026. The honest range is $17–$92.*
+![Real monthly earnings, Oct 2024 → Apr 2026. The honest range is $16–$92.](../images/07-earnings-history.png)
+*Real monthly earnings, Oct 2024 → Apr 2026. The honest range is $16–$92.*
 
 The highest single month was $91.72, in April 2025. The lowest was $16.02, in October 2024. The most recent month at time of writing — April 2026 — was $17.35.
 
@@ -128,5 +130,5 @@ Writers in any of the 100+ countries where the MPP is available can reach this m
 
 ### What's Next
 
-Chapter 2 covers the four hard eligibility requirements every writer must meet before earning a single dollar from Medium — including the countries where the MPP is and is not available. Before you write a single word for the paywall, it is worth confirming you qualify. The requirements are straightforward, and the supported country list now covers more than 100 nations, but there are still exclusions that catch writers by surprise. Chapter 2 will walk through each requirement so you can confirm your status before investing time in the writing work that follows.
+Chapter 2 covers the four hard eligibility requirements every writer must meet before earning a single dollar from Medium — including the countries where the MPP is and is not available. Before you write a single word for the paywall, it is worth confirming you qualify. The requirements are straightforward, but there are still exclusions that catch writers by surprise. Chapter 2 will walk through each requirement so you can confirm your status before investing time in the writing work that follows.
 
