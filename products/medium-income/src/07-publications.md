@@ -15,7 +15,7 @@ A Medium publication is a curated collection of stories built around a niche or 
 
 A writer with 200 followers who publishes solo reaches a few hundred readers on a good day. That same article, accepted by a publication with 50,000 followers, lands in front of a ready audience that already trusts the brand.
 
-For most beginners, getting into the right publication is the highest-leverage move in the first three months. It does not replace writing quality — editors spot thin content — but it solves the cold-start problem that kills otherwise good articles.
+For most beginners, getting into the right publication is the highest-impact move in the first three months. It does not replace writing quality — editors spot thin content — but it solves the cold-start problem that kills otherwise good articles.
 
 Stories outside publications still earn. The Medium Partner Program pays based on read time wherever a story lives. But without publication distribution, volume depends entirely on your follower count and whatever traffic you drive yourself. If you are new, that means slow feedback and low early earnings.
 
