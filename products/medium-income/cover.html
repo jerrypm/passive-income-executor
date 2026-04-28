@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Medium Income 2026 — Cover</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,500&family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1280px;
+    height: 1600px;
+    min-height: 1600px;
+    max-height: 1600px;
+    background: #0f0f11;
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #f5f1e8;
+    overflow: hidden;
+  }
+  .cover {
+    position: relative;
+    width: 1280px;
+    height: 1600px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(26,137,23,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 85%, rgba(255,127,36,0.10) 0%, transparent 50%),
+      linear-gradient(180deg, #14141a 0%, #0a0a0d 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 120px;
+  }
+
+  .constellation {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.45;
+  }
+  .constellation svg { width: 100%; height: 100%; }
+
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  .content { position: relative; z-index: 10; text-align: center; }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #1a8917;
+    margin-bottom: 28px;
+  }
+
+  .number {
+    font-family: 'Playfair Display', serif;
+    font-size: 380px;
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: #f5f1e8;
+    margin-bottom: 10px;
+    text-shadow: 0 8px 40px rgba(255,127,36,0.18);
+  }
+  .number .dollar {
+    color: #ff7f24;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 124px;
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: #f5f1e8;
+    margin-top: 8px;
+    margin-bottom: 42px;
+    font-style: italic;
+  }
+
+  .accent-line {
+    width: 140px;
+    height: 4px;
+    background: #ff7f24;
+    margin: 0 auto 36px auto;
+    box-shadow: 0 0 18px rgba(255,127,36,0.55);
+  }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 500;
+    font-style: italic;
+    color: #ff7f24;
+    margin-bottom: 18px;
+    letter-spacing: 0.01em;
+  }
+
+  .meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #9a9388;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .top-bar, .bottom-bar {
+    position: absolute;
+    left: 120px;
+    right: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6a6458;
+  }
+  .top-bar { top: 80px; }
+  .bottom-bar { bottom: 140px; }
+  .top-bar .dot, .bottom-bar .dot {
+    width: 8px;
+    height: 8px;
+    background: #ff7f24;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .bottom-bar .accent-num {
+    color: #1a8917;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+
+  <div class="constellation">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1600" preserveAspectRatio="xMidYMid slice"></svg>
+  </div>
+  <div class="vignette"></div>
+
+  <div class="top-bar">
+    <span>The Pro Pack</span>
+    <span class="dot"></span>
+    <span>Edition I · 2026</span>
+  </div>
+
+  <div class="content">
+    <div class="eyebrow">Medium&nbsp;Partner&nbsp;Program</div>
+    <div class="number"><span class="dollar">$</span>100</div>
+    <div class="title">Medium Income</div>
+    <div class="accent-line"></div>
+    <div class="subtitle">The 2026 Beginner's Playbook</div>
+    <div class="meta">100+ countries · Updated for 2026 · Zero to payout</div>
+  </div>
+
+  <div class="bottom-bar">
+    <span>jrdevhub.com</span>
+    <span><span class="accent-num">12</span> chapters · <span class="accent-num">100+</span> countries</span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const svg = document.querySelector('.constellation svg');
+  const cols = 40;
+  const rows = 25;
+  const cellW = 1280 / cols;
+  const cellH = 1600 / rows;
+  const ns = 'http://www.w3.org/2000/svg';
+  let count = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cx = cellW * c + cellW / 2 + (Math.random() - 0.5) * cellW * 0.35;
+      const cy = cellH * r + cellH / 2 + (Math.random() - 0.5) * cellH * 0.35;
+      const dot = document.createElementNS(ns, 'circle');
+      dot.setAttribute('cx', cx.toFixed(1));
+      dot.setAttribute('cy', cy.toFixed(1));
+      const bright = Math.random();
+      const rad = bright > 0.94 ? 2.4 : bright > 0.82 ? 1.6 : 1.0;
+      dot.setAttribute('r', rad);
+      // Mix of green (Medium) and cream/orange dots — green dominates as theme
+      const hue = bright > 0.94 ? '#ff7f24' : (bright > 0.78 ? '#1a8917' : '#f5f1e8');
+      dot.setAttribute('fill', hue);
+      dot.setAttribute('opacity', (0.25 + bright * 0.7).toFixed(2));
+      svg.appendChild(dot);
+      count++;
+    }
+  }
+  window.__dotsReady = true;
+  document.title = 'Ready (' + count + ' dots)';
+})();
+</script>
+</body>
+</html>
