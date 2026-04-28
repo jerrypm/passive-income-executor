@@ -19,7 +19,7 @@ Here is a worked opening for a hypothetical article titled "8 Xcode Shortcuts I 
 
 Three sentences: pain, proof, promise. Sentence one names what the reader already experiences. Sentence two delivers the author's standing to make a claim. Sentence three gives the article's value in a single line.
 
-**Common mistake:** Opening with backstory before the pain. Any sentence that begins with "In today's world," "With the rise of," or "Technology is changing how we work" is preamble. Delete it and start with the reader's problem.
+**Common mistake:** Opening with backstory before the pain. Any sentence that begins with vague generic preamble — 'today,' 'with the rise of,' or any framing that could open ten different articles — is filler. Delete it and start with the reader's problem.
 
 ---
 
