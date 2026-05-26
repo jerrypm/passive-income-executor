@@ -305,3 +305,4 @@
 
 ### 100. Content Performance 90-Day Review
 **Prompt**: Act as a content performance analyst running a quarterly review. For blog [BLOG_URL] with 90 days of data, build a review report covering: top 10 articles by traffic/conversions/revenue, bottom 10 decaying articles, best-performing topic cluster, CTR winners and losers, keyword movement, backlink velocity, content ROI per piece (time spent vs traffic value), and 5 lessons learned. End with a 3-point strategic pivot for the next quarter. Output as a structured executive report in markdown.
+

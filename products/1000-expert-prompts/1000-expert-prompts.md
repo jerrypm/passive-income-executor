@@ -42,16 +42,16 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ## Table of Contents
 
-1. [Marketing, Sales & Copywriting](#marketing-sales--copywriting) — *brand positioning, sales letters, VSLs, ads, email, pricing, outbound*
-2. [Content Creation, Blogging & SEO](#content-creation-blogging--seo) — *keyword research, briefs, outlines, on-page, topical authority*
-3. [Business Strategy, Entrepreneurship & Startups](#business-strategy-entrepreneurship--startups) — *lean canvas, GTM, pricing, fundraising, OKRs*
-4. [Software Development & Engineering](#software-development--engineering) — *architecture, code review, debugging, testing, iOS, web*
-5. [AI, Automation & Productivity](#ai-automation--productivity) — *meta-prompting, agentic workflows, GTD, automation blueprints*
-6. [Writing, Editing & Storytelling](#writing-editing--storytelling) — *plotting, character, dialogue, nonfiction, screenwriting*
-7. [Social Media & Community Growth](#social-media--community-growth) — *Twitter threads, LinkedIn, Reels, YouTube, community*
-8. [Data Analysis, Research & Finance](#data-analysis-research--finance) — *SQL, Python, A/B tests, financial modeling, investing*
-9. [Design, Branding & Visual Identity](#design-branding--visual-identity) — *brand identity, UX/UI, Midjourney, typography*
-10. [Career, Coaching & Learning](#career-coaching--learning) — *resumes, interviews, negotiation, coaching, learning roadmaps*
+1. [Marketing, Sales & Copywriting](#marketing-sales-copywriting) — *brand positioning, sales letters, VSLs, ads, email, pricing, outbound*
+2. [Content Creation, Blogging & SEO](#content-creation-blogging-seo) — *keyword research, briefs, outlines, on-page, topical authority*
+3. [Business Strategy, Entrepreneurship & Startups](#business-strategy-entrepreneurship-startups) — *lean canvas, GTM, pricing, fundraising, OKRs*
+4. [Software Development & Engineering](#software-development-engineering) — *architecture, code review, debugging, testing, iOS, web*
+5. [AI, Automation & Productivity](#ai-automation-productivity) — *meta-prompting, agentic workflows, GTD, automation blueprints*
+6. [Writing, Editing & Storytelling](#writing-editing-storytelling) — *plotting, character, dialogue, nonfiction, screenwriting*
+7. [Social Media & Community Growth](#social-media-community-growth) — *Twitter threads, LinkedIn, Reels, YouTube, community*
+8. [Data Analysis, Research & Finance](#data-analysis-research-finance) — *SQL, Python, A/B tests, financial modeling, investing*
+9. [Design, Branding & Visual Identity](#design-branding-visual-identity) — *brand identity, UX/UI, Midjourney, typography*
+10. [Career, Coaching & Learning](#career-coaching-learning) — *resumes, interviews, negotiation, coaching, learning roadmaps*
 
 ---
 
@@ -362,6 +362,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Closing Call Framework
 **Prompt**: Act as a closer who has personally closed $50M+ in B2B software. Write a 30-minute closing call framework for [PRODUCT] at [PRICE] with [DECISION_MAKER]. Structure: recap agreed pains (5 min), walk through solution fit (10 min), present pricing with anchoring (5 min), handle final objections (5 min), ask for the business (5 min). Output each section with: exact talk track, key slides, objection anticipations, and the direct close ("Based on everything, are you ready to move forward?"). Include 3 close variants: assumptive, alternative, urgency.
+
 ## 2 — Content Creation, Blogging & SEO
 ### 100 Expert Prompts Inside
 
@@ -669,6 +670,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Content Performance 90-Day Review
 **Prompt**: Act as a content performance analyst running a quarterly review. For blog [BLOG_URL] with 90 days of data, build a review report covering: top 10 articles by traffic/conversions/revenue, bottom 10 decaying articles, best-performing topic cluster, CTR winners and losers, keyword movement, backlink velocity, content ROI per piece (time spent vs traffic value), and 5 lessons learned. End with a 3-point strategic pivot for the next quarter. Output as a structured executive report in markdown.
+
 ## 3 — Business Strategy, Entrepreneurship & Startups
 ### 100 Expert Prompts Inside
 
@@ -976,6 +978,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Annual Investor Letter
 **Prompt**: Act as a founder writing a Warren Buffett-style annual letter to investors. For [COMPANY] in [INDUSTRY] covering fiscal year [YEAR], draft a 1200-word annual investor letter including: year in review, wins, misses with lessons, strategic shifts, financial highlights, outlook, and a candid ask. Tone: candid, confident, specific. Output as a structured letter in markdown with clear section headers and quantified claims throughout.
+
 ## 4 — Software Development & Engineering
 ### 100 Expert Prompts Inside
 
@@ -1283,6 +1286,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Frontend Testing Strategy
 **Prompt**: Act as a frontend testing lead following Kent C. Dodds's testing trophy. For [APP] in [FRAMEWORK], design a test strategy: static (TS, ESLint), unit (Vitest), component (Testing Library), integration, E2E (Playwright), visual regression (Chromatic), and a11y (axe). Output: trophy ratio table, tooling choices with rationale, sample tests per level, and 5 anti-patterns to avoid (testing implementation details, etc.).
+
 ## 5 — AI, Automation & Productivity
 ### 100 Expert Prompts Inside
 
@@ -1590,6 +1594,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Meta-Learning Retrospective
 **Prompt**: Act as a meta-learning coach. Over the last month I learned [WHAT] via [METHOD] with results [RESULTS]. Diagnose what worked, what wasted time, and which techniques to double down on. Apply Scott Young's ultralearning principles (directness, drill, feedback, retrieval). Output as a meta-learning retrospective report with: method scorecard, time audit, retention check via recall test, and a revised learning protocol for the next month with 3 experiments.
+
 ## 6 — Writing, Editing & Storytelling
 ### 100 Expert Prompts Inside
 
@@ -1897,6 +1902,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Script Coverage Report
 **Prompt**: Act as a professional script reader who writes coverage for a major production company. Given this 110-page [GENRE] feature screenplay logline: "[LOGLINE]", write standard studio coverage including logline, synopsis (300 words), comments (premise, structure, character, dialogue, marketability), and a grid rating (Excellent/Good/Fair/Poor). End with Recommend/Consider/Pass. Output as formal coverage document with all sections labeled and a final one-line recommendation with justification.
+
 ## 7 — Social Media & Community Growth
 ### 100 Expert Prompts Inside
 
@@ -2204,6 +2210,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Quarterly Growth OKRs
 **Prompt**: Act as a creator COO who sets OKRs for 6-figure personal brands. Write a quarterly OKR sheet for [NICHE] targeting [TARGET_AUDIENCE]. Include: 1 objective, 3 key results (output + outcome mix), 6 initiatives, leading indicators, review cadence, and risk register. Align to [GOAL] in 90 days. Output as a one-page OKR sheet with initiative owners and weekly check-in format.
+
 ## 8 — Data Analysis, Research & Finance
 ### 100 Expert Prompts Inside
 
@@ -2511,6 +2518,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Data Ethics Review
 **Prompt**: Act as a research ethics board chair. Review [STUDY] for ethical considerations including informed consent, privacy, data minimization, vulnerable populations, dual use, and algorithmic bias. Apply Belmont Principles and GDPR/HIPAA where relevant. Output an IRB-style review memo, a risk mitigation plan, consent form template, and a monitoring plan for ongoing ethical oversight during data collection and analysis.
+
 ## 9 — Design, Branding & Visual Identity
 ### 100 Expert Prompts Inside
 
@@ -2818,6 +2826,7 @@ Most prompt packs are generic one-liners: *"Write me a marketing email."* Useles
 
 ### 100. Design Retrospective Facilitation
 **Prompt**: Act as an agile design coach facilitating a quarterly retro for [BRAND_NAME] design team. Plan a 90-minute retro: safety check, timeline recap, What Went Well / What Didn't / Ideas / Actions, dot voting, and commitments. Apply Prime Directive. Output: minute-by-minute agenda plus 10 prompt questions, a template for action items (owner, due, metric), and 3 facilitation anti-patterns to avoid.
+
 ## 10 — Career, Coaching & Learning
 ### 100 Expert Prompts Inside
 

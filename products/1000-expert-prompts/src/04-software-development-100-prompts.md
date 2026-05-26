@@ -305,3 +305,4 @@
 
 ### 100. Frontend Testing Strategy
 **Prompt**: Act as a frontend testing lead following Kent C. Dodds's testing trophy. For [APP] in [FRAMEWORK], design a test strategy: static (TS, ESLint), unit (Vitest), component (Testing Library), integration, E2E (Playwright), visual regression (Chromatic), and a11y (axe). Output: trophy ratio table, tooling choices with rationale, sample tests per level, and 5 anti-patterns to avoid (testing implementation details, etc.).
+

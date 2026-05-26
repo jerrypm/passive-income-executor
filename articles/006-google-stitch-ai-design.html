@@ -1,0 +1,137 @@
+<!--
+TITLE: Google Stitch Is Free, AI-Powered, and Figma Should Be Worried
+SEARCH DESCRIPTION: Google Stitch turns text prompts into production-ready UI designs with clean code. Free, AI-native, and now with voice canvas. Here's everything you need to know.
+LABELS: google-stitch, design, ai, ui-design, figma, prototyping, developer-tools
+-->
+
+<img style="width:100%;border-radius:8px;margin:0 0 1.5em;box-shadow:0 2px 12px rgba(0,0,0,0.08);" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" alt="UI design mockup on screen" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Alvaro Reyes on Unsplash</p>
+
+<p>Google just redesigned <strong>Stitch</strong> — their AI-powered UI design tool — and it's no longer just a toy. The March 2026 update added voice commands, an infinite canvas, and direct integration with coding tools like <strong>Claude Code and Cursor</strong>. Figma's stock dropped 8% the day it launched.</p>
+
+<p>Here's what Stitch is, why it matters, and whether you should care.</p>
+
+<h2>What Is Google Stitch?</h2>
+
+<p>Stitch is an <strong>AI-native UI design tool from Google Labs</strong>. You describe what you want — in text, voice, or by uploading a sketch — and it generates high-fidelity, responsive UI designs with clean, usable code (HTML/CSS/Tailwind).</p>
+
+<p>It lives at <strong>stitch.withgoogle.com</strong>. You need a Google account. That's it.</p>
+
+<p>Think of it as: <strong>Figma for people who can't design</strong>. Or more accurately, Figma for people who'd rather describe what they want than manually drag rectangles.</p>
+
+<h2>Why Developers Should Pay Attention</h2>
+
+<p>Three reasons this matters for developers specifically:</p>
+
+<h3>1. Prompt to Prototype in Minutes</h3>
+<p>Type "a dashboard for a SaaS analytics tool with dark mode, sidebar navigation, and a chart showing monthly revenue" and get a fully designed, multi-screen prototype. With real code you can actually use.</p>
+
+<p>The code export isn't garbage either — it outputs clean <strong>HTML, CSS, Tailwind CSS, or JSX</strong>. Not perfect for production, but a solid starting point.</p>
+
+<h3>2. MCP Server Integration</h3>
+<p>This is the feature that made Figma nervous. Stitch now has a <strong>Model Context Protocol (MCP) server</strong> that connects directly to:</p>
+
+<ul>
+<li><strong>Claude Code</strong> — design in Stitch, implement in Claude Code</li>
+<li><strong>Cursor</strong> — seamless design-to-code workflow</li>
+<li><strong>Gemini CLI</strong> — Google's own coding assistant</li>
+</ul>
+
+<p>Your AI coding assistant can now read your Stitch designs and generate matching implementations. The design-to-code gap just got a lot smaller.</p>
+
+<h3>3. It's Free</h3>
+<p>While Figma charges $13-15/editor/month ($13,200/year for a 20-person team), Stitch costs <strong>$0</strong>. You get 350 generations/month with Gemini 2.5 Flash and 50/month with Gemini 2.5 Pro.</p>
+
+<h2>Key Features</h2>
+
+<h3>Voice Canvas (New)</h3>
+<p>Talk to your canvas. Literally. The AI listens, asks clarifying questions, offers real-time design critiques, and makes live updates as you speak. No other design tool does this.</p>
+
+<p>"Make the header bigger. Actually, change the color scheme to something more corporate. Add a CTA button below the hero section."</p>
+
+<p>Done. In real time. While you talk.</p>
+
+<h3>Vibe Design (New)</h3>
+<p>Instead of describing specific UI elements, describe the <strong>feeling</strong> you want. "Minimalist and trustworthy" or "bold startup energy with lots of whitespace." Stitch generates multiple design directions matching that vibe.</p>
+
+<p>This is fundamentally different from how design tools have worked until now. You're designing by intent, not by specification.</p>
+
+<h3>DESIGN.md</h3>
+<p>An agent-friendly markdown format for design systems. Export your design rules as a <code>DESIGN.md</code> file and share it across AI tools. Your Claude Code session can read your design system without you explaining it.</p>
+
+<h3>Multi-Screen Prototyping</h3>
+<p>Connect screens into interactive, clickable prototypes with transitions. Stitch can auto-generate logical next screens in a flow — "if this is a login page, what comes after successful login?"</p>
+
+<h3>Design Agent</h3>
+<p>Tracks your complete project history and the reasoning behind every design version. Agent Manager lets you work on multiple design directions in parallel without losing any branch.</p>
+
+<h2>Stitch vs Figma: Real Talk</h2>
+
+<table style="width:100%;border-collapse:collapse;margin:1.5em 0;font-size:14px;">
+<thead>
+<tr><th style="background:#333;color:#fff;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:12px;text-transform:uppercase;">Aspect</th><th style="background:#333;color:#fff;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:12px;text-transform:uppercase;">Google Stitch</th><th style="background:#333;color:#fff;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:12px;text-transform:uppercase;">Figma</th></tr>
+</thead>
+<tbody>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Price</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Free</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">$13-15/editor/month</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Approach</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">AI-generated from prompts</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Manual precision design</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Speed</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Minutes</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Hours to days</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Learning Curve</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Near zero</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Steep</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Collaboration</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Single-user</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Real-time multiplayer</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Code Export</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Built-in HTML/CSS/Tailwind</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Requires plugins</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>Pixel Control</strong></td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Limited</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">Full precision</td></tr>
+<tr><td style="padding:10px 14px;"><strong>Best For</strong></td><td style="padding:10px 14px;">Rapid ideation, MVPs, devs</td><td style="padding:10px 14px;">Production design, teams</td></tr>
+</tbody>
+</table>
+
+<p><strong>The honest answer:</strong> they're complementary. Use Stitch to start (fast ideation, rough prototypes, code scaffolding). Use Figma to finish (pixel-perfect production designs, team collaboration, design systems).</p>
+
+<p>But for solo developers building MVPs? Stitch might be all you need.</p>
+
+<h2>Limitations (Be Honest)</h2>
+
+<ul>
+<li><strong>Single-user only</strong> — no real-time collaboration (deal-breaker for teams)</li>
+<li><strong>No animation support</strong> — can't design micro-interactions or transitions</li>
+<li><strong>Output consistency</strong> — AI can be unpredictable; same prompt, different results</li>
+<li><strong>No design token management</strong> — Figma's design system tools are far more mature</li>
+<li><strong>HTML/CSS only</strong> — React, Vue, and SwiftUI export are on the roadmap but not here yet</li>
+<li><strong>Still Google Labs</strong> — could be deprecated (remember Google's track record)</li>
+</ul>
+
+<h2>Who Should Use This</h2>
+
+<ul>
+<li><strong>Developers who need UI fast</strong> — describe what you want, get designs + code</li>
+<li><strong>Startup founders</strong> — build investor-ready prototypes before hiring a designer</li>
+<li><strong>Product managers</strong> — visualize feature concepts for stakeholder presentations</li>
+<li><strong>Anyone in the ideation phase</strong> — iterate on ideas 10x faster than traditional tools</li>
+</ul>
+
+<h2>How to Get Started</h2>
+
+<ol>
+<li>Go to <strong>stitch.withgoogle.com</strong></li>
+<li>Sign in with your Google account</li>
+<li>Type a prompt describing the UI you want</li>
+<li>Iterate with follow-up prompts or voice</li>
+<li>Export as code (HTML/CSS/Tailwind) or Figma file</li>
+</ol>
+
+<p>That's it. No installation, no subscription, no credit card.</p>
+
+<h2>The Bottom Line</h2>
+
+<p>Google Stitch won't replace Figma for professional design teams. But it fundamentally changes who can create professional-looking interfaces. If you're a developer who's ever thought "I just need a decent-looking UI for this side project" — Stitch is exactly what you've been waiting for.</p>
+
+<p>The MCP integration with Claude Code and Cursor is particularly interesting for developers. Design in Stitch, implement with AI assistance, ship faster. The workflow of the future is taking shape.</p>
+
+<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:24px 28px;border-radius:8px;margin:2em 0;color:#fff;">
+<p style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:700;margin:0 0 8px;color:#fff;">Ship Your App Faster</p>
+<p style="margin:0 0 14px;font-size:14px;opacity:0.9;">Need a complete Android app template? Get our InfiXOX source code — Kotlin + Jetpack Compose + Material 3 + AdMob. Or explore our Python toolkits for developer passive income.</p>
+<a href="https://zerix1.gumroad.com/l/pheupx" target="_blank" rel="noopener" style="display:inline-block;background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;padding:10px 24px;border-radius:6px;text-decoration:none;font-size:13px;text-transform:uppercase;margin-right:8px;">Android Source Code ($14)</a>
+<a href="https://zerix1.gumroad.com/l/ptikgy" target="_blank" rel="noopener" style="display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;padding:10px 24px;border-radius:6px;text-decoration:none;font-size:13px;text-transform:uppercase;">Python Toolkits ($9)</a>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>Have you tried Stitch?</strong> Drop a comment with your experience — I'd love to hear what you built with it.
+</p>

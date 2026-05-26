@@ -305,3 +305,4 @@
 
 ### 100. Script Coverage Report
 **Prompt**: Act as a professional script reader who writes coverage for a major production company. Given this 110-page [GENRE] feature screenplay logline: "[LOGLINE]", write standard studio coverage including logline, synopsis (300 words), comments (premise, structure, character, dialogue, marketability), and a grid rating (Excellent/Good/Fair/Poor). End with Recommend/Consider/Pass. Output as formal coverage document with all sections labeled and a final one-line recommendation with justification.
+

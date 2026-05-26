@@ -1,0 +1,681 @@
+<!--
+TITLE: SwiftUI Zero to Expert in 100 Articles — The Complete 2026 Reading List Every iOS Developer Needs
+SEARCH DESCRIPTION: 100 SwiftUI articles, 7 phases, from "what is a View" to shipping your first production app. The complete free reading list every iOS developer should bookmark in 2026.
+LABELS: swiftui, ios, swift, ios-development, swiftui-tutorial, apple, mobile-development, learning-roadmap
+FEATURED IMAGE: SwiftUI code on iPhone / Mac mockup, clean dev workspace
+-->
+
+<style>
+.swui * { box-sizing: border-box; }
+.swui { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.swui p { margin: 0 0 1.5em; }
+.swui a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.swui a:hover { color: #000; border-bottom-color: #000; }
+
+.swui h2.swui-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+/* Hero */
+.swui-hero {
+  background: linear-gradient(135deg, #FA7343 0%, #c62641 100%);
+  color: #fff;
+  padding: 40px 32px;
+  border-radius: 10px;
+  margin: 1.5em 0 2em;
+  text-align: center;
+}
+.swui-hero-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+.swui-hero h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: #fff;
+  line-height: 1.2;
+}
+.swui-hero p { font-size: 15px; opacity: 0.95; margin: 0 0 1em; line-height: 1.7; color: #fff; }
+.swui-hero p:last-child { margin: 0; }
+
+/* Stats row */
+.swui-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 1.5em 0;
+}
+.swui-stat {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.swui-stat-num {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #FA7343;
+  margin: 0;
+  line-height: 1.1;
+}
+.swui-stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+  margin: 6px 0 0;
+}
+
+/* Phase / roadmap */
+.swui-phase {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.swui-phase-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #FA7343;
+  margin-bottom: 4px;
+}
+.swui-phase-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 6px;
+}
+.swui-phase-range {
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12px;
+  color: #c62641;
+  margin: 0 0 12px;
+}
+.swui-phase-desc { font-size: 14px; color: #555; margin: 0 0 12px; line-height: 1.65; }
+.swui-phase-topics {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.swui-phase-topics li {
+  list-style: none !important;
+  padding: 5px 11px !important;
+  margin: 0 !important;
+  background: #fff5f0;
+  color: #c62641;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+.swui-phase-topics li::before { display: none !important; }
+
+/* Featured articles list */
+.swui-featured {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 1em 0 !important;
+}
+.swui-featured li {
+  list-style: none !important;
+  padding: 14px 16px !important;
+  margin: 0 0 8px !important;
+  background: #fafafa;
+  border-left: 3px solid #FA7343;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+}
+.swui-featured li::before { display: none !important; }
+.swui-featured-day {
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 11px;
+  color: #c62641;
+  font-weight: 700;
+  margin-right: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.swui-featured-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  color: #222;
+}
+.swui-featured-why { font-size: 13px; color: #666; margin: 4px 0 0; }
+
+/* Why bookmark */
+.swui-why {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 28px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+}
+.swui-why h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #FA7343;
+  font-size: 22px;
+  margin: 0 0 14px;
+}
+.swui-why ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.swui-why li {
+  list-style: none !important;
+  padding: 10px 0 !important;
+  margin: 0 !important;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 14.5px;
+  color: #c9d1d9;
+  line-height: 1.7;
+}
+.swui-why li:first-child { border-top: none; padding-top: 4px; }
+.swui-why li::before {
+  content: "→ " !important;
+  color: #FA7343 !important;
+  display: inline !important;
+  font-weight: 700;
+}
+.swui-why strong { color: #fff; }
+
+/* CTA */
+.swui-cta {
+  background: linear-gradient(135deg, #FA7343 0%, #c62641 100%);
+  color: #fff;
+  padding: 36px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+  text-align: center;
+}
+.swui-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+.swui-cta p { margin: 0 0 18px; color: #fff; opacity: 0.95; font-size: 15px; }
+.swui-buy {
+  display: inline-block;
+  background: #fff;
+  color: #c62641 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 38px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.swui-buy:hover {
+  background: #fff5e6;
+  color: #c62641 !important;
+  border-bottom: none !important;
+}
+
+/* Cross-sell */
+.swui-cross {
+  background: #fff;
+  border: 2px dashed #FA7343;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 2em 0;
+}
+.swui-cross h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 18px;
+  color: #c62641;
+  margin: 0 0 14px;
+}
+.swui-cross-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.swui-cross-item {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 13.5px;
+}
+.swui-cross-item h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 14.5px;
+  color: #222;
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.swui-cross-item p { margin: 0 0 8px; color: #555; font-size: 13px; line-height: 1.55; }
+.swui-cross-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #c62641 !important;
+  border-bottom: none !important;
+}
+.swui-cross-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FA7343;
+  margin-left: 6px;
+}
+
+/* Tags */
+.swui-features {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 14px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.swui-features li {
+  list-style: none !important;
+  padding: 5px 12px !important;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+  font-weight: 500;
+}
+.swui-features li::before { display: none !important; }
+
+/* FAQ */
+.swui-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.swui-faq:last-of-type { border-bottom: none; }
+.swui-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.swui-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+@media (max-width: 600px) {
+  .swui-stats { grid-template-columns: repeat(2, 1fr); }
+  .swui-hero h3 { font-size: 24px; }
+  .swui-cross-grid { grid-template-columns: 1fr; }
+  .swui-buy { display: block; }
+}
+</style>
+
+<div class="swui">
+
+<img style="width:100%;border-radius:8px;margin:0 0 1.5em;box-shadow:0 2px 12px rgba(0,0,0,0.08);" src="https://images.unsplash.com/photo-1592434134753-a70baf7979d5?w=800&q=80" alt="SwiftUI code on iPhone and Mac developer workspace" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Sumudu Mohottige on Unsplash</p>
+
+<p>SwiftUI shipped in 2019. By 2026 it isn't an alternative to UIKit anymore — it's the framework Apple expects you to know. Every WWDC release ships SwiftUI-first. Every iOS job listing assumes you can ship a production app with it. And every developer learning SwiftUI hits the same problem: <strong>tutorials end at the View protocol. Real apps start way past that.</strong></p>
+
+<p>That gap is why I wrote <strong>100 articles in 100 days</strong> — one full curriculum from "What is a View?" to "Ship your first production app." No filler. No "5 hacks for <code>@State</code>" listicles. Just an honest, ordered path from zero to expert.</p>
+
+<div class="swui-hero">
+<div class="swui-hero-label">SwiftUI Zero to Expert</div>
+<h3>The Complete 100-Article SwiftUI Curriculum</h3>
+<p>Seven phases. One article per day. From the View protocol to App Store deployment. Free to read on Medium. Bookmarkable for life.</p>
+<p style="margin-top:14px;"><a href="https://21zerixpm.medium.com/list/100daysswiftuitoexpert-069dcb77c2d2" target="_blank" rel="noopener" style="display:inline-block;background:#fff;color:#c62641;font-family:'Montserrat',sans-serif;font-weight:700;padding:12px 30px;border-radius:6px;text-decoration:none;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;border:none;">Read the Full List on Medium →</a></p>
+</div>
+
+<div class="swui-stats">
+<div class="swui-stat">
+<p class="swui-stat-num">100</p>
+<p class="swui-stat-label">Articles</p>
+</div>
+<div class="swui-stat">
+<p class="swui-stat-num">7</p>
+<p class="swui-stat-label">Phases</p>
+</div>
+<div class="swui-stat">
+<p class="swui-stat-num">1000+</p>
+<p class="swui-stat-label">Words / Article</p>
+</div>
+<div class="swui-stat">
+<p class="swui-stat-num">$0</p>
+<p class="swui-stat-label">Free to Read</p>
+</div>
+</div>
+
+<h2 class="swui-h">Who This Roadmap Is For</h2>
+
+<p>Three kinds of developers get the most out of this list.</p>
+
+<p><strong>Beginners</strong> who installed Xcode last week and want a structured path that doesn't leave you stuck after the first three tutorials. Start at Article 1 and go in order.</p>
+
+<p><strong>Intermediate developers</strong> who can build a small app but stall the moment something real shows up — state management, networking layers, App Store rejections. Jump to Phase 3 or 5 and fill the gaps.</p>
+
+<p><strong>Senior devs moving from UIKit</strong> who need a SwiftUI-native mental model fast. Skim Phases 1–2, then dig into Phase 4 (architecture) and Phase 6 (clean code) — the parts where UIKit habits actively hurt you.</p>
+
+<h2 class="swui-h">The 7-Phase Curriculum (Articles 1 → 100)</h2>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 1</div>
+<h3 class="swui-phase-title">SwiftUI Fundamentals</h3>
+<p class="swui-phase-range">Articles 1 → 15</p>
+<p class="swui-phase-desc">The building blocks. The View protocol, modifiers, the layout system, colors and gradients, SF Symbols, images and media, text and fonts, buttons, text fields, lists, navigation, animations, gestures, and the environment system that ties them together.</p>
+<ul class="swui-phase-topics">
+<li>View protocol</li>
+<li>Modifiers</li>
+<li>Layout system</li>
+<li>Colors &amp; gradients</li>
+<li>SF Symbols</li>
+<li>Images &amp; media</li>
+<li>Typography</li>
+<li>Buttons &amp; controls</li>
+<li>TextField &amp; forms</li>
+<li>Lists &amp; ScrollViews</li>
+<li>Navigation basics</li>
+<li>Animations</li>
+<li>Gestures</li>
+<li>Environment</li>
+</ul>
+</div>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 2</div>
+<h3 class="swui-phase-title">Layouts &amp; UI Components</h3>
+<p class="swui-phase-range">Articles 16 → 30</p>
+<p class="swui-phase-desc">Beyond stock components. Custom Layout containers, shapes and paths, design-system components, advanced lists, context menus, popovers, custom tab bars, scroll effects, cards, onboarding flows, loading skeletons, empty states, error UIs, badges, bottom sheets.</p>
+<ul class="swui-phase-topics">
+<li>Custom Layout protocol</li>
+<li>Shapes &amp; paths</li>
+<li>Reusable components</li>
+<li>Advanced lists</li>
+<li>Context menus</li>
+<li>Popovers</li>
+<li>Custom tab bars</li>
+<li>Scroll effects</li>
+<li>Onboarding flows</li>
+<li>Loading skeletons</li>
+<li>Empty states</li>
+<li>Error handling UI</li>
+<li>Badges</li>
+<li>Bottom sheets</li>
+</ul>
+</div>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 3</div>
+<h3 class="swui-phase-title">State Management &amp; Data Flow</h3>
+<p class="swui-phase-range">Articles 31 → 45</p>
+<p class="swui-phase-desc">The hardest part of modern SwiftUI. <code>@State</code>, <code>@Binding</code>, <code>@StateObject</code> vs <code>@ObservedObject</code>, <code>@EnvironmentObject</code>, the iOS 17+ <code>@Observable</code> macro, Combine fundamentals, complex state, state machines, Redux, TCA, dependency injection, MVVM, debugging, testing.</p>
+<ul class="swui-phase-topics">
+<li>@State deep dive</li>
+<li>@Binding</li>
+<li>@StateObject vs @ObservedObject</li>
+<li>@EnvironmentObject</li>
+<li>@Observable macro</li>
+<li>Combine</li>
+<li>State machines</li>
+<li>Redux pattern</li>
+<li>TCA intro</li>
+<li>Dependency injection</li>
+<li>MVVM</li>
+<li>State debugging</li>
+<li>Testing state</li>
+</ul>
+</div>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 4</div>
+<h3 class="swui-phase-title">Navigation &amp; Architecture</h3>
+<p class="swui-phase-range">Articles 46 → 60</p>
+<p class="swui-phase-desc">Routing and structure at production scale. NavigationStack, programmatic navigation, deep linking, tab apps, modal presentations, the Coordinator and Router patterns, Clean Architecture, MVVM and VIPER, modular feature architecture, project structure, multi-window, widgets.</p>
+<ul class="swui-phase-topics">
+<li>NavigationStack</li>
+<li>NavigationPath</li>
+<li>Deep linking</li>
+<li>Tab navigation</li>
+<li>Modal presentations</li>
+<li>Coordinator pattern</li>
+<li>Router pattern</li>
+<li>Clean Architecture</li>
+<li>MVVM</li>
+<li>VIPER</li>
+<li>Modular features</li>
+<li>Multi-window</li>
+<li>Widgets</li>
+</ul>
+</div>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 5</div>
+<h3 class="swui-phase-title">Networking &amp; Persistence</h3>
+<p class="swui-phase-range">Articles 61 → 75</p>
+<p class="swui-phase-desc">Talking to servers, storing data, surviving offline. URLSession, async/await networking, REST integration, error handling, image caching, GraphQL with Apollo, WebSockets, offline-first patterns, Core Data, SwiftData, UserDefaults, Keychain, CloudKit, Firebase, background tasks.</p>
+<ul class="swui-phase-topics">
+<li>URLSession</li>
+<li>async/await</li>
+<li>REST APIs</li>
+<li>Error handling</li>
+<li>Image caching</li>
+<li>GraphQL</li>
+<li>WebSockets</li>
+<li>Offline-first</li>
+<li>Core Data</li>
+<li>SwiftData</li>
+<li>UserDefaults</li>
+<li>Keychain</li>
+<li>CloudKit</li>
+<li>Firebase</li>
+<li>Background tasks</li>
+</ul>
+</div>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 6</div>
+<h3 class="swui-phase-title">Advanced SwiftUI &amp; Clean Code</h3>
+<p class="swui-phase-range">Articles 76 → 90</p>
+<p class="swui-phase-desc">Performance, memory, abstractions, and the polish that separates hobby projects from shipped apps. Custom view modifiers, property wrappers, result builders, generics, protocol-oriented design, accessibility, localization, dark mode, Dynamic Type, view testing, snapshot tests, code organization.</p>
+<ul class="swui-phase-topics">
+<li>Performance</li>
+<li>Memory management</li>
+<li>Custom modifiers</li>
+<li>Property wrappers</li>
+<li>Result builders</li>
+<li>Generics</li>
+<li>Protocol-oriented</li>
+<li>Accessibility</li>
+<li>Localization</li>
+<li>Dark mode</li>
+<li>Dynamic Type</li>
+<li>UI testing</li>
+<li>Snapshot tests</li>
+<li>Code organization</li>
+</ul>
+</div>
+
+<div class="swui-phase">
+<div class="swui-phase-label">Phase 7</div>
+<h3 class="swui-phase-title">Expert Level &amp; Production Apps</h3>
+<p class="swui-phase-range">Articles 91 → 100</p>
+<p class="swui-phase-desc">Shipping. App Store Optimization, analytics integration, crash reporting, A/B testing, push notifications, in-app purchases, app security, CI/CD pipelines — and a full capstone build of your first production app end-to-end.</p>
+<ul class="swui-phase-topics">
+<li>Production deployment</li>
+<li>ASO basics</li>
+<li>Analytics</li>
+<li>Crash reporting</li>
+<li>A/B testing</li>
+<li>Push notifications</li>
+<li>In-app purchases</li>
+<li>App security</li>
+<li>CI/CD</li>
+<li>Capstone build</li>
+</ul>
+</div>
+
+<h2 class="swui-h">10 Must-Read Articles From The List</h2>
+
+<p>If you only have ten article slots to spend, start here. These are the days where the biggest mental shifts happen.</p>
+
+<ol class="swui-featured">
+<li>
+<span class="swui-featured-day">Article 4</span>
+<span class="swui-featured-title">SwiftUI Layout System Deep Dive</span>
+<p class="swui-featured-why">The piece that makes the rest of SwiftUI click. Once you understand how parents and children negotiate size, every layout bug stops feeling magical.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 13</span>
+<span class="swui-featured-title">Animations in SwiftUI</span>
+<p class="swui-featured-why">The fastest way to make an app feel premium. Implicit vs explicit, transitions, matched geometry, animation curves — all in one place.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 18</span>
+<span class="swui-featured-title">Creating Reusable Components</span>
+<p class="swui-featured-why">The shift from "copy-paste this View" to "we have a design system." The single technique that scales your codebase past the toy-app stage.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 27</span>
+<span class="swui-featured-title">Empty States Design</span>
+<p class="swui-featured-why">The first state every screen needs — and the one tutorials always skip. Real apps spend more time in their empty states than their loaded ones.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 35</span>
+<span class="swui-featured-title">The @Observable Macro (iOS 17+)</span>
+<p class="swui-featured-why">The modern observation model that replaces <code>ObservableObject</code> in new code. Smaller, faster, less ceremony. If you're starting fresh in 2026, this is the default.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 40</span>
+<span class="swui-featured-title">TCA (The Composable Architecture)</span>
+<p class="swui-featured-why">The community's favorite unidirectional architecture. Where it helps, where it overengineers, and what a real TCA reducer looks like in production.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 46</span>
+<span class="swui-featured-title">NavigationStack Deep Dive</span>
+<p class="swui-featured-why">The iOS 16+ navigation API that finally makes deep links, state restoration, and programmatic flows sane. Skipping this means stitching old NavigationView duct tape forever.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 62</span>
+<span class="swui-featured-title">Async/Await Networking</span>
+<p class="swui-featured-why">The modern networking layer in 30 lines. Cancellation, error handling, and the patterns that scale from a single endpoint to a full API client.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 70</span>
+<span class="swui-featured-title">SwiftData (iOS 17+)</span>
+<p class="swui-featured-why">Apple's modern persistence framework. The day the boilerplate of Core Data quietly disappears — and what trade-offs you accept when you switch.</p>
+</li>
+<li>
+<span class="swui-featured-day">Article 100</span>
+<span class="swui-featured-title">Building Your First Production App</span>
+<p class="swui-featured-why">The capstone. Everything from the previous 99 articles, applied end-to-end. Annotated decisions, real trade-offs, the full path from spec to App Store.</p>
+</li>
+</ol>
+
+<div class="swui-why">
+<h3>Why Bookmark This List?</h3>
+<ul>
+<li><strong>Curriculum, not random tips.</strong> 100 topics ordered the way a real iOS career touches them — not a random pile of features.</li>
+<li><strong>1000–3000 words per article.</strong> Long enough to be substantive. Short enough to read in one sitting. Each article has working code, not snippets.</li>
+<li><strong>Production-focused.</strong> Every article ends in a shippable skill. Not theoretical demos that fall apart in App Review.</li>
+<li><strong>Free to read.</strong> Every article lives on Medium. Free with a Medium account on most stories; a Medium subscription unlocks the rest plus offline reading.</li>
+<li><strong>2026-updated.</strong> SwiftData, <code>@Observable</code>, NavigationStack, the modern concurrency model, current App Store Connect — not warmed-over 2021 examples.</li>
+<li><strong>Honest about trade-offs.</strong> Where SwiftUI breaks, where UIKit still wins, where TCA helps and where it overengineers. No fanboy energy.</li>
+</ul>
+</div>
+
+<div class="swui-cta">
+<h3>Read All 100 Articles on Medium</h3>
+<p>Bookmark the full list. Read one per day for 100 days, or jump to the phase that matches your current weak spot.</p>
+<a class="swui-buy" href="https://21zerixpm.medium.com/list/100daysswiftuitoexpert-069dcb77c2d2" target="_blank" rel="noopener">Open the Reading List →</a>
+</div>
+
+<h2 class="swui-h">How To Read The List (Without Burning Out)</h2>
+
+<p>100 articles is a lot. Here are the three schedules that actually work.</p>
+
+<p><strong>The Beginner Path.</strong> Article 1 to 100 in order, one a day for 100 days. Around 30–45 minutes per article including a small code experiment. By the end you've built dozens of small examples and the patterns are muscle memory.</p>
+
+<p><strong>The Weekend Curriculum.</strong> Five articles every Saturday, five every Sunday. Full list in 10 weekends. Pair with a single side project — one repo where every article's pattern lands. This is the schedule busy working developers actually finish.</p>
+
+<p><strong>The Targeted Hit.</strong> You know exactly what you're weak at. Jump to that phase, read 4–6 articles, ship the gap you came for. Use the rest as a reference manual for the next time it bites you.</p>
+
+<h2 class="swui-h">What This List Is NOT</h2>
+
+<ul class="swui-features" style="flex-direction:column;gap:6px;">
+<li style="width:100%;background:#fff5f5;">Not a Swift language tutorial. Comfortable Swift syntax is assumed. If "optional chaining" or "trailing closures" feel unfamiliar, learn Swift first.</li>
+<li style="width:100%;background:#fff5f5;">Not a UIKit-to-SwiftUI migration guide. The series is SwiftUI-first; UIKit shows up only where it still wins.</li>
+<li style="width:100%;background:#fff5f5;">Not a WWDC recap. The framing is timeless: shipping production iOS apps. WWDC features get covered where they actually change practice, not as news.</li>
+<li style="width:100%;background:#fff5f5;">Not a paid course. Free on Medium. Tip the author if it helps you ship.</li>
+</ul>
+
+<div class="swui-cross">
+<h3>For Developers Building &amp; Selling</h3>
+<div class="swui-cross-grid">
+<div class="swui-cross-item">
+<h4>Mastering Claude Code</h4>
+<p>Pair the 100-article curriculum with the AI tool that doubles your shipping speed. 20 chapters, 50 hidden tips, MCP setup.</p>
+<a class="swui-cross-link" href="https://zerix1.gumroad.com/l/TBD-CLAUDECODE" target="_blank" rel="noopener">Get it on Gumroad <span class="swui-cross-price">$19</span></a>
+</div>
+<div class="swui-cross-item">
+<h4>Medium Income 2026</h4>
+<p>The exact playbook this 100-article list was published with — turn dev knowledge into Medium articles that actually earn.</p>
+<a class="swui-cross-link" href="https://zerix1.gumroad.com/l/bpevse" target="_blank" rel="noopener">Get the Playbook <span class="swui-cross-price">$19</span></a>
+</div>
+</div>
+</div>
+
+<h2 class="swui-h">Frequently Asked Questions</h2>
+
+<div class="swui-faq">
+<h4>Do I need a paid Medium subscription to read everything?</h4>
+<p>Some stories are free, others sit behind Medium's Member paywall. A Medium subscription ($5/month or $50/year) unlocks the whole site, not just this list, and gives you offline reading on the app.</p>
+</div>
+
+<div class="swui-faq">
+<h4>I've never written Swift before — can I still start at Article 1?</h4>
+<p>You'll struggle. The series assumes comfortable Swift syntax: optionals, closures, protocols, generics. Spend a few days on Apple's free <em>Swift Programming Language</em> book or Hacking with Swift's "100 Days of Swift" first, then come back.</p>
+</div>
+
+<div class="swui-faq">
+<h4>Is the order strict?</h4>
+<p>For beginners, yes — articles 1 to 15 build on each other. After Phase 1, the phases stand alone. You can read Phase 5 (Networking) before Phase 4 (Architecture) without missing context.</p>
+</div>
+
+<div class="swui-faq">
+<h4>How long until I'm at "expert" level?</h4>
+<p>Three to four months of consistent reading plus one real shipping project. Reading without shipping doesn't compound. The Phase 7 capstone exists for a reason — apply as you go.</p>
+</div>
+
+<div class="swui-faq">
+<h4>Will there be articles after Day 100?</h4>
+<p>The 100-article list is the curriculum. Follow-up pieces on advanced topics (Vision Pro, Swift 6 strict concurrency, SwiftUI on macOS, App Intents) ship on the same Medium account — follow to catch them.</p>
+</div>
+
+<div class="swui-faq">
+<h4>Can I share the list with my team?</h4>
+<p>Absolutely. Send the Medium list URL — it's built to be shared, bookmarked, and used as an onboarding curriculum for junior iOS devs. Each article stands alone, which makes it easy to assign specific phases as homework.</p>
+</div>
+
+<p style="margin-top:2em;padding:22px;background:#fff5f0;border:1px solid #ffe1d4;border-radius:8px;text-align:center;font-size:15px;">
+<strong>One article a day for 100 days.</strong> By the end you'll have shipped patterns, written tests, profiled performance, handled App Review, integrated payments, and built a complete production app — with a reading list you'll keep coming back to. <br><br>
+<a href="https://21zerixpm.medium.com/list/100daysswiftuitoexpert-069dcb77c2d2" target="_blank" rel="noopener" style="display:inline-block;background:#FA7343;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;padding:12px 30px;border-radius:6px;text-decoration:none;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;border:none;margin-top:10px;">Open The 100-Article List →</a>
+</p>
+
+</div>

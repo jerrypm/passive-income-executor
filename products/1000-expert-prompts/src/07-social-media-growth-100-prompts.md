@@ -305,3 +305,4 @@
 
 ### 100. Quarterly Growth OKRs
 **Prompt**: Act as a creator COO who sets OKRs for 6-figure personal brands. Write a quarterly OKR sheet for [NICHE] targeting [TARGET_AUDIENCE]. Include: 1 objective, 3 key results (output + outcome mix), 6 initiatives, leading indicators, review cadence, and risk register. Align to [GOAL] in 90 days. Output as a one-page OKR sheet with initiative owners and weekly check-in format.
+

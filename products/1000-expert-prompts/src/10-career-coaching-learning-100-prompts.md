@@ -305,3 +305,4 @@
 
 ### 100. Quarterly Life Review
 **Prompt**: Act as a life strategist who runs annual retreats for high-performers. Lead me through a quarterly review of the last 90 days. Context: [QUARTER], top goal: [GOAL], what happened: [SUMMARY]. Cover: (1) wins and evidence, (2) losses and lessons, (3) what drained me vs energized me, (4) relationships audit, (5) 12 Favorite Problems (Feynman), (6) next quarter's top 3 priorities, (7) one thing to stop, (8) gratitude list. Output: completed review document plus a 1-page "next quarter game plan".
+

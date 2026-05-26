@@ -1,0 +1,475 @@
+<!--
+TITLE: Mastering Claude Code — From Zero to Expert in 20 Chapters (50 Hidden Tips Inside)
+SEARCH DESCRIPTION: Most developers use 10% of Claude Code. This 150-page field guide takes you from raw install to a fully customized AI dev environment with CLAUDE.md, hooks, MCP servers, and subagents.
+LABELS: claude-code, ai-coding, developer-tools, anthropic, ebook, mcp, claude
+FEATURED IMAGE: Dark terminal / IDE screenshot with Claude Code interface
+-->
+
+<style>
+.mcc * { box-sizing: border-box; }
+.mcc { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.mcc p { margin: 0 0 1.5em; }
+.mcc a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.mcc a:hover { color: #000; border-bottom-color: #000; }
+
+.mcc h2.mcc-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+.mcc-hero {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 36px 30px;
+  border-radius: 8px;
+  margin: 1.5em 0 2em;
+  border-left: 4px solid #ff7f24;
+}
+.mcc-hero h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #ffa657;
+  font-size: 24px;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+.mcc-hero p { margin: 0 0 1em; font-size: 15px; line-height: 1.7; color: #c9d1d9; }
+.mcc-hero p:last-child { margin: 0; }
+.mcc-hero strong { color: #7bed9f; }
+.mcc-hero code { background: rgba(255,255,255,0.08); color: #ffa657; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+/* Before/After table */
+.mcc-ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 1.5em 0;
+}
+.mcc-ba-card {
+  padding: 18px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.mcc-ba-before {
+  background: #fff5f5;
+  border-left: 4px solid #c62641;
+  color: #444;
+}
+.mcc-ba-after {
+  background: #f5fff8;
+  border-left: 4px solid #2e7d32;
+  color: #1a3a1a;
+}
+.mcc-ba-label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.mcc-ba-before .mcc-ba-label { color: #c62641; }
+.mcc-ba-after .mcc-ba-label { color: #2e7d32; }
+.mcc-ba-card ul { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+.mcc-ba-card li { list-style: none !important; padding: 4px 0 !important; margin: 0 !important; font-size: 13.5px; }
+.mcc-ba-card li::before { display: none !important; }
+.mcc-ba-before li::before { content: "✗ " !important; color: #c62641 !important; display: inline !important; font-weight: 700; }
+.mcc-ba-after li::before { content: "✓ " !important; color: #2e7d32 !important; display: inline !important; font-weight: 700; }
+
+/* Part card */
+.mcc-part {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.mcc-part-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ff7f24;
+  margin-bottom: 4px;
+}
+.mcc-part-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 10px;
+}
+.mcc-part-desc { font-size: 14px; color: #555; margin: 0 0 12px; line-height: 1.65; }
+.mcc-part-chapters {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.mcc-part-chapters li {
+  list-style: none !important;
+  padding: 6px 0 !important;
+  margin: 0 !important;
+  font-size: 13px;
+  color: #444;
+  border-bottom: 1px solid #f5f5f5;
+}
+.mcc-part-chapters li:last-child { border-bottom: none; }
+.mcc-part-chapters li::before { display: none !important; }
+.mcc-part-chapters strong {
+  font-family: 'Monaco','Menlo',monospace;
+  color: #c62641;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+/* Tips highlight */
+.mcc-tips {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e0e0;
+  padding: 30px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+}
+.mcc-tips h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #ff7f24;
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+.mcc-tips ul { list-style: none !important; padding: 0 !important; margin: 14px 0 0 !important; }
+.mcc-tips li {
+  list-style: none !important;
+  padding: 10px 0 !important;
+  margin: 0 !important;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 14px;
+  color: #d0d0d0;
+  line-height: 1.65;
+}
+.mcc-tips li::before {
+  content: "→ " !important;
+  color: #ff7f24 !important;
+  display: inline !important;
+  font-weight: 700;
+}
+.mcc-tips code { background: rgba(255,127,36,0.15); color: #ffa657; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+/* Files */
+.mcc-files {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 1em 0 1.5em;
+}
+.mcc-files td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+.mcc-files td:first-child {
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12px;
+  color: #c62641;
+  white-space: nowrap;
+  width: 38%;
+}
+.mcc-files tr:last-child td { border-bottom: none; }
+
+/* CTA */
+.mcc-cta {
+  background: linear-gradient(135deg, #0d1117 0%, #1f2937 100%);
+  color: #fff;
+  padding: 36px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+  text-align: center;
+  border: 1px solid #2d3748;
+}
+.mcc-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px;
+  margin: 0 0 8px;
+  color: #ffa657;
+}
+.mcc-cta p { margin: 0 0 18px; color: #c9d1d9; font-size: 15px; }
+.mcc-cta-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  display: block;
+  margin: 10px 0;
+  color: #fff;
+}
+.mcc-cta-old {
+  text-decoration: line-through;
+  opacity: 0.5;
+  font-size: 22px;
+  margin-right: 10px;
+  font-weight: 400;
+  color: #c9d1d9;
+}
+.mcc-buy {
+  display: inline-block;
+  background: #ff7f24;
+  color: #fff !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 38px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.mcc-buy:hover {
+  background: #e86b10;
+  color: #fff !important;
+  border-bottom: none !important;
+}
+
+/* FAQ */
+.mcc-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.mcc-faq:last-of-type { border-bottom: none; }
+.mcc-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.mcc-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+.mcc-features {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 14px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mcc-features li {
+  list-style: none !important;
+  padding: 5px 12px !important;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+  font-weight: 500;
+}
+.mcc-features li::before { display: none !important; }
+
+@media (max-width: 600px) {
+  .mcc-ba { grid-template-columns: 1fr; }
+  .mcc-cta-price { font-size: 32px; }
+  .mcc-buy { display: block; }
+  .mcc-files td:first-child { white-space: normal; }
+}
+</style>
+
+<div class="mcc">
+
+<img style="width:100%;border-radius:8px;margin:0 0 1.5em;box-shadow:0 2px 12px rgba(0,0,0,0.08);" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80" alt="Developer terminal with code editor" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Luca Bravo on Unsplash</p>
+
+<p>You installed Claude Code. You type prompts. You get code back. Useful — but not transformative.</p>
+
+<p><strong>That's not how the top 1% of Claude Code users work.</strong></p>
+
+<p>They've tuned a <code>CLAUDE.md</code> that makes every session context-aware from the first message. They write prompts that produce production-grade code on the first run. They've wired hooks that automate the repetitive parts of their workflow. They've plugged in MCP servers that give Claude access to their entire toolchain. They run subagents in parallel and ship features in a fraction of the time.</p>
+
+<div class="mcc-hero">
+<h3>This book teaches you exactly how to do all of that.</h3>
+<p><strong>Mastering Claude Code</strong> is a 150-page field guide written for developers who use Claude Code every single day. 20 chapters across 5 parts take you from raw install to a fully customized AI development environment — with <strong>50 hidden tips</strong> most developers never discover.</p>
+<p>Written by a developer, for developers. No fluff. No marketing prose. Every chapter ends with a hands-on exercise.</p>
+</div>
+
+<h2 class="mcc-h">Before vs. After</h2>
+
+<p>What changes when you go from blank-CLAUDE.md user to power user.</p>
+
+<div class="mcc-ba">
+<div class="mcc-ba-card mcc-ba-before">
+<span class="mcc-ba-label">Before</span>
+<ul>
+<li>Blank or stub <code>CLAUDE.md</code></li>
+<li>Generic, chatbot-style prompts</li>
+<li>Manually run tests after every change</li>
+<li>Reset context every session</li>
+<li>Hand-stitch context for every refactor</li>
+<li>No MCP servers connected</li>
+<li>Never run parallel subagents</li>
+</ul>
+</div>
+<div class="mcc-ba-card mcc-ba-after">
+<span class="mcc-ba-label">After</span>
+<ul>
+<li>Project-aware sessions from message 1</li>
+<li>Engineered prompts → first-run production code</li>
+<li>Hooks auto-run tests and pipe failures back</li>
+<li>Carry state cleanly across sessions</li>
+<li>MCP servers expose docs, DB, internal APIs</li>
+<li>Parallel subagents on independent tasks</li>
+<li>Ship features in a fraction of the time</li>
+</ul>
+</div>
+</div>
+
+<h2 class="mcc-h">What's Inside — 5 Parts, 20 Chapters</h2>
+
+<div class="mcc-part">
+<div class="mcc-part-label">Part 1</div>
+<h3 class="mcc-part-title">Foundations</h3>
+<p class="mcc-part-desc">Everything you need to go from zero to a working, properly configured environment.</p>
+<ul class="mcc-part-chapters">
+<li><strong>Ch 1</strong>What Claude Code Actually Is — architecture, how it thinks, what makes it different from Copilot and Cursor</li>
+<li><strong>Ch 2</strong>Installation and First Configuration — setup across macOS, Linux, WSL; first-run gotchas; verifying your environment</li>
+<li><strong>Ch 3</strong>The <code>CLAUDE.md</code> File — the single most important file in your workflow; what to put in it, why 90% of devs leave it blank</li>
+<li><strong>Ch 4</strong>Your First Real Session — running a complete feature from prompt to commit; reading the output; iterating effectively</li>
+</ul>
+</div>
+
+<div class="mcc-part">
+<div class="mcc-part-label">Part 2</div>
+<h3 class="mcc-part-title">Prompt Engineering for Developers</h3>
+<p class="mcc-part-desc">Stop prompting like a chatbot user. Start prompting like an engineer.</p>
+<ul class="mcc-part-chapters">
+<li><strong>Ch 5</strong>How Claude Reads Your Prompts — tokenization intuition, context windows, why specificity beats length</li>
+<li><strong>Ch 6</strong>Expert Prompt Patterns — role anchoring, constraint framing, output specification, decomposition strategies</li>
+<li><strong>Ch 7</strong>Code-Specific Prompt Techniques — architecture, debugging, refactoring, test-writing prompts with concrete templates</li>
+<li><strong>Ch 8</strong>Iterating Without Losing Context — thread management, when to reset, how to carry state across sessions</li>
+</ul>
+</div>
+
+<div class="mcc-part">
+<div class="mcc-part-label">Part 3</div>
+<h3 class="mcc-part-title">Customization and Workflow Automation</h3>
+<p class="mcc-part-desc">Make Claude Code behave exactly how your team works.</p>
+<ul class="mcc-part-chapters">
+<li><strong>Ch 9</strong>Advanced <code>CLAUDE.md</code> Patterns — project-specific rules, persona calibration, team vs personal CLAUDE.md</li>
+<li><strong>Ch 10</strong>Hooks — Automating the Boring Parts — pre/post hooks for linting, testing, committing; real examples</li>
+<li><strong>Ch 11</strong>Slash Commands and Custom Shortcuts — building a personal command library, team-shared commands</li>
+<li><strong>Ch 12</strong>Integrating Your Existing Toolchain — git workflows, CI/CD, terminal multiplexers, editor integration</li>
+</ul>
+</div>
+
+<div class="mcc-part">
+<div class="mcc-part-label">Part 4</div>
+<h3 class="mcc-part-title">Extending Claude Code with MCP</h3>
+<p class="mcc-part-desc">Give Claude access to everything in your dev environment.</p>
+<ul class="mcc-part-chapters">
+<li><strong>Ch 13</strong>What MCP Is and Why It Matters — the Model Context Protocol explained without jargon</li>
+<li><strong>Ch 14</strong>Installing and Configuring MCP Servers — the essential servers, config syntax, troubleshooting connections</li>
+<li><strong>Ch 15</strong>Building a Simple MCP Server — from scratch in Node.js or Python; exposing your internal APIs to Claude</li>
+<li><strong>Ch 16</strong>Real-World MCP Workflows — database-aware sessions, docs-aware sessions, codebase-wide refactors with context</li>
+</ul>
+</div>
+
+<div class="mcc-part">
+<div class="mcc-part-label">Part 5</div>
+<h3 class="mcc-part-title">Advanced Techniques</h3>
+<p class="mcc-part-desc">The techniques that separate power users from everyone else.</p>
+<ul class="mcc-part-chapters">
+<li><strong>Ch 17</strong>Parallel Development with Subagents — running multiple Claude instances simultaneously; orchestration patterns</li>
+<li><strong>Ch 18</strong>The 50 Hidden Tips — the definitive chapter; one tip per page; months of research distilled</li>
+<li><strong>Ch 19</strong>Real-World Case Studies — three complete projects built with Claude Code from spec to production; annotated transcripts</li>
+<li><strong>Ch 20</strong>The Claude Code Workflow You'll Actually Stick To — bringing all five parts into a repeatable daily practice</li>
+</ul>
+</div>
+
+<div class="mcc-tips">
+<h3>Chapter 18 — The 50 Hidden Tips</h3>
+<p style="margin:0 0 6px;font-size:14px;color:#c9d1d9;">There are behaviors, flags, patterns, and config tricks in Claude Code that aren't in the official docs. They're scattered across GitHub issues, Discord channels, X threads, and the CLI source. I spent months finding them. Chapter 18 puts all 50 in one place.</p>
+<ul>
+<li>The <code>/clear</code> timing trick that recovers degraded output quality mid-session without losing workflow state</li>
+<li>The <code>CLAUDE.md</code> pattern that makes Claude refuse to touch specific files — generated files, secrets, legacy debt</li>
+<li>The prompt prefix that reliably produces idiomatic, production-grade code instead of tutorial-style scaffolding</li>
+<li>How to use <code>--continue</code> and <code>--resume</code> flags to reconnect to sessions after a crash or network drop</li>
+<li>The MCP config entry that gives Claude read access to your local docs folder — so it stops hallucinating your internal API</li>
+<li>The hook pattern that auto-runs your test suite after every accepted code change and pipes failures back in</li>
+</ul>
+<p style="margin:14px 0 0;font-size:13px;color:#a0aec0;font-style:italic;">Plus 44 more — one per page.</p>
+</div>
+
+<h2 class="mcc-h">What You Get</h2>
+
+<table class="mcc-files">
+<tr><td>mastering-claude-code.pdf</td><td>Full 150-page PDF with table of contents, chapter navigation, and code blocks formatted for readability. Read on any device.</td></tr>
+<tr><td>mastering-claude-code.md</td><td>Complete book in Markdown source. Import into Obsidian, Notion, Bear, or any editor. Search, annotate, copy code blocks directly.</td></tr>
+<tr><td>Free updates</td><td>Every future revision delivered free to your Gumroad library. Claude Code ships updates regularly — the book stays current.</td></tr>
+</table>
+
+<ul class="mcc-features">
+<li>20 chapters</li>
+<li>50 hidden tips</li>
+<li>150 pages PDF</li>
+<li>Markdown source</li>
+<li>CLAUDE.md patterns</li>
+<li>Hooks examples</li>
+<li>MCP server setup</li>
+<li>Parallel subagents</li>
+<li>Free lifetime updates</li>
+<li>14-day refund</li>
+</ul>
+
+<h2 class="mcc-h">Who This Is For</h2>
+
+<p><strong>Developers who just installed Claude Code</strong> and want to skip the six-month learning curve everyone else stumbles through.</p>
+
+<p><strong>Experienced Claude Code users</strong> who have a gut feeling they're leaving huge capability on the table — and are right.</p>
+
+<p><strong>Engineering leads and teams</strong> evaluating whether Claude Code is worth standardizing on (spoiler: it is, if you set it up correctly).</p>
+
+<h2 class="mcc-h">Who It's Not For</h2>
+
+<ul class="mcc-features" style="flex-direction:column;gap:6px;">
+<li style="width:100%;background:#fff5f5;">People looking for a basic "how to install Claude Code" blog post (free on the Anthropic docs site)</li>
+<li style="width:100%;background:#fff5f5;">People who've never written code before (this book assumes a working developer)</li>
+<li style="width:100%;background:#fff5f5;">People who want theory without practice (every chapter ends with a hands-on exercise)</li>
+</ul>
+
+<div class="mcc-cta">
+<h3>Mastering Claude Code</h3>
+<p>From zero to expert — 20 chapters, 50 hidden tips, free lifetime updates.</p>
+<span class="mcc-cta-price"><span class="mcc-cta-old">$29</span>$19</span>
+<p style="font-size:13px;color:#a0aec0;">Launch price — first 100 buyers. Then raises to $29.</p>
+<a class="mcc-buy" href="https://zerix1.gumroad.com/l/TBD-CLAUDECODE" target="_blank" rel="noopener">Get the Book — $19</a>
+</div>
+
+<h2 class="mcc-h">Frequently Asked Questions</h2>
+
+<div class="mcc-faq">
+<h4>Will this be updated when Claude Code changes?</h4>
+<p>Yes. Claude Code ships updates regularly. When significant features drop, the book gets a revision. You get all updates free, forever, through your Gumroad library.</p>
+</div>
+
+<div class="mcc-faq">
+<h4>What version of Claude Code does this cover?</h4>
+<p>The book is written and tested against the current Claude Code CLI as of early 2026. The core techniques (<code>CLAUDE.md</code>, hooks, MCP, subagents) are stable and remain relevant across versions.</p>
+</div>
+
+<div class="mcc-faq">
+<h4>Is this for a specific language or framework?</h4>
+<p>No. The book covers Claude Code's workflow and configuration layer, which is language-agnostic. Code examples are in Python, TypeScript, Swift, and shell — but the techniques apply to any stack.</p>
+</div>
+
+<div class="mcc-faq">
+<h4>What's the refund policy?</h4>
+<p>14 days, no questions asked. If the book doesn't give you at least three concrete improvements to your Claude Code workflow, reply to the receipt for a full refund.</p>
+</div>
+
+<div class="mcc-faq">
+<h4>I'm new to Claude Code — should I wait until I have more experience?</h4>
+<p>No. The book is structured so a brand-new user starts at Part 1 and builds up. Experienced users typically skim Parts 1–2 and dig into Parts 3–5 — but the early chapters cover patterns even veterans miss.</p>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>One workflow improvement from chapter 18 pays for this in the first hour.</strong> If you use Claude Code and you haven't customized your <code>CLAUDE.md</code>, wired any hooks, or connected an MCP server — this book is for you.
+</p>
+
+</div>

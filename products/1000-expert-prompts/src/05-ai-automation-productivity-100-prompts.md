@@ -305,3 +305,4 @@
 
 ### 100. Meta-Learning Retrospective
 **Prompt**: Act as a meta-learning coach. Over the last month I learned [WHAT] via [METHOD] with results [RESULTS]. Diagnose what worked, what wasted time, and which techniques to double down on. Apply Scott Young's ultralearning principles (directness, drill, feedback, retrieval). Output as a meta-learning retrospective report with: method scorecard, time audit, retention check via recall test, and a revised learning protocol for the next month with 3 experiments.
+

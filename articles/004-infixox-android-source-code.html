@@ -1,0 +1,473 @@
+<!--
+TITLE: InfiXOX — Full Android Game Source Code (Kotlin + Jetpack Compose + AdMob)
+SEARCH DESCRIPTION: Get the complete source code for InfiXOX, a modern Tic-Tac-Toe game with infinite pieces mechanic. Built with Kotlin, Jetpack Compose, Material 3, MVVM architecture, and AdMob monetization. Published on Google Play Store.
+LABELS: android, kotlin, jetpack-compose, source-code, game, admob, open-source
+-->
+
+<style>
+.ix * { box-sizing: border-box; }
+.ix { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.ix p { margin: 0 0 1.5em; }
+.ix a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.ix a:hover { color: #000; border-bottom-color: #000; }
+.ix strong { color: #222; }
+
+.ix h2.ix-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #7B61FF;
+}
+
+/* Hero section */
+.ix-hero {
+  background: linear-gradient(135deg, #0F0F1E 0%, #1B1B2B 50%, #2D1B4E 100%);
+  padding: 36px 30px;
+  border-radius: 10px;
+  margin: 0 0 2em;
+  text-align: center;
+  color: #fff;
+}
+.ix-hero-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: #fff;
+}
+.ix-hero-sub {
+  font-size: 16px;
+  color: #B0B0C3;
+  margin: 0 0 20px;
+}
+.ix-hero-tags {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+}
+.ix-hero-tag {
+  background: rgba(123,97,255,0.2);
+  color: #A78BFA;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.ix-hero-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #7B61FF;
+  margin: 16px 0 6px;
+}
+.ix-hero-note {
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 20px;
+}
+.ix-hero-buy {
+  display: inline-block;
+  background: #7B61FF;
+  color: #fff !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 40px;
+  border-radius: 8px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.ix-hero-buy:hover {
+  background: #6A4FE8;
+  color: #fff !important;
+  border-bottom: none !important;
+  box-shadow: 0 4px 20px rgba(123,97,255,0.4);
+}
+.ix-hero-playstore {
+  display: inline-block;
+  color: #B0B0C3 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  margin-top: 12px;
+  border-bottom: 1px solid rgba(176,176,195,0.3) !important;
+}
+.ix-hero-playstore:hover { color: #fff !important; }
+
+/* Screenshots */
+.ix-screens {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 2em 0;
+}
+.ix-screens img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Feature cards */
+.ix-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 1.5em 0;
+}
+.ix-feat {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 20px;
+}
+.ix-feat:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.ix-feat-icon {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+.ix-feat-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 6px;
+}
+.ix-feat-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Tech stack */
+.ix-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1em 0;
+}
+.ix-stack-item {
+  background: #f5f3ff;
+  border: 1px solid #e8e0ff;
+  color: #5B21B6;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+/* File structure */
+.ix-files {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 20px 24px;
+  border-radius: 8px;
+  font-family: 'Monaco','Menlo','Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  margin: 1em 0;
+  -webkit-overflow-scrolling: touch;
+}
+.ix-files .ix-dir { color: #7bed9f; }
+.ix-files .ix-file { color: #d4d4d4; }
+.ix-files .ix-comment { color: #6a9955; }
+
+/* What you get table */
+.ix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 1em 0;
+}
+.ix-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+.ix-table td:first-child {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #222;
+  width: 35%;
+  white-space: nowrap;
+}
+.ix-table tr:last-child td { border-bottom: none; }
+.ix-table tr:hover td { background: #fafafa; }
+
+/* Highlight box */
+.ix-highlight {
+  background: #f5f3ff;
+  border-left: 4px solid #7B61FF;
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5em 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.ix-highlight strong { color: #5B21B6; }
+
+/* Use cases */
+.ix-uses {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 1em 0 !important;
+}
+.ix-uses li {
+  list-style: none !important;
+  padding: 10px 16px !important;
+  margin: 6px 0;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.ix-uses li::before { display: none !important; }
+.ix-uses li strong { color: #5B21B6; }
+
+/* FAQ */
+.ix-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.ix-faq:last-of-type { border-bottom: none; }
+.ix-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.ix-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+/* CTA bottom */
+.ix-cta {
+  background: linear-gradient(135deg, #0F0F1E 0%, #2D1B4E 100%);
+  color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  margin: 2.5em 0;
+  text-align: center;
+}
+.ix-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 22px; margin: 0 0 8px; color: #fff;
+}
+.ix-cta p { margin: 0 0 18px; font-size: 15px; color: #B0B0C3; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .ix-hero { padding: 24px 18px; }
+  .ix-hero-title { font-size: 24px; }
+  .ix-hero-price { font-size: 28px; }
+  .ix-screens { grid-template-columns: 1fr; }
+  .ix-features { grid-template-columns: 1fr; }
+  .ix-files { font-size: 11px; padding: 14px 16px; }
+  .ix-table td:first-child { white-space: normal; }
+}
+</style>
+
+<div class="ix">
+
+<!-- HERO -->
+<div class="ix-hero">
+<div class="ix-hero-tags">
+<span class="ix-hero-tag">Kotlin</span>
+<span class="ix-hero-tag">Jetpack Compose</span>
+<span class="ix-hero-tag">Material 3</span>
+<span class="ix-hero-tag">AdMob</span>
+<span class="ix-hero-tag">MVVM</span>
+</div>
+<h2 class="ix-hero-title" style="border:none;padding:0;margin:0 0 6px;text-transform:none;letter-spacing:0;">InfiXOX</h2>
+<p class="ix-hero-sub">Complete Android Game Source Code -- Infinite Tic-Tac-Toe with AI Opponent</p>
+<div class="ix-hero-price">$14</div>
+<p class="ix-hero-note">2,555 lines of Kotlin / 23 files / Published on Google Play</p>
+<a class="ix-hero-buy" href="https://zerix1.gumroad.com/l/pheupx" target="_blank" rel="noopener">Get Source Code</a>
+<br/>
+<a class="ix-hero-playstore" href="https://play.google.com/store/apps/details?id=com.jeripurnama.infixox" target="_blank" rel="noopener">View on Google Play Store</a>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="ix-screens">
+<img src="https://play-lh.googleusercontent.com/dfDHz8av54sX2KtGJuHKVKSEZARY74HNsZtHxDZHeBeuZqWyzJaEV7JcXxny8jQsGfFJ_FX1sytXBVy5EQrkOTI=w1052-h592-rw" alt="InfiXOX gameplay screenshot - game board with infinite pieces" />
+<img src="https://play-lh.googleusercontent.com/m_R7p2poOcElsvyv783b1EJqsUVlPxQRk09yhlTPcjRqiz3B1BC4R0AyOSlScX7xWeatnpFED-BYcws6CUQG9MQ=w1052-h592-rw" alt="InfiXOX menu and game modes" />
+</div>
+
+<p>InfiXOX is a <strong>modern twist on Tic-Tac-Toe</strong> with one game-changing rule: each player can only have <strong>3 pieces on the board at a time</strong>. When you place your 4th piece, your oldest one vanishes. No more draws. Every game has a winner.</p>
+
+<p>This is the <strong>complete source code</strong> for the app that's currently live on the Google Play Store. Production-ready, clean architecture, fully documented. Buy it, customize it, publish it as your own.</p>
+
+<h2 class="ix-h">What Makes This Different</h2>
+
+<div class="ix-features">
+<div class="ix-feat">
+<div class="ix-feat-icon">&#9854;</div>
+<div class="ix-feat-title">Infinite Pieces Mechanic</div>
+<p class="ix-feat-desc">Max 3 pieces per player. Oldest piece vanishes when you place #4. Eliminates all draws -- every game ends with a winner.</p>
+</div>
+<div class="ix-feat">
+<div class="ix-feat-icon">&#129302;</div>
+<div class="ix-feat-title">7-Level AI Strategy</div>
+<p class="ix-feat-desc">Smart opponent with fork detection, center control, and strategic corner play. Not random -- actually challenging to beat.</p>
+</div>
+<div class="ix-feat">
+<div class="ix-feat-icon">&#127912;</div>
+<div class="ix-feat-title">Jetpack Compose UI</div>
+<p class="ix-feat-desc">100% Compose with Material 3 dark theme, animated confetti, splash screen animations, and smooth transitions.</p>
+</div>
+<div class="ix-feat">
+<div class="ix-feat-icon">&#128176;</div>
+<div class="ix-feat-title">AdMob Ready</div>
+<p class="ix-feat-desc">Full Google AdMob integration with test IDs for debug and production IDs for release. Just swap your ad unit IDs.</p>
+</div>
+</div>
+
+<h2 class="ix-h">Tech Stack</h2>
+
+<div class="ix-stack">
+<span class="ix-stack-item">Kotlin 100%</span>
+<span class="ix-stack-item">Jetpack Compose</span>
+<span class="ix-stack-item">Material 3</span>
+<span class="ix-stack-item">MVVM + StateFlow</span>
+<span class="ix-stack-item">Coroutines</span>
+<span class="ix-stack-item">Google AdMob SDK</span>
+<span class="ix-stack-item">SoundPool</span>
+<span class="ix-stack-item">Android 9+ (API 28)</span>
+<span class="ix-stack-item">Target Android 15 (API 35)</span>
+</div>
+
+<h2 class="ix-h">Project Structure</h2>
+
+<div class="ix-files">
+<span class="ix-dir">app/src/main/java/com/jeripurnama/infixox/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;MainActivity.kt</span> <span class="ix-comment">// Navigation: Splash > Menu > Game</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;game/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;GameLogic.kt</span> <span class="ix-comment">// Win detection, draw logic</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;AIStrategy.kt</span> <span class="ix-comment">// 7-tier AI decision tree</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;model/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;GameModels.kt</span> <span class="ix-comment">// Data classes: CellState, Move, GameState</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;viewmodel/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;GameViewModel.kt</span> <span class="ix-comment">// MVVM state management (StateFlow)</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;sound/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;SoundManager.kt</span> <span class="ix-comment">// SoundPool + SharedPreferences</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;ui/screens/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;SplashScreen.kt</span> <span class="ix-comment">// Animated intro</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;MainMenuScreen.kt</span> <span class="ix-comment">// Solo / Local Duel selection</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;GameScreen.kt</span> <span class="ix-comment">// Main game UI container</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;AdBanner.kt</span> <span class="ix-comment">// AdMob banner component</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;ui/components/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;GameBoard.kt</span> <span class="ix-comment">// 3x3 grid with tap handling</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;ScoreBoard.kt</span> <span class="ix-comment">// Player scores display</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;Confetti.kt</span> <span class="ix-comment">// Victory celebration effect</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;+ 6 more components...</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;ui/theme/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;Color.kt, Theme.kt, Type.kt</span> <span class="ix-comment">// Material 3 theming</span><br/>
+<span class="ix-dir">&nbsp;&nbsp;res/raw/</span><br/>
+<span class="ix-file">&nbsp;&nbsp;&nbsp;&nbsp;cell_tap.wav, winning.wav, game_over.wav</span>
+</div>
+
+<h2 class="ix-h">What You Get</h2>
+
+<table class="ix-table">
+<tr><td>Source Code</td><td>23 Kotlin files, 2,555 lines of clean, readable code</td></tr>
+<tr><td>Architecture</td><td>MVVM with StateFlow -- proper separation of concerns</td></tr>
+<tr><td>Game Modes</td><td>Solo (vs 7-level AI) + Local Duel (2-player PvP)</td></tr>
+<tr><td>Match System</td><td>Best of 5 rounds with score tracking</td></tr>
+<tr><td>UI/UX</td><td>Material 3 dark theme, animations, confetti, sound effects</td></tr>
+<tr><td>Monetization</td><td>AdMob banner ads with debug/release build configurations</td></tr>
+<tr><td>Sound Effects</td><td>3 WAV files (tap, win, game over) with toggle preference</td></tr>
+<tr><td>Assets</td><td>App icon (all densities), vectors, gradients, logo</td></tr>
+<tr><td>Build Config</td><td>Gradle KTS with version catalog, release signing ready</td></tr>
+<tr><td>Play Store Proof</td><td>Currently live at com.jeripurnama.infixox</td></tr>
+</table>
+
+<div class="ix-highlight">
+<strong>AdMob setup is plug-and-play.</strong> The code already has separate ad unit IDs for debug (Google test ads) and release (production ads). Just replace the production IDs in <code>build.gradle.kts</code> with your own AdMob IDs, build a release APK, and publish. Your own monetized game in under an hour.
+</div>
+
+<h2 class="ix-h">Who Should Buy This</h2>
+
+<ul class="ix-uses">
+<li><strong>Android developers learning Jetpack Compose</strong> -- a complete, real-world Compose app to study and extend. Better than any tutorial.</li>
+<li><strong>Indie developers who want to publish fast</strong> -- reskin the theme, change the app name, swap AdMob IDs, publish on Play Store. Done.</li>
+<li><strong>Students building a portfolio</strong> -- understand MVVM, StateFlow, Coroutines, and game AI through working production code.</li>
+<li><strong>Anyone who wants passive income from apps</strong> -- the AdMob integration is already built. Publish and let banner ads generate revenue.</li>
+</ul>
+
+<h2 class="ix-h">AI Strategy Deep Dive</h2>
+
+<p>The AI opponent uses a <strong>7-tier priority decision tree</strong>, not random moves. Here's how it thinks:</p>
+
+<table class="ix-table">
+<tr><td>Priority 1</td><td><strong>Win immediately</strong> if a winning move is available</td></tr>
+<tr><td>Priority 2</td><td><strong>Block player's win</strong> -- don't let the player complete a line</td></tr>
+<tr><td>Priority 3</td><td><strong>Create a fork</strong> -- set up 2+ ways to win simultaneously</td></tr>
+<tr><td>Priority 4</td><td><strong>Block player's fork</strong> -- prevent the player from creating forks</td></tr>
+<tr><td>Priority 5</td><td><strong>Take center</strong> -- strongest strategic position</td></tr>
+<tr><td>Priority 6</td><td><strong>Take opposite corner</strong> -- counter the player's corner</td></tr>
+<tr><td>Priority 7</td><td><strong>Random available cell</strong> -- fallback when no strategic move exists</td></tr>
+</table>
+
+<p>Combined with the infinite pieces mechanic (where old pieces vanish), this creates a constantly shifting board where the AI genuinely challenges you. It's not tic-tac-toe as you know it.</p>
+
+<h2 class="ix-h">How to Customize</h2>
+
+<table class="ix-table">
+<tr><td>Change colors</td><td>Edit <code>Color.kt</code> -- all colors in one file (Material 3 theme)</td></tr>
+<tr><td>Swap AdMob IDs</td><td>Edit <code>build.gradle.kts</code> -- replace <code>manifestPlaceholders</code> values</td></tr>
+<tr><td>Change app name</td><td>Edit <code>strings.xml</code> -- all 80+ strings in one file</td></tr>
+<tr><td>Add difficulty levels</td><td>Modify <code>AIStrategy.kt</code> -- skip priorities for easier AI</td></tr>
+<tr><td>Add new game modes</td><td>Extend <code>GameViewModel.kt</code> -- the state management is modular</td></tr>
+<tr><td>Change board size</td><td>Modify <code>GameConstants</code> -- designed to be adjustable</td></tr>
+<tr><td>Add interstitial ads</td><td>Follow the same pattern as <code>AdBanner.kt</code></td></tr>
+<tr><td>Publish to Play Store</td><td>Generate your keystore, update <code>build.gradle.kts</code>, build release APK</td></tr>
+</table>
+
+<h2 class="ix-h">Frequently Asked Questions</h2>
+
+<div class="ix-faq">
+<h4>Can I publish this on the Play Store?</h4>
+<p>Yes. Change the package name, app name, colors, and AdMob IDs. It becomes your app. Many buyers do exactly this.</p>
+</div>
+
+<div class="ix-faq">
+<h4>Do I need to credit the original developer?</h4>
+<p>No. This is a full source code license. You can use it commercially, modify it, and publish it under your own name.</p>
+</div>
+
+<div class="ix-faq">
+<h4>What Android Studio version do I need?</h4>
+<p>Android Studio Hedgehog or newer. The project uses Gradle KTS with version catalogs (modern setup).</p>
+</div>
+
+<div class="ix-faq">
+<h4>Is the AdMob integration production-ready?</h4>
+<p>Yes. Debug builds automatically use Google's test ad IDs (prevents policy violations during development). Release builds use your production IDs. Just swap the IDs in the build config.</p>
+</div>
+
+<div class="ix-faq">
+<h4>Can I add more features?</h4>
+<p>Absolutely. The MVVM architecture makes it straightforward to add online multiplayer, leaderboards, different board sizes, or in-app purchases. The code is clean and well-structured for extension.</p>
+</div>
+
+<div class="ix-faq">
+<h4>What if I get stuck?</h4>
+<p>Drop a comment below or reach out. I built this app and I'm happy to help with setup or customization questions.</p>
+</div>
+
+<!-- CTA -->
+<div class="ix-cta">
+<h3>Get InfiXOX Source Code</h3>
+<p>2,555 lines of production Kotlin. Jetpack Compose + Material 3 + MVVM + AdMob. Published on Play Store.</p>
+<a class="ix-hero-buy" href="https://zerix1.gumroad.com/l/pheupx" target="_blank" rel="noopener" style="margin-top:4px;">Download for $14</a>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>Have questions before buying?</strong> Drop a comment below -- I respond to every one.
+</p>
+
+</div>

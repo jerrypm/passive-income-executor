@@ -1,0 +1,448 @@
+<!--
+TITLE: 5 Claude Code Slash Commands I Wish I Knew Sooner
+SEARCH DESCRIPTION: Stop doing things the hard way. These 5 Claude Code slash commands will change how you write, review, and ship code from your terminal.
+LABELS: claude-code, ai, developer-tools, productivity, cli, terminal
+-->
+
+<style>
+.cc * { box-sizing: border-box; }
+.cc { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.cc p { margin: 0 0 1.5em; }
+.cc a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.cc a:hover { color: #000; border-bottom-color: #000; }
+.cc strong { color: #222; }
+
+.cc h2.cc-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+.cc-hero {
+  width: 100%;
+  border-radius: 8px;
+  margin: 0 0 2em;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.cc-img {
+  width: 100%;
+  border-radius: 6px;
+  margin: 1.5em 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.cc-caption {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  margin: -1em 0 1.5em;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Command Card */
+.cc-cmd {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 0;
+  margin: 2em 0;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.cc-cmd:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+.cc-cmd-header {
+  background: #1e1e1e;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.cc-cmd-num {
+  background: #ff7f24;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cc-cmd-name {
+  font-family: 'Monaco','Menlo','Ubuntu Mono', monospace;
+  font-size: 20px;
+  color: #7bed9f;
+  margin: 0;
+}
+.cc-cmd-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  background: rgba(255,127,36,0.2);
+  color: #ff7f24;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cc-cmd-body { padding: 24px; }
+
+.cc-cmd-subtitle {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 12px;
+}
+
+/* Code blocks */
+.cc-code {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px 20px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1em 0;
+  font-family: 'Monaco','Menlo','Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-overflow-scrolling: touch;
+}
+.cc-code .cc-comment { color: #6a9955; }
+.cc-code .cc-cmd-text { color: #7bed9f; }
+.cc-code .cc-flag { color: #569cd6; }
+.cc-code .cc-string { color: #ce9178; }
+
+/* Why it matters box */
+.cc-why {
+  background: #f0f7ff;
+  border-left: 3px solid #4facfe;
+  padding: 14px 18px;
+  border-radius: 0 6px 6px 0;
+  margin: 16px 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.cc-why strong { color: #1565c0; }
+
+/* Pro tip */
+.cc-tip {
+  background: #fff8f0;
+  border-left: 3px solid #ff7f24;
+  padding: 12px 18px;
+  border-radius: 0 6px 6px 0;
+  margin: 14px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.cc-tip strong { color: #ff7f24; }
+
+/* Keyboard shortcut */
+.cc-key {
+  display: inline-block;
+  background: #e8e8e8;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-family: 'Monaco','Menlo', monospace;
+  font-size: 12px;
+  color: #333;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+/* Comparison table */
+.cc-table-wrap {
+  overflow-x: auto;
+  margin: 1.5em 0;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+}
+.cc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 500px;
+  font-family: 'Montserrat', sans-serif;
+}
+.cc-table th {
+  background: #1e1e1e;
+  color: #7bed9f;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.cc-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #444;
+}
+.cc-table code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #c62641;
+}
+.cc-table tbody tr:hover td { background: #fafafa; }
+
+/* CTA */
+.cc-cta {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 28px;
+  border-radius: 8px;
+  margin: 2.5em 0;
+  text-align: center;
+}
+.cc-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+.cc-cta p { margin: 0; font-size: 15px; opacity: 0.9; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .cc-cmd-body { padding: 18px; }
+  .cc-cmd-header { padding: 14px 18px; }
+  .cc-cmd-name { font-size: 16px; }
+  .cc h2.cc-h { font-size: 20px; }
+  .cc-code { font-size: 12px; padding: 12px 14px; }
+}
+</style>
+
+<div class="cc">
+
+<img class="cc-hero" src="https://images.unsplash.com/photo-1625838144804-300f3907c110?w=800&q=80" alt="Developer terminal with dark theme displaying code" />
+<p class="cc-caption">Photo by Mohammad Rahmani on Unsplash</p>
+
+<p>I've been using Claude Code daily for months. And honestly, for the first few weeks, I was using it like a chatbot with file access -- typing everything out, manually managing context, losing track of changes.</p>
+
+<p>Then I discovered these slash commands. Some of them completely changed how I work. Here are the 5 that made the biggest difference.</p>
+
+<!-- COMMAND 1 -->
+<div class="cc-cmd">
+<div class="cc-cmd-header">
+<div class="cc-cmd-num">1</div>
+<h3 class="cc-cmd-name">/rewind</h3>
+<span class="cc-cmd-badge">Game Changer</span>
+</div>
+<div class="cc-cmd-body">
+<div class="cc-cmd-subtitle">Undo Everything -- Code, Conversation, or Both</div>
+
+<p>This is the command I use most. Claude Code auto-creates checkpoints on every prompt. <code>/rewind</code> lets you roll back to any of them.</p>
+
+<p>The genius part: you can choose <strong>what</strong> to rewind.</p>
+
+<div class="cc-code">
+<span class="cc-comment"># Rewind both conversation and code changes</span><br/>
+<span class="cc-cmd-text">/rewind</span><br/><br/>
+<span class="cc-comment"># Or just press Esc twice to open the rewind menu</span><br/>
+<span class="cc-cmd-text">Esc Esc</span>
+</div>
+
+<p>The rewind menu shows you a timeline of checkpoints. You can:</p>
+<ul class="pit-features" style="flex-direction:column;gap:6px;margin:12px 0 !important;">
+<li style="width:100%;background:#f0fff0;list-style:none !important;padding:6px 12px !important;border-radius:4px;font-size:13px;font-family:'Montserrat',sans-serif;">Rewind <strong>conversation only</strong> -- keep the code, redo the conversation</li>
+<li style="width:100%;background:#f0f7ff;list-style:none !important;padding:6px 12px !important;border-radius:4px;font-size:13px;font-family:'Montserrat',sans-serif;">Rewind <strong>code only</strong> -- keep the conversation context, undo file changes</li>
+<li style="width:100%;background:#fff8f0;list-style:none !important;padding:6px 12px !important;border-radius:4px;font-size:13px;font-family:'Montserrat',sans-serif;">Rewind <strong>both</strong> -- full reset to a previous state</li>
+</ul>
+
+<div class="cc-why"><strong>Why it matters:</strong> Before this, if Claude went down the wrong path, your only option was starting over. Now you can branch, experiment, and safely undo. It's like <code>git reset</code> for your entire AI coding session.</div>
+
+<div class="cc-tip"><strong>Pro tip:</strong> Use <span class="cc-key">Esc</span> <span class="cc-key">Esc</span> (double-tap Escape) -- it's faster than typing <code>/rewind</code>.</div>
+</div>
+</div>
+
+<!-- COMMAND 2 -->
+<div class="cc-cmd">
+<div class="cc-cmd-header">
+<div class="cc-cmd-num">2</div>
+<h3 class="cc-cmd-name">/batch</h3>
+<span class="cc-cmd-badge">Multi-Agent</span>
+</div>
+<div class="cc-cmd-body">
+<div class="cc-cmd-subtitle">Parallel Bulk Edits Across Your Entire Codebase</div>
+
+<p>This command spawns <strong>multiple AI agents in parallel</strong>, each working in an isolated git worktree. It's the most powerful command in Claude Code and most people have never tried it.</p>
+
+<div class="cc-code">
+<span class="cc-comment"># Migrate an entire directory from one framework to another</span><br/>
+<span class="cc-cmd-text">/batch</span> <span class="cc-string">migrate src/ from Solid to React</span><br/><br/>
+<span class="cc-comment"># Add error handling to all API endpoints</span><br/>
+<span class="cc-cmd-text">/batch</span> <span class="cc-string">add proper error handling to all route handlers in src/api/</span><br/><br/>
+<span class="cc-comment"># Update all test files to use the new testing library</span><br/>
+<span class="cc-cmd-text">/batch</span> <span class="cc-string">migrate all tests from Jest to Vitest</span>
+</div>
+
+<p>Here's what happens under the hood:</p>
+<ol style="margin:12px 0;padding-left:20px;font-size:15px;line-height:1.7;">
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;">Claude researches your repo to understand the scope</li>
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;">Decomposes the work into 5-30 independent units</li>
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;">Shows you the plan for approval</li>
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;">Spawns one agent per unit in an isolated git worktree</li>
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;">Each agent implements, tests, and opens a PR</li>
+</ol>
+
+<div class="cc-why"><strong>Why it matters:</strong> Tasks that would take you a full day -- like migrating a framework across 50 files -- can be done in minutes with parallel agents. Each works independently so they don't conflict.</div>
+</div>
+</div>
+
+<img class="cc-img" src="https://images.unsplash.com/photo-1568716353609-12ddc5c67f04?w=800&q=80" alt="Close-up of code displayed on a terminal screen" />
+<p class="cc-caption">Photo by Patrick Martin on Unsplash</p>
+
+<!-- COMMAND 3 -->
+<div class="cc-cmd">
+<div class="cc-cmd-header">
+<div class="cc-cmd-num">3</div>
+<h3 class="cc-cmd-name">/fork</h3>
+</div>
+<div class="cc-cmd-body">
+<div class="cc-cmd-subtitle">Branch Your Conversation Like a Git Branch</div>
+
+<p>Want to try a risky approach without losing your current progress? <code>/fork</code> creates a copy of your conversation that you can experiment with freely.</p>
+
+<div class="cc-code">
+<span class="cc-comment"># Create a named fork</span><br/>
+<span class="cc-cmd-text">/fork</span> <span class="cc-string">refactor-attempt</span><br/><br/>
+<span class="cc-comment"># Try a different architecture approach</span><br/>
+<span class="cc-cmd-text">/fork</span> <span class="cc-string">try-redux-instead</span><br/><br/>
+<span class="cc-comment"># Experiment with a breaking change</span><br/>
+<span class="cc-cmd-text">/fork</span> <span class="cc-string">drop-legacy-support</span>
+</div>
+
+<p>The original conversation stays untouched. If the experiment fails, just go back to the original. If it succeeds, continue in the fork.</p>
+
+<div class="cc-why"><strong>Why it matters:</strong> It removes the fear of experimenting. Before <code>/fork</code>, trying something risky meant potentially wasting your entire conversation context. Now you can explore freely.</div>
+
+<div class="cc-tip"><strong>Pro tip:</strong> Name your forks descriptively. When you <code>/resume</code> later, you'll see all your forks listed by name.</div>
+</div>
+</div>
+
+<!-- COMMAND 4 -->
+<div class="cc-cmd">
+<div class="cc-cmd-header">
+<div class="cc-cmd-num">4</div>
+<h3 class="cc-cmd-name">/compact</h3>
+</div>
+<div class="cc-cmd-body">
+<div class="cc-cmd-subtitle">Compress Context Without Losing What Matters</div>
+
+<p>Claude Code auto-compacts at 95% context capacity. But the manual <code>/compact</code> is way more powerful because <strong>you tell it what to keep</strong>.</p>
+
+<div class="cc-code">
+<span class="cc-comment"># Basic compact</span><br/>
+<span class="cc-cmd-text">/compact</span><br/><br/>
+<span class="cc-comment"># Keep specific context</span><br/>
+<span class="cc-cmd-text">/compact</span> <span class="cc-string">focus on the auth module changes</span><br/><br/>
+<span class="cc-comment"># Preserve error context</span><br/>
+<span class="cc-cmd-text">/compact</span> <span class="cc-string">keep all error messages and stack traces</span><br/><br/>
+<span class="cc-comment"># Check context usage first</span><br/>
+<span class="cc-cmd-text">/context</span>
+</div>
+
+<p>Use <code>/context</code> first to see a visual grid of how your context window is being used. Then compact strategically.</p>
+
+<div class="cc-why"><strong>Why it matters:</strong> Long sessions degrade in quality as context fills up. Strategic compaction keeps Claude sharp on what matters. The difference between a generic compact and a targeted one is like the difference between "clear my desk" and "clear my desk but keep the architecture diagrams."</div>
+
+<div class="cc-tip"><strong>Pro tip:</strong> Before compacting, write critical decisions to your <code>CLAUDE.md</code> file using <code>#</code> prefix. CLAUDE.md persists across compactions and even new sessions.</div>
+</div>
+</div>
+
+<!-- COMMAND 5 -->
+<div class="cc-cmd">
+<div class="cc-cmd-header">
+<div class="cc-cmd-num">5</div>
+<h3 class="cc-cmd-name">/simplify</h3>
+<span class="cc-cmd-badge">3 Agents</span>
+</div>
+<div class="cc-cmd-body">
+<div class="cc-cmd-subtitle">Automated Code Review with Three Parallel Agents</div>
+
+<p>This command spawns <strong>three review agents in parallel</strong> that each check your recently changed code for different issues:</p>
+
+<ol style="margin:12px 0;padding-left:20px;font-size:15px;line-height:1.7;">
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;"><strong>Agent 1:</strong> Code reuse -- are you duplicating logic that already exists?</li>
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;"><strong>Agent 2:</strong> Code quality -- naming, structure, readability</li>
+<li style="list-style:decimal !important;margin:6px 0;padding:0 !important;"><strong>Agent 3:</strong> Efficiency -- performance, unnecessary complexity</li>
+</ol>
+
+<div class="cc-code">
+<span class="cc-comment"># Review all recent changes</span><br/>
+<span class="cc-cmd-text">/simplify</span><br/><br/>
+<span class="cc-comment"># Focus the review</span><br/>
+<span class="cc-cmd-text">/simplify</span> <span class="cc-string">focus on memory efficiency</span><br/><br/>
+<span class="cc-comment"># Review specific area</span><br/>
+<span class="cc-cmd-text">/simplify</span> <span class="cc-string">check the new API handlers</span>
+</div>
+
+<p>After the review, it doesn't just report issues -- it <strong>automatically applies fixes</strong>. You review the changes and accept or rewind.</p>
+
+<div class="cc-why"><strong>Why it matters:</strong> It's like having three senior engineers review your PR simultaneously. And unlike a human review, it catches things like "you wrote this helper, but there's already a utility function in <code>utils/</code> that does the same thing."</div>
+</div>
+</div>
+
+<img class="cc-img" src="https://images.unsplash.com/photo-1699831472920-66e1964b7781?w=800&q=80" alt="Clean developer desk setup with dual monitors" />
+<p class="cc-caption">Photo by Xavier Foucrier on Unsplash</p>
+
+<h2 class="cc-h">Bonus: Quick Reference</h2>
+
+<p>Here are more commands worth knowing, organized by what you're trying to do:</p>
+
+<div class="cc-table-wrap">
+<table class="cc-table">
+<thead>
+<tr><th>Task</th><th>Command</th><th>What It Does</th></tr>
+</thead>
+<tbody>
+<tr><td>Undo changes</td><td><code>/rewind</code></td><td>Roll back code and/or conversation</td></tr>
+<tr><td>Bulk edits</td><td><code>/batch</code></td><td>Parallel multi-agent file changes</td></tr>
+<tr><td>Experiment safely</td><td><code>/fork</code></td><td>Branch conversation</td></tr>
+<tr><td>Free up context</td><td><code>/compact</code></td><td>Compress with targeted retention</td></tr>
+<tr><td>Code review</td><td><code>/simplify</code></td><td>3-agent quality review + auto-fix</td></tr>
+<tr><td>Security audit</td><td><code>/security-review</code></td><td>Scan for vulnerabilities</td></tr>
+<tr><td>Set intensity</td><td><code>/effort max</code></td><td>Deep thinking for hard problems</td></tr>
+<tr><td>Switch model</td><td><code>/model opus</code></td><td>Use Opus for complex tasks</td></tr>
+<tr><td>PR review</td><td><code>/review 123</code></td><td>Multi-agent PR review</td></tr>
+<tr><td>Track progress</td><td><code>/cost</code></td><td>Show token usage and cost</td></tr>
+<tr><td>Mode toggle</td><td><span class="cc-key">Shift</span>+<span class="cc-key">Tab</span></td><td>Cycle: Normal / Auto-Accept / Plan</td></tr>
+<tr><td>Multi-line input</td><td><span class="cc-key">Ctrl</span>+<span class="cc-key">G</span></td><td>Open multi-line editor</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="cc-h">The Workflow That Works</h2>
+
+<p>After months of daily use, here's the workflow I've settled on:</p>
+
+<ol style="margin:12px 0;padding-left:20px;font-size:16px;line-height:1.8;">
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;"><strong>Start a session</strong> and describe what I'm building</li>
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;">Use <code>/effort high</code> for the initial architecture discussion</li>
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;"><strong>Fork</strong> when I want to try different approaches</li>
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;">Implement in the best fork, <strong>rewind</strong> if needed</li>
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;">Run <code>/simplify</code> before committing</li>
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;"><strong>Compact</strong> strategically when context gets heavy</li>
+<li style="list-style:decimal !important;margin:8px 0;padding:0 !important;">Use <code>/batch</code> for cross-cutting changes</li>
+</ol>
+
+<p>The key insight: <strong>these commands compose</strong>. Fork to experiment, rewind when it fails, simplify when it works, compact to keep going. Each command makes the others more useful.</p>
+
+<div class="cc-cta">
+<h3>Already Using Claude Code?</h3>
+<p>Try <code>/rewind</code> and <code>/fork</code> in your next session. Once you experience the safety net of checkpoints, you'll code more boldly. That's the point.</p>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>Found this useful?</strong> Share it with a developer friend who uses Claude Code. And drop a comment if you have a favorite slash command I missed.
+</p>
+
+</div>

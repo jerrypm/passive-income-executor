@@ -305,3 +305,4 @@
 
 ### 100. Data Ethics Review
 **Prompt**: Act as a research ethics board chair. Review [STUDY] for ethical considerations including informed consent, privacy, data minimization, vulnerable populations, dual use, and algorithmic bias. Apply Belmont Principles and GDPR/HIPAA where relevant. Output an IRB-style review memo, a risk mitigation plan, consent form template, and a monitoring plan for ongoing ethical oversight during data collection and analysis.
+

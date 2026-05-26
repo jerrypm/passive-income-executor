@@ -305,3 +305,4 @@
 
 ### 100. Design Retrospective Facilitation
 **Prompt**: Act as an agile design coach facilitating a quarterly retro for [BRAND_NAME] design team. Plan a 90-minute retro: safety check, timeline recap, What Went Well / What Didn't / Ideas / Actions, dot voting, and commitments. Apply Prime Directive. Output: minute-by-minute agenda plus 10 prompt questions, a template for action items (owner, due, metric), and 3 facilitation anti-patterns to avoid.
+

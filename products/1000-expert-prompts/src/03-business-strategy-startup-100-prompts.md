@@ -305,3 +305,4 @@
 
 ### 100. Annual Investor Letter
 **Prompt**: Act as a founder writing a Warren Buffett-style annual letter to investors. For [COMPANY] in [INDUSTRY] covering fiscal year [YEAR], draft a 1200-word annual investor letter including: year in review, wins, misses with lessons, strategic shifts, financial highlights, outlook, and a candid ask. Tone: candid, confident, specific. Output as a structured letter in markdown with clear section headers and quantified claims throughout.
+

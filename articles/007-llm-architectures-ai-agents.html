@@ -1,0 +1,265 @@
+<!--
+TITLE: 9 LLM Architectures Powering AI Agents — And When to Use Each One
+SEARCH DESCRIPTION: From GPT to Mixture of Experts to Vision Language Models, here are the 9 LLM architectures that power modern AI agents. Explained simply with real-world use cases.
+LABELS: ai, llm, machine-learning, ai-agents, architecture, gpt, deep-learning
+-->
+
+<img style="width:100%;border-radius:8px;margin:0 0 1.5em;box-shadow:0 2px 12px rgba(0,0,0,0.08);" src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="AI neural network visualization" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Steve Johnson on Unsplash</p>
+
+<p>AI agents are everywhere — coding assistants, autonomous research tools, self-driving workflows. But under the hood, they're not all running the same type of model. Different tasks require <strong>different architectures</strong>, and understanding them is becoming essential for any developer building with AI.</p>
+
+<p>Here are the <strong>9 LLM architectures</strong> that power modern AI agents, what each one does, and when you'd pick one over another.</p>
+
+<!-- TOC -->
+<div style="background:#fff;border:2px solid #f0f0f0;padding:20px 24px;border-radius:8px;margin:1.5em 0 2em;">
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:16px;text-transform:uppercase;color:#333;margin:0 0 12px;letter-spacing:0.5px;">The 9 Architectures</h3>
+<ol style="margin:0;padding-left:22px;">
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch1" style="color:#c62641;font-weight:600;">LLM</a> — The Foundation Layer</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch2" style="color:#c62641;font-weight:600;">GPT</a> — Autoregressive Text Generation</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch3" style="color:#c62641;font-weight:600;">SLM</a> — Small, Fast, Local</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch4" style="color:#c62641;font-weight:600;">MoE</a> — Mixture of Experts</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch5" style="color:#c62641;font-weight:600;">VLM</a> — Vision + Language</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch6" style="color:#c62641;font-weight:600;">LRM</a> — Large Reasoning Models</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch7" style="color:#c62641;font-weight:600;">LAM</a> — Large Action Models</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch8" style="color:#c62641;font-weight:600;">HRM</a> — Hierarchical Reasoning</li>
+<li style="padding:4px 0;font-size:14px;line-height:1.6;list-style:decimal !important;"><a href="#arch9" style="color:#c62641;font-weight:600;">LCM</a> — Large Concept Models</li>
+</ol>
+</div>
+
+<!-- ARCHITECTURE 1: LLM -->
+<div id="arch1" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">1</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#fff;margin:0;">LLM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Large Language Models</span></h3>
+</div>
+<div style="padding:24px;">
+<p>LLMs are deep neural networks trained on massive text datasets to understand and generate human language. They form the <strong>foundation layer</strong> for virtually every modern AI agent.</p>
+
+<p><strong>How they work:</strong> Tokenize input, embed tokens into vectors, process through transformer attention layers, model context, retrieve knowledge, predict next tokens, generate sequences, produce output.</p>
+
+<p><strong>Examples:</strong> GPT-4, Claude (Anthropic), Gemini (Google), Llama (Meta)</p>
+
+<div style="background:#f0f7ff;border-left:3px solid #4facfe;padding:12px 16px;border-radius:0 6px 6px 0;margin:14px 0;font-size:14px;">
+<strong style="color:#1565c0;">Why it matters for developers:</strong> Every AI agent starts with an LLM as its "brain." Understanding LLMs means understanding the base capability of any agent you build or use.
+</div>
+</div>
+</div>
+
+<!-- ARCHITECTURE 2: GPT -->
+<div id="arch2" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">2</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#fff;margin:0;">GPT <span style="font-weight:400;font-size:14px;opacity:0.7;">— General Pretrained Transformer</span></h3>
+</div>
+<div style="padding:24px;">
+<p>GPT models generate text by predicting the <strong>next token based on context</strong>. They are pretrained on massive datasets and fine-tuned for different applications. This is the architecture that started the current AI revolution.</p>
+
+<p><strong>How they work:</strong> Tokenize input, encode tokens, process through transformer layers, apply pretrained knowledge, predict next token, generate sequence, produce output.</p>
+
+<p><strong>Used in:</strong> Chatbots, content generation, coding assistants, AI copilots</p>
+
+<p><strong>Key insight:</strong> GPT is <em>autoregressive</em> — it generates one token at a time, each informed by all previous tokens. This is why longer contexts produce better outputs, and why context window size matters.</p>
+</div>
+</div>
+
+<!-- ARCHITECTURE 3: SLM -->
+<div id="arch3" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">3</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#fff;margin:0;">SLM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Small Language Models</span></h3>
+</div>
+<div style="padding:24px;">
+<p>SLMs are compact versions of LLMs designed for <strong>speed, efficiency, and local deployment</strong>. They require less compute and are ideal for edge devices and real-time applications where you can't afford cloud API latency.</p>
+
+<p><strong>How they work:</strong> Same transformer architecture as LLMs, but with fewer parameters, compact layers, and efficient attention mechanisms. They trade some capability for dramatically faster inference.</p>
+
+<p><strong>Used in:</strong> Mobile AI assistants, embedded AI systems, edge AI devices</p>
+
+<p><strong>Examples:</strong> Phi-3 (Microsoft), Gemma (Google), Llama 3.2 1B/3B, Qwen 2.5 0.5B</p>
+
+<div style="background:#f0f7ff;border-left:3px solid #4facfe;padding:12px 16px;border-radius:0 6px 6px 0;margin:14px 0;font-size:14px;">
+<strong style="color:#1565c0;">Developer takeaway:</strong> If you're running AI on a phone, Raspberry Pi, or any device without a GPU — SLMs are your only option. Tools like Ollama make running SLMs locally trivial.
+</div>
+</div>
+</div>
+
+<!-- ARCHITECTURE 4: MoE -->
+<div id="arch4" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">4</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#fff;margin:0;">MoE <span style="font-weight:400;font-size:14px;opacity:0.7;">— Mixture of Experts</span></h3>
+</div>
+<div style="padding:24px;">
+<p>MoE models route each input to <strong>specialized sub-models called "experts."</strong> A gating network decides which expert handles each task, allowing the system to scale efficiently without activating all parameters for every request.</p>
+
+<p><strong>How they work:</strong> Tokenize input, gating network makes routing decision, route to selected experts, experts process independently, select top experts, merge outputs, generate response, output.</p>
+
+<p><strong>Used in:</strong> Many large frontier models (GPT-4 is widely believed to use MoE, Mixtral by Mistral is confirmed MoE)</p>
+
+<p><strong>Why it's clever:</strong> A 1.8 trillion parameter MoE model might only activate 200 billion parameters per query. You get the capability of a massive model with the inference cost of a much smaller one. It's how companies build "smart" models that are still fast.</p>
+</div>
+</div>
+
+<!-- ARCHITECTURE 5: VLM -->
+<div id="arch5" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">5</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#fff;margin:0;">VLM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Vision Language Models</span></h3>
+</div>
+<div style="padding:24px;">
+<p>VLMs process <strong>both images and text</strong>. They combine visual understanding with language reasoning to interpret images, documents, screenshots, or video.</p>
+
+<p><strong>How they work:</strong> Image encoding (via vision encoder like ViT) + text encoding, multimodal fusion to create joint representation, context reasoning across both modalities, generate text response about the visual input.</p>
+
+<p><strong>Used in:</strong> Image captioning, visual search, document AI, robotics perception, screenshot understanding</p>
+
+<p><strong>Examples:</strong> GPT-4o (OpenAI), Claude 3.5 Sonnet (Anthropic), Gemini Pro Vision (Google), LLaVA (open source)</p>
+
+<div style="background:#f0f7ff;border-left:3px solid #4facfe;padding:12px 16px;border-radius:0 6px 6px 0;margin:14px 0;font-size:14px;">
+<strong style="color:#1565c0;">Practical example:</strong> When Claude Code reads a screenshot you paste and understands the UI — that's a VLM at work. When iOS 26's Visual Intelligence identifies objects through your camera — also a VLM.
+</div>
+</div>
+</div>
+
+<img style="width:100%;border-radius:6px;margin:1.5em 0;box-shadow:0 2px 10px rgba(0,0,0,0.06);" src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80" alt="AI brain neural network concept" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Andrea De Santis on Unsplash</p>
+
+<!-- ARCHITECTURE 6: LRM -->
+<div id="arch6" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#a18cd1 0%,#fbc2eb 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">6</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#333;margin:0;">LRM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Large Reasoning Models</span></h3>
+</div>
+<div style="padding:24px;">
+<p>LRMs are optimized for <strong>multi-step reasoning and complex problem solving</strong>. They break problems into smaller parts and reason through intermediate steps before producing answers — similar to how a human would work through a math proof.</p>
+
+<p><strong>How they work:</strong> Decompose problem into sub-problems, generate reasoning steps (chain-of-thought), evaluate intermediate states, refine reasoning, verify results, construct final answer.</p>
+
+<p><strong>Used in:</strong> Math reasoning, scientific reasoning, complex planning tasks, code debugging</p>
+
+<p><strong>Examples:</strong> o1/o3 (OpenAI), Claude with extended thinking, DeepSeek-R1</p>
+
+<p><strong>Key difference from LLMs:</strong> Standard LLMs generate answers directly. LRMs spend compute on <em>thinking</em> before answering. This "thinking time" dramatically improves accuracy on hard problems but makes simple queries slower and more expensive.</p>
+</div>
+</div>
+
+<!-- ARCHITECTURE 7: LAM -->
+<div id="arch7" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#ff9a9e 0%,#fad0c4 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">7</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#333;margin:0;">LAM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Large Action Models</span></h3>
+</div>
+<div style="padding:24px;">
+<p>LAMs are designed to <strong>take actions in the real world</strong> — not just generate text. They understand user intent and execute tasks by interacting with apps, APIs, and operating systems.</p>
+
+<p><strong>How they work:</strong> Parse user intent, plan action sequence, interact with tools/APIs/UI elements, execute actions step by step, verify results, report back.</p>
+
+<p><strong>Used in:</strong> Browser automation, app control, workflow orchestration, robotic process automation</p>
+
+<p><strong>Examples:</strong> Claude Code (tool use), Rabbit R1 (LAM), computer-use agents, Devin (software engineering agent)</p>
+
+<div style="background:#fff8f0;border-left:3px solid #ff7f24;padding:12px 16px;border-radius:0 6px 6px 0;margin:14px 0;font-size:14px;">
+<strong style="color:#ff7f24;">This is the future:</strong> LAMs are what turn chatbots into agents. Instead of telling you how to do something, a LAM <em>does it for you</em>. Claude Code writing files, running tests, and pushing to git — that's LAM behavior.
+</div>
+</div>
+</div>
+
+<!-- ARCHITECTURE 8: HRM -->
+<div id="arch8" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#89f7fe 0%,#66a6ff 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">8</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#333;margin:0;">HRM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Hierarchical Reasoning Model</span></h3>
+</div>
+<div style="padding:24px;">
+<p>HRMs organize reasoning across <strong>multiple layers of abstraction</strong>. High-level planning handles strategy, while lower-level layers perform faster computation. This improves efficiency for complex tasks that need both big-picture thinking and detailed execution.</p>
+
+<p><strong>How they work:</strong> High-level planning (strategy), low-level computation (execution), iterative updates between layers, feedback loops for refinement, hierarchical convergence, decode results.</p>
+
+<p><strong>Think of it like:</strong> A CEO (high-level reasoning) sets the strategy, managers (mid-level) translate to tasks, individual contributors (low-level) execute. Each level operates at different speeds and abstraction levels.</p>
+
+<p><strong>Used in:</strong> Complex multi-step planning, autonomous systems, research agents that need to both plan and execute</p>
+</div>
+</div>
+
+<!-- ARCHITECTURE 9: LCM -->
+<div id="arch9" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:0;margin:2em 0;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+<div style="background:linear-gradient(135deg,#c471f5 0%,#fa71cd 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">9</span>
+<h3 style="font-family:'Josefin Sans',sans-serif;font-size:20px;color:#fff;margin:0;">LCM <span style="font-weight:400;font-size:14px;opacity:0.7;">— Large Concept Models</span></h3>
+</div>
+<div style="padding:24px;">
+<p>LCMs focus on <strong>conceptual understanding rather than token prediction</strong>. Instead of generating text word-by-word, they map semantic concepts and relationships across knowledge spaces. This improves deep reasoning and knowledge representation.</p>
+
+<p><strong>How they work:</strong> Normalize representations into concept space, diffusion refinement, concept interaction mapping, semantic mapping across knowledge domains, decode concepts back into language, generate response.</p>
+
+<p><strong>Why they matter:</strong> Standard LLMs can sometimes produce fluent text that's factually wrong — they're great at language patterns but weaker at actual understanding. LCMs try to model the <em>meaning</em> behind text, not just the statistical patterns.</p>
+
+<p><strong>Example:</strong> Meta's Large Concept Model (2024) — operates on sentence-level semantic representations rather than individual tokens.</p>
+</div>
+</div>
+
+<!-- KEY TAKEAWAY -->
+<div style="background:linear-gradient(135deg,#1a1a2e 0%,#2D1B4E 100%);padding:30px;border-radius:10px;margin:2.5em 0;color:#fff;">
+<h2 style="font-family:'Josefin Sans',sans-serif;font-size:22px;margin:0 0 16px;color:#fff;border:none;padding:0;">How Modern AI Agents Combine These</h2>
+<p style="margin:0 0 14px;font-size:15px;line-height:1.7;opacity:0.9;">The most capable AI agents don't use just one architecture — they combine several:</p>
+<ul style="margin:0;padding-left:20px;font-size:15px;line-height:1.8;">
+<li style="list-style:disc !important;padding:2px 0;"><strong style="color:#7bed9f;">LLM</strong> for language understanding</li>
+<li style="list-style:disc !important;padding:2px 0;"><strong style="color:#7bed9f;">LRM</strong> for complex reasoning</li>
+<li style="list-style:disc !important;padding:2px 0;"><strong style="color:#7bed9f;">LAM</strong> for tool execution and actions</li>
+<li style="list-style:disc !important;padding:2px 0;"><strong style="color:#7bed9f;">VLM</strong> for multimodal perception</li>
+<li style="list-style:disc !important;padding:2px 0;"><strong style="color:#7bed9f;">MoE</strong> for scalable compute</li>
+</ul>
+<p style="margin:16px 0 0;font-size:14px;opacity:0.8;">This combination creates <strong>Agentic AI systems</strong> capable of reasoning, planning, and acting — not just chatting.</p>
+</div>
+
+<!-- QUICK REFERENCE -->
+<h2 style="font-family:'Josefin Sans',sans-serif;font-size:24px;font-weight:700;color:#222;text-transform:uppercase;letter-spacing:0.5px;margin:2.5em 0 1em;padding-bottom:10px;border-bottom:3px solid #ff7f24;">Quick Reference</h2>
+
+<div style="overflow-x:auto;border:1px solid #e8e8e8;border-radius:6px;margin:1.5em 0;">
+<table style="width:100%;border-collapse:collapse;font-size:13px;min-width:600px;">
+<thead>
+<tr>
+<th style="background:#1e1e1e;color:#7bed9f;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Architecture</th>
+<th style="background:#1e1e1e;color:#7bed9f;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Strength</th>
+<th style="background:#1e1e1e;color:#7bed9f;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Best For</th>
+<th style="background:#1e1e1e;color:#7bed9f;padding:10px 14px;text-align:left;font-family:'Josefin Sans',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>LLM</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Language understanding</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">General AI tasks</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Claude, GPT-4</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>GPT</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Text generation</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Chatbots, coding</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">GPT-4, Llama</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>SLM</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Speed, efficiency</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Edge/mobile devices</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Phi-3, Gemma</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>MoE</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Scalable compute</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Large-scale inference</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Mixtral, GPT-4</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>VLM</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Image + text</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Visual understanding</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">GPT-4o, Claude</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>LRM</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Deep reasoning</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Math, science, logic</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">o1, DeepSeek-R1</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>LAM</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Taking actions</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Automation, agents</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Claude Code, Devin</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;"><strong>HRM</strong></td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Multi-level planning</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Complex workflows</td><td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;">Research agents</td></tr>
+<tr><td style="padding:10px 14px;"><strong>LCM</strong></td><td style="padding:10px 14px;">Concept understanding</td><td style="padding:10px 14px;">Knowledge reasoning</td><td style="padding:10px 14px;">Meta LCM</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 style="font-family:'Josefin Sans',sans-serif;font-size:24px;font-weight:700;color:#222;text-transform:uppercase;letter-spacing:0.5px;margin:2.5em 0 1em;padding-bottom:10px;border-bottom:3px solid #ff7f24;">What This Means for You</h2>
+
+<p>If you're building AI-powered tools, you don't need to understand the math behind each architecture. But knowing <strong>which architecture solves which problem</strong> will help you pick the right model for your use case:</p>
+
+<ul>
+<li style="padding:4px 0;font-size:16px;"><strong>Need fast local inference?</strong> Use an SLM (Phi-3, Llama 3.2 3B)</li>
+<li style="padding:4px 0;font-size:16px;"><strong>Need to understand images?</strong> Use a VLM (GPT-4o, Claude Sonnet)</li>
+<li style="padding:4px 0;font-size:16px;"><strong>Need complex reasoning?</strong> Use an LRM (o1, Claude with thinking)</li>
+<li style="padding:4px 0;font-size:16px;"><strong>Need to automate tasks?</strong> Use a LAM (Claude Code, browser agents)</li>
+<li style="padding:4px 0;font-size:16px;"><strong>Need everything?</strong> Combine multiple architectures in an agent stack</li>
+</ul>
+
+<p>The trend is clear: <strong>the future of AI isn't one model doing everything — it's specialized architectures working together.</strong></p>
+
+<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:24px 28px;border-radius:8px;margin:2em 0;color:#fff;">
+<p style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:700;margin:0 0 8px;color:#fff;">Want to Monetize AI Locally?</p>
+<p style="margin:0 0 14px;font-size:14px;opacity:0.9;">Run SLMs on your machine with Ollama and turn them into paid API services. Our Ollama API Monetizer toolkit handles Lightning payments, RapidAPI listing, and more.</p>
+<a href="https://zerix1.gumroad.com/l/pzesvw" target="_blank" rel="noopener" style="display:inline-block;background:#ff7f24;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;padding:10px 24px;border-radius:6px;text-decoration:none;font-size:13px;text-transform:uppercase;">Get Ollama API Monetizer ($14)</a>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>Found this useful?</strong> Share it with a developer who's building with AI. And drop a comment — which architecture are you most excited about?
+</p>

@@ -305,3 +305,4 @@
 
 ### 100. Closing Call Framework
 **Prompt**: Act as a closer who has personally closed $50M+ in B2B software. Write a 30-minute closing call framework for [PRODUCT] at [PRICE] with [DECISION_MAKER]. Structure: recap agreed pains (5 min), walk through solution fit (10 min), present pricing with anchoring (5 min), handle final objections (5 min), ask for the business (5 min). Output each section with: exact talk track, key slides, objection anticipations, and the direct close ("Based on everything, are you ready to move forward?"). Include 3 close variants: assumptive, alternative, urgency.
+

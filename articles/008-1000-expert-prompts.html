@@ -1,0 +1,486 @@
+<!--
+TITLE: 1000 Expert Prompts for ChatGPT and Claude — Built Like a Senior Consultant's Playbook
+SEARCH DESCRIPTION: Stop begging the AI for "expert advice." 1000 framework-powered, role-specific prompts across 10 categories. Engineered to give boardroom-quality output on the first run.
+LABELS: chatgpt, claude, prompts, ai, prompt-engineering, productivity, ebook
+FEATURED IMAGE: Use a clean prompt engineering / AI workspace image
+-->
+
+<style>
+.epp * { box-sizing: border-box; }
+.epp { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.epp p { margin: 0 0 1.5em; }
+.epp a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.epp a:hover { color: #000; border-bottom-color: #000; }
+
+.epp h2.epp-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+.epp-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e0e0;
+  padding: 36px 30px;
+  border-radius: 8px;
+  margin: 1.5em 0 2em;
+}
+.epp-hero h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #ff7f24;
+  font-size: 26px;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+.epp-hero p { margin: 0 0 1em; font-size: 15px; line-height: 1.7; }
+.epp-hero p:last-child { margin: 0; }
+.epp-hero strong { color: #ff7f24; }
+.epp-hero code { background: rgba(255,255,255,0.1); color: #7bed9f; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+/* Bad vs Good prompt comparison */
+.epp-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 1.5em 0;
+}
+.epp-bad, .epp-good {
+  padding: 18px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  font-family: 'Monaco','Menlo',monospace;
+}
+.epp-bad {
+  background: #fff5f5;
+  border-left: 4px solid #c62641;
+  color: #444;
+}
+.epp-good {
+  background: #f5fff8;
+  border-left: 4px solid #2e7d32;
+  color: #1a3a1a;
+}
+.epp-label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.epp-bad .epp-label { color: #c62641; }
+.epp-good .epp-label { color: #2e7d32; }
+
+/* Pillars */
+.epp-pillar {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 18px 22px;
+  margin: 14px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.epp-pillar-num {
+  display: inline-block;
+  background: #ff7f24;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.epp-pillar h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  display: inline-block;
+  font-size: 17px;
+  margin: 0;
+  color: #222;
+  vertical-align: middle;
+}
+.epp-pillar p { font-size: 14px; margin: 10px 0 0; color: #555; }
+
+/* Category grid */
+.epp-cats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 1.5em 0;
+}
+.epp-cat {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.epp-cat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ff7f24;
+}
+.epp-cat-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+  margin: 4px 0 6px;
+}
+.epp-cat-desc { font-size: 12.5px; color: #666; line-height: 1.55; margin: 0; }
+
+/* Sample prompts */
+.epp-sample {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 20px 24px;
+  border-radius: 6px;
+  margin: 14px 0;
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border-left: 4px solid #7bed9f;
+}
+.epp-sample-cat {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #7bed9f;
+  margin-bottom: 10px;
+  display: block;
+}
+.epp-sample code { color: #ffa657; }
+
+/* Files */
+.epp-files {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 1em 0 1.5em;
+}
+.epp-files td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+.epp-files td:first-child {
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12px;
+  color: #c62641;
+  white-space: nowrap;
+  width: 38%;
+}
+.epp-files tr:last-child td { border-bottom: none; }
+
+/* Price + CTA */
+.epp-cta {
+  background: linear-gradient(135deg, #ff7f24 0%, #c62641 100%);
+  color: #fff;
+  padding: 32px 30px;
+  border-radius: 10px;
+  margin: 2em 0;
+  text-align: center;
+}
+.epp-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px;
+  margin: 0 0 8px;
+  color: #fff;
+}
+.epp-cta p { margin: 0 0 18px; color: #fff; opacity: 0.95; font-size: 15px; }
+.epp-cta-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  display: block;
+  margin: 10px 0;
+}
+.epp-cta-old {
+  text-decoration: line-through;
+  opacity: 0.6;
+  font-size: 22px;
+  margin-right: 10px;
+  font-weight: 400;
+}
+.epp-buy {
+  display: inline-block;
+  background: #fff;
+  color: #c62641 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 38px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.epp-buy:hover {
+  background: #fff5e6;
+  color: #c62641 !important;
+  border-bottom: none !important;
+}
+
+/* FAQ */
+.epp-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.epp-faq:last-of-type { border-bottom: none; }
+.epp-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.epp-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+.epp-features {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 14px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.epp-features li {
+  list-style: none !important;
+  padding: 5px 12px !important;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+  font-weight: 500;
+}
+.epp-features li::before { display: none !important; }
+
+@media (max-width: 600px) {
+  .epp-compare { grid-template-columns: 1fr; }
+  .epp-cats { grid-template-columns: 1fr; }
+  .epp-cta-price { font-size: 32px; }
+  .epp-buy { display: block; }
+  .epp-files td:first-child { white-space: normal; }
+}
+</style>
+
+<div class="epp">
+
+<img style="width:100%;border-radius:8px;margin:0 0 1.5em;box-shadow:0 2px 12px rgba(0,0,0,0.08);" src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="Prompt engineering workspace with AI interface" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Steve Johnson on Unsplash</p>
+
+<p>You've seen them. <strong>500 prompts. 10,000 prompts.</strong> All the same: <em>"Write me a marketing email."</em> <em>"Act as an expert."</em> <em>"Give me 10 blog ideas."</em></p>
+
+<p>That isn't prompting. That's begging. And the output is exactly what you'd expect — <strong>generic, hedged, forgettable slop.</strong></p>
+
+<div class="epp-hero">
+<h3>What if every prompt was engineered like a senior consultant's playbook?</h3>
+<p>That's the bet behind <strong>1000 Expert Prompts</strong>. Every single one of the 1000 prompts in this pack was built around four pillars that separate hobbyist prompts from professional ones — role specificity, named frameworks, concrete variables, and defined output structure.</p>
+<p>The result: boardroom-quality output on the first run. No re-prompting. No "the model needs more context." No generic slop.</p>
+</div>
+
+<h2 class="epp-h">Most Prompts vs. Expert Prompts</h2>
+
+<p>The difference between a generic prompt and an expert prompt isn't length. It's <strong>specificity</strong> across four dimensions.</p>
+
+<div class="epp-compare">
+<div class="epp-bad">
+<span class="epp-label">Generic prompt</span>
+"Write me a sales letter for my SaaS product."
+</div>
+<div class="epp-good">
+<span class="epp-label">Expert prompt</span>
+"Act as a senior direct-response copywriter who has written $100M+ in control-beating sales letters for Agora and Boardroom. Apply Halbert's 19-step structure to [PRODUCT]. Output as: lead hook, agitation, mechanism, proof, offer, urgency, P.S. Length: 1200 words."
+</div>
+</div>
+
+<p>The second one returns copy you can actually ship. The first one returns a Wikipedia summary of sales letters.</p>
+
+<h2 class="epp-h">The Four Pillars of Pro Prompting</h2>
+
+<div class="epp-pillar">
+<span class="epp-pillar-num">1</span>
+<h4>Role Specificity</h4>
+<p>Not "act as an expert." Instead: <em>"Act as a senior product strategist who built Stripe's pricing page."</em> The model now has a mental model to inhabit — and the output reflects it.</p>
+</div>
+
+<div class="epp-pillar">
+<span class="epp-pillar-num">2</span>
+<h4>Named Frameworks</h4>
+<p>StoryBrand. Jobs-to-be-Done. Blue Ocean. AIDA. PAS. Hexagonal Architecture. Domain-Driven Design. CQRS. SOLID. Hero's Journey. Skyscraper. E-E-A-T. STAR. GROW. Every framework a senior practitioner actually uses.</p>
+</div>
+
+<div class="epp-pillar">
+<span class="epp-pillar-num">3</span>
+<h4>Concrete Variables</h4>
+<p>Replace <code>[PRODUCT]</code>, <code>[AUDIENCE]</code>, <code>[COMPETITOR]</code>, <code>[PRICE]</code> with your specifics and the prompt knows exactly what to do. No more "the model needs more context" circles.</p>
+</div>
+
+<div class="epp-pillar">
+<span class="epp-pillar-num">4</span>
+<h4>Defined Output Structure</h4>
+<p>Every prompt ends with <em>"Output as a table with columns…"</em> or <em>"Return a 5-step framework…"</em> You get an artifact you can use — not a wall of hedged prose.</p>
+</div>
+
+<h2 class="epp-h">10 Categories, 100 Prompts Each</h2>
+
+<div class="epp-cats">
+<div class="epp-cat">
+<span class="epp-cat-num">Category 1</span>
+<div class="epp-cat-title">Marketing, Sales & Copywriting</div>
+<p class="epp-cat-desc">Brand positioning (Moore, Dunford, StoryBrand). Sales letters (Halbert 19-step). VSLs. Meta and Google ads. Email sequences. Pricing psychology. Cold outbound. Discovery call scripts. Objection handling. VOC mining.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 2</span>
+<div class="epp-cat-title">Content, Blogging & SEO</div>
+<p class="epp-cat-desc">Keyword clustering. Content briefs (Skyscraper, pillar-cluster). On-page optimization. Topical authority maps. Technical SEO. YouTube scripts. Newsletter writing. Repurposing pipelines. Link building. Digital PR.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 3</span>
+<div class="epp-cat-title">Business Strategy & Startups</div>
+<p class="epp-cat-desc">Lean Canvas. Business Model Canvas. Porter's 5 Forces. Blue Ocean. Go-to-market. Pricing models. Financial models (DCF, unit economics). Pitch decks. Investor memos. OKRs. North Star metrics. Hiring. Org design.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 4</span>
+<div class="epp-cat-title">Software Development</div>
+<p class="epp-cat-desc">System architecture. Monolith-to-microservices. DDD bounded contexts. CQRS. Event sourcing. SOLID refactoring. GoF patterns. Code review. Debugging. TDD. API design. SQL tuning. Dockerfiles. Kubernetes. OWASP security.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 5</span>
+<div class="epp-cat-title">AI, Automation & Productivity</div>
+<p class="epp-cat-desc">Meta-prompting (chain-of-thought, tree-of-thought, ReAct). Agentic workflows. GTD. Weekly reviews. Inbox triage. Meeting prep. Eisenhower matrix. Second brain / Zettelkasten. Zapier/Make/n8n blueprints. Feynman learning.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 6</span>
+<div class="epp-cat-title">Writing, Editing & Storytelling</div>
+<p class="epp-cat-desc">3-act structure. Save the Cat. Hero's Journey. Character arcs. Dialogue. Worldbuilding. Memoir. Developmental editing. Line edits. Voice calibration. Poetry. Screenwriting (shorts, pilots, features).</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 7</span>
+<div class="epp-cat-title">Social Media & Community</div>
+<p class="epp-cat-desc">Twitter/X viral threads. LinkedIn long-form. Instagram carousels. Reels and TikTok scripts. YouTube titles and thumbnails. Content pillars. Community management (Discord, Circle). Influencer outreach.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 8</span>
+<div class="epp-cat-title">Data, Research & Finance</div>
+<p class="epp-cat-desc">EDA. SQL queries (CTEs, window functions). Pandas. Hypothesis testing. A/B test design. Cohort analysis. LTV/CAC. DCF models. 3-statement models. Personal finance. Portfolio strategy. Survey design.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 9</span>
+<div class="epp-cat-title">Design, Branding & Visual</div>
+<p class="epp-cat-desc">Brand identity systems. Logo briefs. UX/UI wireframes. Landing page CRO design. Mobile (iOS HIG, Material). Midjourney and DALL-E prompts. Icon and illustration briefs. Pitch decks. Print design. Portfolio critique.</p>
+</div>
+
+<div class="epp-cat">
+<span class="epp-cat-num">Category 10</span>
+<div class="epp-cat-title">Career, Coaching & Learning</div>
+<p class="epp-cat-desc">ATS-optimized resumes. LinkedIn profiles. Behavioral and case interview prep. Salary negotiation. Career pivots. Executive coaching (GROW, SBI). Performance reviews. Learning roadmaps. Language study.</p>
+</div>
+</div>
+
+<h2 class="epp-h">Sample Prompts</h2>
+
+<p>Two real prompts pulled directly from the pack — paste them into Claude or ChatGPT right now and see the output.</p>
+
+<div class="epp-sample">
+<span class="epp-sample-cat">Software — Architecture</span>
+"Act as a principal architect with 15 years at Stripe. Design a strangler-fig migration for <code>[MONOLITH]</code> using DDD bounded contexts. Output: roadmap (6 phases), context map, extraction order ranked by risk, rollback strategy. Highlight every irreversible decision."
+</div>
+
+<div class="epp-sample">
+<span class="epp-sample-cat">Marketing — Brand Strategy</span>
+"Act as a StoryBrand certified guide. Build a BrandScript for <code>[COMPANY]</code>. Fill Character, Problem (external/internal/philosophical), Guide, Plan, CTA, Success, Failure stakes. Output as labeled table, then translate into a 150-word homepage headline section."
+</div>
+
+<h2 class="epp-h">What You Get</h2>
+
+<table class="epp-files">
+<tr><td>1000-expert-prompts.md</td><td>The full pack in one clean markdown file (3,000+ lines). Works in any editor, any OS, any AI model.</td></tr>
+<tr><td>1000-expert-prompts.pdf</td><td>Print-ready PDF version with table of contents.</td></tr>
+<tr><td>HOW-TO-USE.md</td><td>15-minute quick-start guide teaching the four pillars of pro prompting — so you can write your own.</td></tr>
+<tr><td>10 category files</td><td>Each category broken out separately. Grep, import, or feed individual sections into your tool of choice.</td></tr>
+<tr><td>Commercial license</td><td>Unlimited personal and commercial use of the output. Use it in your business, client work, products.</td></tr>
+</table>
+
+<ul class="epp-features">
+<li>1000 prompts</li>
+<li>10 categories</li>
+<li>Role-based</li>
+<li>Framework-powered</li>
+<li>Variable-driven</li>
+<li>Works with ChatGPT, Claude, Gemini</li>
+<li>Markdown + PDF</li>
+<li>Commercial license</li>
+<li>14-day refund</li>
+</ul>
+
+<h2 class="epp-h">Who This Is For</h2>
+
+<p><strong>Founders and operators</strong> who want strategy-consultant output without the retainer. <strong>Marketers and copywriters</strong> who need conversion-grade copy in minutes. <strong>Engineers and product leads</strong> who want principal-level code review, architecture advice, and debugging partnerships. <strong>Creators</strong> who need viral hooks, developmental editing, and platform-native content.</p>
+
+<p>If you're tired of generic "act as an expert" prompts that produce forgettable output — this pack was built for you.</p>
+
+<h2 class="epp-h">Who It's Not For</h2>
+
+<ul class="epp-features" style="flex-direction:column;gap:6px;">
+<li style="width:100%;background:#fff5f5;">People looking for 5,000 generic one-liners to stuff a Notion page</li>
+<li style="width:100%;background:#fff5f5;">People who've never used ChatGPT or Claude before</li>
+<li style="width:100%;background:#fff5f5;">People who think longer = better (these are tight, engineered, ruthless about cutting filler)</li>
+</ul>
+
+<div class="epp-cta">
+<h3>1000 Expert Prompts — The Pro Pack</h3>
+<p>Boardroom-quality output. No fluff. No generic one-liners. Buy once, own forever, use every day.</p>
+<span class="epp-cta-price"><span class="epp-cta-old">$19</span>$4</span>
+<p style="font-size:13px;opacity:0.9;">Launch price — pay what you want from $4. Lock it in before it raises.</p>
+<a class="epp-buy" href="https://zerix1.gumroad.com/l/ybezdv" target="_blank" rel="noopener">Get the Pack — $4</a>
+</div>
+
+<h2 class="epp-h">Frequently Asked Questions</h2>
+
+<div class="epp-faq">
+<h4>Does this work with Claude, not just ChatGPT?</h4>
+<p>Yes. The prompts are model-agnostic. Tested across ChatGPT (GPT-4 and GPT-5), Claude (Sonnet and Opus), and Gemini. The four-pillar pattern works wherever you can paste text.</p>
+</div>
+
+<div class="epp-faq">
+<h4>Can I use the output commercially?</h4>
+<p>Yes — unlimited personal and commercial use of anything the prompts produce. The one restriction: you can't resell the pack itself or redistribute it as your own product.</p>
+</div>
+
+<div class="epp-faq">
+<h4>Will I learn how to write my own expert prompts?</h4>
+<p>Yes. The <code>HOW-TO-USE.md</code> guide breaks down the four pillars step by step. After reading it, the 1000 prompts become a reference library — and you'll write your own from scratch.</p>
+</div>
+
+<div class="epp-faq">
+<h4>What's the refund policy?</h4>
+<p>14 days, no questions asked. If these prompts don't give you at least one "oh damn, that's good" moment, reply to the receipt and you get a full refund.</p>
+</div>
+
+<div class="epp-faq">
+<h4>How long are the prompts?</h4>
+<p>Typically 80–200 words each. Long enough to be specific. Short enough to fit in any context window. Designed to be pasted, edited, and shipped — not skimmed.</p>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>One good prompt pays for this 100 times over.</strong> If you use ChatGPT or Claude in your work, this pack will pay for itself the first time you ship something with it.
+</p>
+
+</div>

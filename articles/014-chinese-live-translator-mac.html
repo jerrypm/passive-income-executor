@@ -1,0 +1,568 @@
+<!--
+TITLE: I Built a Private Chinese Live Translator on My Mac — On-Device ASR, Offline Translation, Pinyin Overlay
+SEARCH DESCRIPTION: Chinese meetings move faster than cloud translators. Here's the architecture behind a native macOS live translator — on-device speech recognition, offline Mandarin → English, pinyin under every line. Zero cloud, zero latency tax.
+LABELS: macos, swift, speech-recognition, mandarin, chinese, translation, on-device-ai, pinyin, privacy, ios-development
+FEATURED IMAGE: Mac screen with live Chinese subtitle + pinyin overlay during a video call
+-->
+
+<style>
+.clt * { box-sizing: border-box; }
+.clt { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.clt p { margin: 0 0 1.5em; }
+.clt a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.clt a:hover { color: #000; border-bottom-color: #000; }
+
+.clt h2.clt-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+/* Hero */
+.clt-hero {
+  background: linear-gradient(135deg, #c62641 0%, #7a1330 100%);
+  color: #fff;
+  padding: 36px 32px;
+  border-radius: 10px;
+  margin: 1.5em 0 2em;
+  text-align: center;
+}
+.clt-hero-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  opacity: 0.85; margin-bottom: 10px;
+}
+.clt-hero h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 28px; font-weight: 700;
+  margin: 0 0 14px; color: #fff; line-height: 1.2;
+}
+.clt-hero p { font-size: 15px; opacity: 0.95; margin: 0 0 1em; line-height: 1.7; color: #fff; }
+.clt-hero p:last-child { margin: 0; }
+
+/* Subtitle mockup — looks like the live UI */
+.clt-sub {
+  background: #0a0a0a;
+  border-radius: 10px;
+  padding: 26px 28px;
+  margin: 1.5em 0 2em;
+  border: 1px solid #1f1f1f;
+}
+.clt-sub-row {
+  padding: 14px 0;
+  border-top: 1px solid #1f1f1f;
+}
+.clt-sub-row:first-child { border-top: none; padding-top: 0; }
+.clt-sub-zh {
+  font-family: 'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 0 0 4px;
+}
+.clt-sub-py {
+  font-family: 'Monaco','Menlo',monospace;
+  color: #ff7f24;
+  font-size: 13px;
+  margin: 0 0 6px;
+  letter-spacing: 0.5px;
+}
+.clt-sub-en {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #c9d1d9;
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Stats row */
+.clt-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 1.5em 0;
+}
+.clt-stat {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.clt-stat-num {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px; font-weight: 700;
+  color: #c62641; margin: 0; line-height: 1.1;
+}
+.clt-stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; color: #666; margin: 6px 0 0;
+}
+
+/* Pipeline card */
+.clt-pipe {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 14px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.clt-pipe-step {
+  display: inline-block;
+  background: #c62641;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-right: 10px;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.clt-pipe h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  display: inline-block;
+  font-size: 17px;
+  margin: 0;
+  color: #222;
+  vertical-align: middle;
+}
+.clt-pipe-tag {
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12px;
+  color: #0a8030;
+  background: #e8f6ec;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin-left: 8px;
+  font-weight: 600;
+}
+.clt-pipe-desc { font-size: 14.5px; margin: 10px 0 0; color: #555; line-height: 1.7; }
+
+/* Why-not-cloud block */
+.clt-why {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 28px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+}
+.clt-why h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #ff7f24;
+  font-size: 22px;
+  margin: 0 0 14px;
+}
+.clt-why ul { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+.clt-why li {
+  list-style: none !important;
+  padding: 11px 0 !important;
+  margin: 0 !important;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 14.5px;
+  color: #c9d1d9;
+  line-height: 1.7;
+}
+.clt-why li:first-child { border-top: none; padding-top: 4px; }
+.clt-why li::before {
+  content: "→ " !important;
+  color: #ff7f24 !important;
+  display: inline !important;
+  font-weight: 700;
+}
+.clt-why strong { color: #fff; }
+.clt-why code { background: rgba(255,127,36,0.18); color: #ffa657; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+/* Decision table */
+.clt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin: 1em 0 1.5em;
+}
+.clt-table th {
+  background: #f5f5f5;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding: 10px 12px;
+  color: #444;
+  font-weight: 700;
+  border-bottom: 2px solid #ddd;
+}
+.clt-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.clt-table tr:last-child td { border-bottom: none; }
+.clt-table tr:hover td { background: #fafafa; }
+.clt-table td:first-child { color: #c62641; font-weight: 600; width: 35%; }
+
+/* Code block */
+.clt-code {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 10px 0 1.5em;
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12.5px;
+  line-height: 1.75;
+  border-left: 3px solid #c62641;
+  overflow-x: auto;
+}
+.clt-code .c { color: #6e7681; font-style: italic; }
+.clt-code .k { color: #ffa657; }
+.clt-code .v { color: #7bed9f; }
+.clt-code .s { color: #79c0ff; }
+
+/* Tips */
+.clt-tips {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 1em 0 !important;
+}
+.clt-tips li {
+  list-style: none !important;
+  padding: 14px 16px !important;
+  margin: 0 0 8px !important;
+  background: #f8fafd;
+  border-left: 3px solid #c62641;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.7;
+}
+.clt-tips li::before { display: none !important; }
+.clt-tips-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: #c62641;
+  font-weight: 700;
+  margin-right: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.clt-tips strong { font-family: 'Josefin Sans', sans-serif; color: #222; font-weight: 700; }
+.clt-tips code { background: #fbe6ea; color: #7a1330; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; font-family: 'Monaco','Menlo',monospace; }
+
+/* CTA */
+.clt-cta {
+  background: linear-gradient(135deg, #1a8917 0%, #0d6a0a 100%);
+  color: #fff;
+  padding: 36px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+  text-align: center;
+}
+.clt-cta-medium {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+.clt-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+.clt-cta p { margin: 0 0 18px; color: #fff; opacity: 0.95; font-size: 15px; }
+.clt-buy {
+  display: inline-block;
+  background: #fff;
+  color: #1a8917 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 38px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.clt-buy:hover {
+  background: #f0fff0;
+  color: #1a8917 !important;
+  border-bottom: none !important;
+}
+
+/* Cross-sell */
+.clt-cross {
+  background: #fff;
+  border: 2px dashed #c62641;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 2em 0;
+}
+.clt-cross h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 18px;
+  color: #c62641;
+  margin: 0 0 14px;
+}
+.clt-cross-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.clt-cross-item {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 13px;
+}
+.clt-cross-item h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 14px;
+  color: #222;
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.clt-cross-item p { margin: 0 0 8px; color: #555; font-size: 12.5px; line-height: 1.55; }
+.clt-cross-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #c62641 !important;
+  border-bottom: none !important;
+}
+
+/* FAQ */
+.clt-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.clt-faq:last-of-type { border-bottom: none; }
+.clt-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.clt-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+@media (max-width: 600px) {
+  .clt-stats { grid-template-columns: repeat(2, 1fr); }
+  .clt-cross-grid { grid-template-columns: 1fr; }
+  .clt-hero h3 { font-size: 22px; }
+  .clt-buy { display: block; }
+  .clt-table td:first-child { width: 45%; }
+}
+</style>
+
+<div class="clt">
+
+<p>I work at a Chinese company. Every standup, every design review, every Friday demo — Mandarin. My ear is getting better, but at meeting speed it isn't fast enough yet, and pulling out a phone translator means I miss the next sentence to catch the last one.</p>
+
+<p>So I built one. <strong>A native macOS app that listens to system audio, transcribes the Mandarin on-device, drops a pinyin line underneath, and shows the English translation — all without sending a byte to a cloud.</strong> Here's the architecture, why every "obvious" cloud-based shortcut fails for live meetings, and the engineering decisions that mattered.</p>
+
+<div class="clt-sub">
+<div class="clt-sub-row">
+<p class="clt-sub-zh">我们今天先对一下产品方向</p>
+<p class="clt-sub-py">wǒ men jīn tiān xiān duì yí xià chǎn pǐn fāng xiàng</p>
+<p class="clt-sub-en">Let's align on product direction first today</p>
+</div>
+<div class="clt-sub-row">
+<p class="clt-sub-zh">这个功能下周能上线吗</p>
+<p class="clt-sub-py">zhè ge gōng néng xià zhōu néng shàng xiàn ma</p>
+<p class="clt-sub-en">Can this feature ship next week?</p>
+</div>
+<div class="clt-sub-row">
+<p class="clt-sub-zh">我们再讨论一下接口的设计</p>
+<p class="clt-sub-py">wǒ men zài tǎo lùn yí xià jiē kǒu de shè jì</p>
+<p class="clt-sub-en">Let's discuss the API design once more</p>
+</div>
+</div>
+
+<h2 class="clt-h">Why Cloud Translators Fail at Meeting Speed</h2>
+
+<p>Google Translate, DeepL, Apple's Live Captions — all decent for static text or solo speech. None of them survive a real meeting. The reason is latency budget, not accuracy.</p>
+
+<div class="clt-why">
+<h3>The Cloud Round-Trip Tax</h3>
+<ul>
+<li><strong>Step 1 — Capture:</strong> chunk audio, encode, sometimes buffer 2–3 seconds for ASR confidence.</li>
+<li><strong>Step 2 — Upload:</strong> push to a remote ASR endpoint. Add network jitter, TLS handshake, queue.</li>
+<li><strong>Step 3 — Transcribe:</strong> server runs ASR, returns text. Usually fast — but not local-fast.</li>
+<li><strong>Step 4 — Translate:</strong> second cloud hop, second model, second queue.</li>
+<li><strong>Step 5 — Render:</strong> finally, English shows up on your screen. <code>~3–6s</code> total in good conditions.</li>
+</ul>
+</div>
+
+<p>Three to six seconds doesn't sound like much. In a meeting full of <em>"对，对，那个不行,"</em> it's two thoughts behind. By the time the translation lands, the speaker has moved on and the cursor in your brain is still on the previous sentence. <strong>You don't fall behind by one beat — you fall behind compounding.</strong></p>
+
+<p>On-device ASR + on-device translation can run the same pipeline in <code>200–500ms</code>. That's the difference between following a meeting and watching one happen to you.</p>
+
+<h2 class="clt-h">The 4 Numbers That Matter</h2>
+
+<div class="clt-stats">
+<div class="clt-stat">
+<p class="clt-stat-num">~300ms</p>
+<p class="clt-stat-label">End-to-End Latency</p>
+</div>
+<div class="clt-stat">
+<p class="clt-stat-num">0</p>
+<p class="clt-stat-label">Cloud Calls</p>
+</div>
+<div class="clt-stat">
+<p class="clt-stat-num">3</p>
+<p class="clt-stat-label">Lines Shown</p>
+</div>
+<div class="clt-stat">
+<p class="clt-stat-num">100%</p>
+<p class="clt-stat-label">Private</p>
+</div>
+</div>
+
+<h2 class="clt-h">The Pipeline (4 Stages, All Local)</h2>
+
+<p>Every stage runs on the M-series Neural Engine or CPU. No outbound network. The trade-off is model size on disk and a one-time download — in return you get latency a cloud service cannot match.</p>
+
+<div class="clt-pipe">
+<span class="clt-pipe-step">Stage 1</span>
+<h4>Audio Capture (System + Mic)</h4>
+<span class="clt-pipe-tag">CoreAudio · ScreenCaptureKit</span>
+<p class="clt-pipe-desc">macOS 13+ lets you tap system audio via <code>ScreenCaptureKit</code> alongside the mic. That single API is the whole reason this app is possible — before it, capturing Zoom audio meant kernel extensions or BlackHole. Now it's one entitlement and a stream subscription.</p>
+</div>
+
+<div class="clt-pipe">
+<span class="clt-pipe-step">Stage 2</span>
+<h4>On-Device Mandarin ASR</h4>
+<span class="clt-pipe-tag">Whisper · Speech framework</span>
+<p class="clt-pipe-desc">Apple's <code>SFSpeechRecognizer</code> works for Mandarin (<code>zh-CN</code>) and runs on-device on Apple Silicon when you set <code>requiresOnDeviceRecognition = true</code>. For richer accuracy, a Whisper small/medium CoreML model is the alternate path — slower but more forgiving with accents and noisy meetings.</p>
+</div>
+
+<div class="clt-pipe">
+<span class="clt-pipe-step">Stage 3</span>
+<h4>Pinyin Romanization</h4>
+<span class="clt-pipe-tag">CFStringTransform</span>
+<p class="clt-pipe-desc">This one surprised me — it's a single line. Apple ships a Unicode transform that converts Han characters to Latin pinyin with tone marks. No model, no library, no network. <code>kCFStringTransformMandarinLatin</code> handles it natively.</p>
+</div>
+
+<div class="clt-pipe">
+<span class="clt-pipe-step">Stage 4</span>
+<h4>Offline Translation (zh → en)</h4>
+<span class="clt-pipe-tag">Apple Translation</span>
+<p class="clt-pipe-desc">macOS 15's <code>Translation</code> framework runs offline once you've downloaded the language pack. <code>TranslationSession</code> handles batching and streaming results. For older macOS, swap in an Argos Translate or local ONNX Marian model — same shape of pipeline.</p>
+</div>
+
+<h2 class="clt-h">Pinyin in One Line (No, Really)</h2>
+
+<p>The detail I want to highlight, because nobody told me it existed: Apple gives you Mandarin → pinyin for free. Built into Foundation. Has been there for years.</p>
+
+<div class="clt-code">
+<span class="c">// Swift — Han → pinyin with tone marks</span>
+<span class="k">let</span> mandarin = <span class="s">"我们今天先对一下产品方向"</span>
+<span class="k">let</span> mutable = NSMutableString(string: mandarin) <span class="k">as</span> CFMutableString
+CFStringTransform(mutable, <span class="k">nil</span>, kCFStringTransformMandarinLatin, <span class="k">false</span>)
+<span class="c">// → "wǒ men jīn tiān xiān duì yī xià chǎn pǐn fāng xiàng"</span>
+</div>
+
+<p>If you want pinyin without tone marks (cleaner for some readers), chain a second transform with <code>kCFStringTransformStripDiacritics</code>. That's the whole pinyin layer. The other 95% of the work was audio capture and UI.</p>
+
+<h2 class="clt-h">Decision Table — Stack Choices I Made</h2>
+
+<p>Every stage had a cloud option and a local option. Here's where I landed and why.</p>
+
+<table class="clt-table">
+<thead>
+<tr><th>Choice</th><th>Picked</th><th>Why</th></tr>
+</thead>
+<tbody>
+<tr><td>ASR engine</td><td>Apple Speech (on-device) + Whisper fallback</td><td>Zero round-trip, free, ships with the OS.</td></tr>
+<tr><td>Audio capture</td><td>ScreenCaptureKit (system + mic mix)</td><td>One API, no kernel extension, works with Zoom/Meet/Teams.</td></tr>
+<tr><td>Pinyin layer</td><td>CFStringTransform</td><td>One line of Foundation. No model.</td></tr>
+<tr><td>Translation</td><td>Apple Translation (offline pack)</td><td>Offline once downloaded. Good enough for technical meetings.</td></tr>
+<tr><td>UI shell</td><td>SwiftUI floating window</td><td>Always-on-top panel above Zoom. NSPanel hosting a SwiftUI view.</td></tr>
+<tr><td>State</td><td>Actor + AsyncStream</td><td>Audio buffer → ASR → translate is a natural async pipeline.</td></tr>
+</tbody>
+</table>
+
+<h2 class="clt-h">5 Things That Bit Me</h2>
+
+<ol class="clt-tips">
+<li><span class="clt-tips-num">Gotcha 01</span><strong>Partial vs final ASR results.</strong> <code>SFSpeechRecognizer</code> emits partial transcripts that get rewritten. Don't translate every partial — debounce by ~400ms or wait for <code>isFinal</code>. Translating mid-sentence is what makes apps feel broken.</li>
+<li><span class="clt-tips-num">Gotcha 02</span><strong>Audio routing changes break the stream.</strong> Plug in AirPods mid-meeting and <code>ScreenCaptureKit</code> can drop the system tap. Listen for route changes and restart the capture session.</li>
+<li><span class="clt-tips-num">Gotcha 03</span><strong>Mandarin segmentation is hard.</strong> ASR gives you a wall of characters with no spaces. For pinyin readability you want word-level segmentation — but <code>CFStringTransform</code> doesn't know words. Either accept char-level pinyin or layer in a segmenter (Jieba-style).</li>
+<li><span class="clt-tips-num">Gotcha 04</span><strong>Translation pack must be pre-downloaded.</strong> First run, <code>TranslationSession</code> can prompt the user. Trigger the download proactively at first launch, otherwise mid-meeting download = mid-meeting outage.</li>
+<li><span class="clt-tips-num">Gotcha 05</span><strong>Battery on laptops.</strong> Continuous ASR + translation + an always-on-top SwiftUI window eats power. On a MacBook on battery, I throttle the ASR sample rate and translate every Nth final segment instead of every one.</li>
+</ol>
+
+<div class="clt-cta">
+<div class="clt-cta-medium">Full Story on Medium · 12 min read</div>
+<h3>Read The Build Log On Medium</h3>
+<p>The Medium version goes into the actual code — ScreenCaptureKit setup, the SwiftUI floating panel, how I tuned partial-result debouncing, and the moment I realized Apple shipped pinyin in Foundation a decade ago and nobody talks about it.</p>
+<a class="clt-buy" href="https://21zerixpm.medium.com/chinese-live-translator-on-my-mac-286baa6f6515" target="_blank" rel="noopener">Read the Full Article on Medium →</a>
+</div>
+
+<h2 class="clt-h">Why I'm Sharing This</h2>
+
+<p>Two reasons. First, "build it instead of buying it" is the right move more often than people admit — especially for tools you'll touch ten times a day. The cloud translators charge per minute, leak audio to servers, and lag enough to be useless for the actual problem.</p>
+
+<p>Second, the macOS stack is quietly absurd. <code>ScreenCaptureKit</code>, <code>SFSpeechRecognizer</code>, <code>CFStringTransform</code>, <code>TranslationSession</code> — four Apple APIs and you've replaced a paid SaaS. The hard part wasn't AI. It was knowing which Foundation transform to call.</p>
+
+<div class="clt-cross">
+<h3>If You're Building Mac/iOS Tools Like This</h3>
+<div class="clt-cross-grid">
+<div class="clt-cross-item">
+<h4>Mastering Claude Code</h4>
+<p>20 chapters + 50 hidden tips. Pair Claude Code with your iOS/macOS workflow to ship features in half the time.</p>
+<a class="clt-cross-link" href="https://zerix1.gumroad.com/l/TBD-CLAUDECODE" target="_blank" rel="noopener">Gumroad — $19 →</a>
+</div>
+<div class="clt-cross-item">
+<h4>100DaysSwiftUI-to-Expert</h4>
+<p>The complete 100-article SwiftUI curriculum — fundamentals to production apps, free on Medium.</p>
+<a class="clt-cross-link" href="https://21zerixpm.medium.com/list/100daysswiftuitoexpert-069dcb77c2d2" target="_blank" rel="noopener">Open the List →</a>
+</div>
+<div class="clt-cross-item">
+<h4>Medium Income 2026</h4>
+<p>The 2026 playbook for monetizing your dev knowledge on Medium. Real receipts, 100+ countries supported.</p>
+<a class="clt-cross-link" href="https://zerix1.gumroad.com/l/bpevse" target="_blank" rel="noopener">Gumroad — $19 →</a>
+</div>
+</div>
+</div>
+
+<h2 class="clt-h">Frequently Asked Questions</h2>
+
+<div class="clt-faq">
+<h4>Does this work on Intel Macs?</h4>
+<p>The audio capture and pinyin transform do. On-device ASR with <code>SFSpeechRecognizer</code> requires Apple Silicon for the offline mode — on Intel, it falls back to cloud-assisted recognition, which defeats the latency point. If you're on Intel, swap in a local Whisper.cpp build instead.</p>
+</div>
+
+<div class="clt-faq">
+<h4>Why not Whisper for everything?</h4>
+<p>Whisper is more accurate, especially with accents, but the small/medium models still cost real time on CPU. Apple's <code>SFSpeechRecognizer</code> is tuned for streaming and ships with the OS — for typical meeting Mandarin it's faster and quite accurate. I keep Whisper as a "noisy meeting" mode.</p>
+</div>
+
+<div class="clt-faq">
+<h4>What about Cantonese or other Chinese variants?</h4>
+<p><code>SFSpeechRecognizer</code> supports <code>yue-CN</code> for Cantonese. The pinyin step is Mandarin-specific (you'd want Jyutping for Cantonese — a separate transform). Translation works similarly via the Apple Translation framework if the language pack exists.</p>
+</div>
+
+<div class="clt-faq">
+<h4>Could I open-source this?</h4>
+<p>Possibly. The core pipeline is straightforward enough that I'm considering it. The interesting code isn't the APIs — it's the debounce logic, the floating panel behavior, and the meeting-specific tuning. Watch the Medium article for updates.</p>
+</div>
+
+<div class="clt-faq">
+<h4>Is on-device translation good enough for technical work?</h4>
+<p>For technical and product meetings — yes. The Apple Translation models handle engineering jargon surprisingly well. For literary or marketing language, cloud models are still better. For "can this ship next week" and "who owns the API change," local is fine.</p>
+</div>
+
+<p style="margin-top:2em;padding:22px;background:#fff5f0;border:1px solid #ffd9c2;border-radius:8px;text-align:center;font-size:15px;">
+<strong>Working at a Chinese company? Stop missing meetings. Read the full build.</strong><br><br>
+<a href="https://21zerixpm.medium.com/chinese-live-translator-on-my-mac-286baa6f6515" target="_blank" rel="noopener" style="display:inline-block;background:#c62641;color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;padding:12px 30px;border-radius:6px;text-decoration:none;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;border:none;margin-top:10px;">Read The Full Walkthrough On Medium →</a>
+</p>
+
+</div>

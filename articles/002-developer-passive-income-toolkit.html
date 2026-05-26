@@ -1,0 +1,508 @@
+<!--
+TITLE: 3 Python Toolkits That Turn Your Terminal Into a Passive Income Machine
+SEARCH DESCRIPTION: Monetize your dev skills with these ready-to-use Python toolkits. Content publishing, AI inference paywall, and Nostr bots - all from your terminal with zero dependencies.
+LABELS: python, passive-income, developer, tools, ai, nostr, terminal
+-->
+
+<style>
+.pit * { box-sizing: border-box; }
+.pit { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.pit p { margin: 0 0 1.5em; }
+.pit a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.pit a:hover { color: #000; border-bottom-color: #000; }
+
+.pit h2.pit-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+.pit-intro {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e0e0;
+  padding: 30px;
+  border-radius: 8px;
+  margin: 1.5em 0 2em;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.pit-intro strong { color: #ff7f24; }
+.pit-intro code { background: rgba(255,255,255,0.1); color: #7bed9f; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+/* Product Card */
+.pit-product {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 0;
+  margin: 2em 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+.pit-product:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+
+.pit-product-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px 28px;
+  color: #fff;
+}
+.pit-product:nth-child(2) .pit-product-header {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+.pit-product:nth-child(3) .pit-product-header {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.pit-product-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin: 0 0 4px;
+}
+.pit-product-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+.pit-product-tagline {
+  font-size: 14px;
+  margin: 6px 0 0;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.pit-product-body { padding: 24px 28px; }
+
+.pit-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  flex-wrap: wrap;
+}
+.pit-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff7f24;
+}
+.pit-price-note {
+  font-size: 12px;
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.pit-what {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #222;
+  margin: 0 0 10px;
+}
+
+.pit-files {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 0 0 20px;
+}
+.pit-files td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+.pit-files td:first-child {
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12px;
+  color: #c62641;
+  white-space: nowrap;
+  width: 40%;
+}
+.pit-files tr:last-child td { border-bottom: none; }
+.pit-files tr:hover td { background: #fafafa; }
+
+.pit-features {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 14px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pit-features li {
+  list-style: none !important;
+  padding: 5px 12px !important;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+  font-weight: 500;
+}
+.pit-features li::before { display: none !important; }
+
+.pit-revenue {
+  background: #f8fff8;
+  border: 1px solid #d4edda;
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+.pit-revenue-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #2e7d32;
+  margin: 0 0 8px;
+}
+.pit-revenue-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.pit-revenue-table td {
+  padding: 4px 0;
+  color: #444;
+}
+.pit-revenue-table td:last-child {
+  text-align: right;
+  font-weight: 700;
+  color: #2e7d32;
+}
+.pit-revenue-total td {
+  padding-top: 8px;
+  border-top: 1px solid #d4edda;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.pit-buy {
+  display: inline-block;
+  background: #ff7f24;
+  color: #fff !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 36px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  margin-top: 10px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.pit-buy:hover {
+  background: #e86b10;
+  color: #fff !important;
+  border-bottom: none !important;
+  box-shadow: 0 4px 15px rgba(255,127,36,0.35);
+}
+
+/* Bundle CTA */
+.pit-bundle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  margin: 2.5em 0;
+  text-align: center;
+}
+.pit-bundle h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 22px;
+  margin: 0 0 8px;
+  color: #fff;
+}
+.pit-bundle p { margin: 0 0 6px; font-size: 15px; opacity: 0.9; }
+.pit-bundle-prices {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+.pit-bundle-item {
+  background: rgba(255,255,255,0.15);
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+}
+.pit-bundle-item strong { display: block; font-size: 18px; margin-top: 2px; }
+
+/* FAQ */
+.pit-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.pit-faq:last-of-type { border-bottom: none; }
+.pit-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.pit-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .pit-product-body { padding: 18px; }
+  .pit-product-header { padding: 20px; }
+  .pit-product-title { font-size: 19px; }
+  .pit-price { font-size: 24px; }
+  .pit-features { gap: 6px; }
+  .pit-bundle-prices { flex-direction: column; align-items: center; }
+  .pit-buy { display: block; text-align: center; }
+  .pit-files td:first-child { white-space: normal; }
+}
+</style>
+
+<div class="pit">
+
+<p>Most developers already have the tools to generate passive income -- they just don't know it. If you have <strong>Python installed</strong> and a <strong>terminal open</strong>, you're closer than you think.</p>
+
+<p>I built three toolkits that turn your existing developer setup into multiple income streams. No frameworks to learn, no external dependencies to install, no platforms to register on. Just pure Python scripts that work.</p>
+
+<div class="pit-intro">
+<strong>What makes these different?</strong> Every script uses <strong>zero external dependencies</strong> -- only Python's standard library. No <code>pip install</code> needed. Download, configure your <code>.env</code>, run. That's it. They also work independently -- pick what you need, skip the rest.
+</div>
+
+<h2 class="pit-h">The Three Toolkits</h2>
+
+<!-- PRODUCT 1 -->
+<div class="pit-product">
+<div class="pit-product-header">
+<div class="pit-product-num">Toolkit #1</div>
+<h3 class="pit-product-title">Terminal Income Starter</h3>
+<p class="pit-product-tagline">Content publishing, crypto staking, and bandwidth sharing -- all from your terminal.</p>
+</div>
+<div class="pit-product-body">
+
+<div class="pit-price-row">
+<span class="pit-price">$9</span>
+<span class="pit-price-note">6 scripts / 11.7 KB download</span>
+</div>
+
+<p>The entry-level toolkit for developers who want to start stacking income streams today. Write an article once, publish it to dev.to, Hashnode, and Nostr simultaneously. Set up crypto staking from the command line. Turn your unused bandwidth into monthly revenue.</p>
+
+<div class="pit-what">What's Included</div>
+<table class="pit-files">
+<tr><td>publish_devto.py</td><td>Publish Markdown articles to dev.to via API</td></tr>
+<tr><td>publish_hashnode.py</td><td>Publish to Hashnode via GraphQL API</td></tr>
+<tr><td>publish_all.py</td><td>Cross-publish to Nostr + dev.to + Hashnode in one command</td></tr>
+<tr><td>solana_setup.sh</td><td>Solana wallet creation, balance, staking, rewards</td></tr>
+<tr><td>cosmos_setup.sh</td><td>Cosmos/ATOM wallet, delegation, rewards, claiming</td></tr>
+<tr><td>money4band_setup.sh</td><td>Docker-based bandwidth sharing setup</td></tr>
+</table>
+
+<ul class="pit-features">
+<li>Zero pip dependencies</li>
+<li>dev.to API</li>
+<li>Hashnode GraphQL</li>
+<li>Solana CLI</li>
+<li>Cosmos CLI</li>
+<li>Docker bandwidth sharing</li>
+<li>One-command cross-publish</li>
+</ul>
+
+<div class="pit-revenue">
+<div class="pit-revenue-title">Estimated Monthly Revenue</div>
+<table class="pit-revenue-table">
+<tr><td>Content + affiliate links</td><td>$50 - $200</td></tr>
+<tr><td>Solana staking (100 SOL)</td><td>$10 - $15</td></tr>
+<tr><td>Cosmos staking (100 ATOM)</td><td>$3 - $5</td></tr>
+<tr><td>Bandwidth sharing</td><td>$10 - $30</td></tr>
+<tr class="pit-revenue-total"><td>Combined</td><td>$73 - $250</td></tr>
+</table>
+</div>
+
+<a class="pit-buy" href="https://zerix1.gumroad.com/l/ptikgy" target="_blank" rel="noopener">Get Terminal Income Starter</a>
+</div>
+</div>
+
+<!-- PRODUCT 2 -->
+<div class="pit-product">
+<div class="pit-product-header">
+<div class="pit-product-num">Toolkit #2</div>
+<h3 class="pit-product-title">Ollama API Monetizer</h3>
+<p class="pit-product-tagline">Turn your local AI models into a revenue-generating API service with Lightning payments.</p>
+</div>
+<div class="pit-product-body">
+
+<div class="pit-price-row">
+<span class="pit-price">$14</span>
+<span class="pit-price-note">3 scripts + 1 guide / 11.4 KB download</span>
+</div>
+
+<p>If you're running Ollama locally, you're already sitting on a monetizable asset. This toolkit wraps your AI models in production-ready HTTP endpoints with four different ways to get paid: RapidAPI marketplace, Lightning Network invoices, custom Lightning address, or L402 paywall protocol.</p>
+
+<div class="pit-what">What's Included</div>
+<table class="pit-files">
+<tr><td>ollama_api_server.py</td><td>HTTP API server with tip jar and optional LNbits paywall</td></tr>
+<tr><td>rapidapi_wrapper.py</td><td>RapidAPI-compatible wrapper for marketplace listing</td></tr>
+<tr><td>lightning_address_server.py</td><td>Self-hosted LNURL-pay Lightning address server</td></tr>
+<tr><td>ADVANCED_SETUP.md</td><td>Guide for L402 paywall using LND + Aperture</td></tr>
+</table>
+
+<ul class="pit-features">
+<li>Zero pip dependencies</li>
+<li>OpenAI-compatible API</li>
+<li>RapidAPI marketplace</li>
+<li>Lightning Network</li>
+<li>LNURL-pay</li>
+<li>L402 protocol</li>
+<li>Rate limiting</li>
+<li>CORS enabled</li>
+<li>Privacy-first</li>
+</ul>
+
+<div class="pit-revenue">
+<div class="pit-revenue-title">Estimated Monthly Revenue</div>
+<table class="pit-revenue-table">
+<tr><td>RapidAPI tiers (Pro/Ultra)</td><td>$5 - $150</td></tr>
+<tr><td>Lightning tips</td><td>$1 - $20</td></tr>
+<tr><td>Lightning paywall (10 sats/req)</td><td>$5 - $100</td></tr>
+<tr class="pit-revenue-total"><td>Combined</td><td>$11 - $270</td></tr>
+</table>
+</div>
+
+<a class="pit-buy" href="https://zerix1.gumroad.com/l/pzesvw" target="_blank" rel="noopener">Get Ollama API Monetizer</a>
+</div>
+</div>
+
+<!-- PRODUCT 3 -->
+<div class="pit-product">
+<div class="pit-product-header">
+<div class="pit-product-num">Toolkit #3</div>
+<h3 class="pit-product-title">Nostr AI Toolkit</h3>
+<p class="pit-product-tagline">9 scripts to monetize AI on the Nostr protocol -- DVM, bots, marketplace, and automated content.</p>
+</div>
+<div class="pit-product-body">
+
+<div class="pit-price-row">
+<span class="pit-price">$19</span>
+<span class="pit-price-note">8 scripts / 20.9 KB download</span>
+</div>
+
+<p>The most comprehensive toolkit in the bundle. This gives you a complete Nostr presence: generate your identity, run an AI-powered Data Vending Machine that earns sats, automate content creation, sell digital products on the decentralized Shopstr marketplace, and publish long-form articles to Habla.news. No registration required anywhere -- Nostr is permissionless.</p>
+
+<div class="pit-what">What's Included</div>
+<table class="pit-files">
+<tr><td>generate_keypair.py</td><td>Generate Nostr keypair (nsec/npub) with bech32 encoding</td></tr>
+<tr><td>post_to_nostr.py</td><td>Post messages to Nostr relays via raw WebSocket</td></tr>
+<tr><td>dvm_text_generation.py</td><td>AI Data Vending Machine (kind 5050) powered by Ollama</td></tr>
+<tr><td>announce_dvm.py</td><td>Announce your DVM on Nostr (NIP-89) for discovery</td></tr>
+<tr><td>auto_content.py</td><td>Auto-generate AI/dev tips and post on autopilot</td></tr>
+<tr><td>publish_longform.py</td><td>Publish long-form Markdown articles (NIP-23)</td></tr>
+<tr><td>list_product_shopstr.py</td><td>List digital products on Shopstr marketplace (NIP-15)</td></tr>
+<tr><td>update_profile.py</td><td>Update profile with bio and Lightning address</td></tr>
+</table>
+
+<ul class="pit-features">
+<li>Zero pip dependencies</li>
+<li>Pure Python Schnorr signatures</li>
+<li>Raw WebSocket</li>
+<li>NIP-90 DVM</li>
+<li>NIP-89 Announcement</li>
+<li>NIP-23 Long-form</li>
+<li>NIP-15 Marketplace</li>
+<li>Ollama integration</li>
+<li>Multi-relay</li>
+<li>Cron-schedulable</li>
+</ul>
+
+<div class="pit-revenue">
+<div class="pit-revenue-title">5 Revenue Streams</div>
+<table class="pit-revenue-table">
+<tr><td>AI DVM (sats per inference)</td><td>Varies</td></tr>
+<tr><td>Shopstr digital product sales</td><td>Varies</td></tr>
+<tr><td>Lightning zaps on posts</td><td>Varies</td></tr>
+<tr><td>Audience building (automated posts)</td><td>Compounding</td></tr>
+<tr><td>Long-form authority (Habla.news)</td><td>Compounding</td></tr>
+</table>
+</div>
+
+<a class="pit-buy" href="https://zerix1.gumroad.com/l/vrblqu" target="_blank" rel="noopener">Get Nostr AI Toolkit</a>
+</div>
+</div>
+
+<!-- BUNDLE CTA -->
+<div class="pit-bundle">
+<h3>All Three Toolkits</h3>
+<p>17 scripts covering content, AI monetization, and Nostr -- everything you need to start earning from your terminal.</p>
+<div class="pit-bundle-prices">
+<div class="pit-bundle-item">Terminal Income Starter<strong>$9</strong></div>
+<div class="pit-bundle-item">Ollama API Monetizer<strong>$14</strong></div>
+<div class="pit-bundle-item">Nostr AI Toolkit<strong>$19</strong></div>
+</div>
+<p style="font-size:13px;opacity:0.8;">Total: $42 for 17 production-ready scripts. Zero dependencies. Pure Python.</p>
+</div>
+
+<h2 class="pit-h">Who Is This For?</h2>
+
+<p><strong>Developers with a terminal and curiosity.</strong> You don't need a GPU (Ollama runs on CPU and Apple Silicon). You don't need crypto to start (content publishing and bandwidth sharing are free). You don't need to register on any platform (Nostr is permissionless).</p>
+
+<p>These toolkits are ideal if you:</p>
+
+<ul class="pit-features" style="flex-direction:column;gap:6px;">
+<li style="width:100%;background:#f0f7ff;">Already run Ollama or want to start monetizing local AI</li>
+<li style="width:100%;background:#f0fff0;">Want to cross-publish content to multiple platforms automatically</li>
+<li style="width:100%;background:#fff8f0;">Are curious about Nostr and earning Bitcoin/sats</li>
+<li style="width:100%;background:#f5f0ff;">Prefer command-line tools over GUI apps</li>
+<li style="width:100%;background:#fff0f0;">Want passive income streams that run on cron jobs</li>
+</ul>
+
+<h2 class="pit-h">Requirements</h2>
+
+<p>Minimal. Intentionally.</p>
+
+<table class="pit-files" style="margin:1em 0;">
+<tr><td>Python 3.8+</td><td>Required for all toolkits</td></tr>
+<tr><td>Ollama</td><td>Free, local AI -- required for API Monetizer and Nostr AI Toolkit</td></tr>
+<tr><td>Docker</td><td>Only for bandwidth sharing (Terminal Income Starter)</td></tr>
+<tr><td>API Keys</td><td>Free -- dev.to and Hashnode (Terminal Income Starter only)</td></tr>
+<tr><td>Crypto tokens</td><td>Only if you want to stake SOL/ATOM</td></tr>
+</table>
+
+<h2 class="pit-h">Frequently Asked Questions</h2>
+
+<div class="pit-faq">
+<h4>Do I need to install any Python packages?</h4>
+<p>No. Every script uses only Python's standard library. No <code>pip install</code> required. This is intentional -- fewer dependencies means fewer things that break.</p>
+</div>
+
+<div class="pit-faq">
+<h4>Do I need a GPU?</h4>
+<p>No. Ollama runs on CPU and Apple Silicon (M1/M2/M3). A GPU makes it faster, but it's not required.</p>
+</div>
+
+<div class="pit-faq">
+<h4>Can I modify the scripts?</h4>
+<p>Absolutely. They're plain Python files -- readable, documented, and designed to be extended. Treat them as a starting point.</p>
+</div>
+
+<div class="pit-faq">
+<h4>What if I only want one toolkit?</h4>
+<p>Each toolkit works completely independently. Buy only what you need. There's no bundle lock-in.</p>
+</div>
+
+<div class="pit-faq">
+<h4>Is this a get-rich-quick scheme?</h4>
+<p>No. These are real tools that require real effort. The revenue estimates are conservative and based on consistent daily usage. Results compound over time.</p>
+</div>
+
+<div class="pit-faq">
+<h4>Do you offer refunds?</h4>
+<p>These are digital products, but if you run into issues, reach out. I want these tools to work for you.</p>
+</div>
+
+<p style="margin-top:2em;padding:20px;background:#f5f5f5;border-radius:8px;text-align:center;font-size:15px;">
+<strong>Questions?</strong> Drop a comment below or reach out on Nostr. I built these for developers like us -- feedback is always welcome.
+</p>
+
+</div>

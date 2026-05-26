@@ -1,0 +1,697 @@
+<!--
+TITLE: Expert Image Prompting in ChatGPT (2026 Images 2.0 Edition) — The 6-Block Formula That Wins on the First Try
+SEARCH DESCRIPTION: ChatGPT Images 2.0 launched April 2026 with reasoning, multi-reference support, and 99% text accuracy. Here's the labeled 6-block prompt formula and multi-reference technique that produce premium results — first attempt, every time.
+LABELS: chatgpt, image-generation, ai-art, prompt-engineering, dalle, openai, ai-design, gpt-image-2
+FEATURED IMAGE: Surreal AI-generated illustration / split visual showing prompt → image transformation
+-->
+
+<style>
+.eip * { box-sizing: border-box; }
+.eip { font-family: 'Domine', serif; line-height: 1.85; color: #333; font-size: 17px; }
+.eip p { margin: 0 0 1.5em; }
+.eip a { color: #c62641; border-bottom: 1px solid rgba(198,38,65,0.3); padding-bottom: 1px; }
+.eip a:hover { color: #000; border-bottom-color: #000; }
+
+.eip h2.eip-h {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 2.5em 0 1em; padding-bottom: 10px;
+  border-bottom: 3px solid #ff7f24;
+}
+
+/* Hero */
+.eip-hero {
+  background: linear-gradient(135deg, #10a37f 0%, #1a73e8 100%);
+  color: #fff;
+  padding: 40px 32px;
+  border-radius: 10px;
+  margin: 1.5em 0 2em;
+  text-align: center;
+}
+.eip-hero-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+.eip-hero h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: #fff;
+  line-height: 1.2;
+}
+.eip-hero p { font-size: 15px; opacity: 0.95; margin: 0; line-height: 1.7; color: #fff; }
+
+/* What's new in 2026 */
+.eip-new {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 28px 32px;
+  border-radius: 10px;
+  margin: 1.5em 0 2em;
+}
+.eip-new h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #10a37f;
+  font-size: 22px;
+  margin: 0 0 14px;
+}
+.eip-new ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.eip-new li {
+  list-style: none !important;
+  padding: 10px 0 !important;
+  margin: 0 !important;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 14.5px;
+  color: #c9d1d9;
+  line-height: 1.7;
+}
+.eip-new li:first-child { border-top: none; padding-top: 4px; }
+.eip-new li::before {
+  content: "→ " !important;
+  color: #10a37f !important;
+  display: inline !important;
+  font-weight: 700;
+}
+.eip-new strong { color: #fff; }
+.eip-new code { background: rgba(16,163,127,0.15); color: #7bed9f; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+/* Stats */
+.eip-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 1.5em 0;
+}
+.eip-stat {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.eip-stat-num {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #10a37f;
+  margin: 0;
+  line-height: 1.1;
+}
+.eip-stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+  margin: 6px 0 0;
+}
+
+/* Bad vs Good comparison */
+.eip-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 1.5em 0;
+}
+.eip-bad, .eip-good {
+  padding: 18px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.7;
+  font-family: 'Monaco','Menlo',monospace;
+}
+.eip-bad {
+  background: #fff5f5;
+  border-left: 4px solid #c62641;
+  color: #444;
+}
+.eip-good {
+  background: #f0fff4;
+  border-left: 4px solid #10a37f;
+  color: #0a3a1f;
+}
+.eip-label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.eip-bad .eip-label { color: #c62641; }
+.eip-good .eip-label { color: #10a37f; }
+
+/* Block formula */
+.eip-block {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 14px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  position: relative;
+}
+.eip-block-num {
+  display: inline-block;
+  background: #10a37f;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.eip-block h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  display: inline-block;
+  font-size: 17px;
+  margin: 0;
+  color: #222;
+  vertical-align: middle;
+}
+.eip-block-tag {
+  font-family: 'Monaco','Menlo',monospace;
+  background: #e8f5f0;
+  color: #0a6a4d;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  margin-left: 8px;
+  font-weight: 600;
+}
+.eip-block-desc { font-size: 14px; margin: 10px 0 8px; color: #555; line-height: 1.65; }
+.eip-block-ex {
+  background: #fafafa;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 12px;
+  color: #444;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+
+/* Code block (terminal style) */
+.eip-code {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 22px 26px;
+  border-radius: 8px;
+  margin: 1.5em 0;
+  font-family: 'Monaco','Menlo',monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  border-left: 4px solid #10a37f;
+  overflow-x: auto;
+}
+.eip-code-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #10a37f;
+  margin-bottom: 10px;
+  display: block;
+}
+.eip-code .h { color: #ffa657; font-weight: 700; }
+.eip-code .v { color: #7bed9f; }
+.eip-code .c { color: #6e7681; font-style: italic; }
+
+/* Tips list */
+.eip-tips {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 1em 0 !important;
+}
+.eip-tips li {
+  list-style: none !important;
+  padding: 14px 16px !important;
+  margin: 0 0 8px !important;
+  background: #fafafa;
+  border-left: 3px solid #10a37f;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.65;
+}
+.eip-tips li::before { display: none !important; }
+.eip-tips-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: #c62641;
+  font-weight: 700;
+  margin-right: 10px;
+  text-transform: uppercase;
+}
+.eip-tips strong {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222;
+  font-weight: 700;
+}
+
+/* Mistakes table */
+.eip-mistakes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin: 1em 0 1.5em;
+}
+.eip-mistakes th {
+  background: #f5f5f5;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding: 10px 12px;
+  color: #444;
+  font-weight: 700;
+  border-bottom: 2px solid #ddd;
+}
+.eip-mistakes td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.eip-mistakes tr:last-child td { border-bottom: none; }
+.eip-mistakes tr:hover td { background: #fafafa; }
+.eip-mistakes td:first-child { color: #c62641; font-weight: 600; width: 40%; }
+.eip-mistakes td:last-child { color: #10a37f; }
+
+/* CTA */
+.eip-cta {
+  background: linear-gradient(135deg, #10a37f 0%, #1a73e8 100%);
+  color: #fff;
+  padding: 36px 32px;
+  border-radius: 10px;
+  margin: 2em 0;
+  text-align: center;
+}
+.eip-cta h3 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 26px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+.eip-cta p { margin: 0 0 18px; color: #fff; opacity: 0.95; font-size: 15px; }
+.eip-buy {
+  display: inline-block;
+  background: #fff;
+  color: #10a37f !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 14px 38px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.eip-buy:hover {
+  background: #f0fff4;
+  color: #10a37f !important;
+  border-bottom: none !important;
+}
+
+/* Features */
+.eip-features {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 14px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.eip-features li {
+  list-style: none !important;
+  padding: 5px 12px !important;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+  font-weight: 500;
+}
+.eip-features li::before { display: none !important; }
+
+/* FAQ */
+.eip-faq { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+.eip-faq:last-of-type { border-bottom: none; }
+.eip-faq h4 {
+  font-family: 'Josefin Sans', sans-serif;
+  color: #222; font-size: 15px; margin: 0 0 6px; font-weight: 600;
+}
+.eip-faq p { margin: 0; color: #555; font-size: 14px; line-height: 1.7; }
+
+@media (max-width: 600px) {
+  .eip-compare { grid-template-columns: 1fr; }
+  .eip-stats { grid-template-columns: repeat(2, 1fr); }
+  .eip-hero h3 { font-size: 24px; }
+  .eip-buy { display: block; }
+  .eip-mistakes td:first-child { width: 50%; }
+}
+</style>
+
+<div class="eip">
+
+<img style="width:100%;border-radius:8px;margin:0 0 1.5em;box-shadow:0 2px 12px rgba(0,0,0,0.08);" src="https://images.unsplash.com/photo-1684369175809-f9642140a1bc?w=800&q=80" alt="AI-generated artwork on screen, prompt engineering workspace" />
+<p style="font-size:12px;color:#999;text-align:center;margin:-1em 0 1.5em;font-family:'Montserrat',sans-serif;">Photo by Andrew Neel on Unsplash</p>
+
+<p>On <strong>April 21, 2026</strong>, OpenAI shipped ChatGPT Images 2.0 — the first image model with native reasoning, near-perfect multilingual text rendering, and support for up to 16 reference images in a single prompt. Within 12 hours it hit #1 on the Image Arena leaderboard with the largest margin ever recorded.</p>
+
+<p>The same week, half the internet was still typing <em>"a cyberpunk city at night, very detailed, 8k"</em> and wondering why their results looked like everyone else's.</p>
+
+<p>That gap — between what the new model is actually capable of and how most people still prompt it — is what this guide closes. Below is the <strong>6-block expert prompt formula</strong> and the <strong>multi-reference technique</strong> that consistently produce premium output on the first attempt.</p>
+
+<div class="eip-hero">
+<div class="eip-hero-label">2026 Update — Images 2.0 / GPT Image 2</div>
+<h3>The Expert Prompt Formula That Wins First Try</h3>
+<p>Stop typing comma-soup prompts. Start writing labeled, layered briefs that match how the model actually reasons about your request.</p>
+</div>
+
+<div class="eip-stats">
+<div class="eip-stat">
+<p class="eip-stat-num">99%</p>
+<p class="eip-stat-label">Text Accuracy</p>
+</div>
+<div class="eip-stat">
+<p class="eip-stat-num">2K</p>
+<p class="eip-stat-label">Native Resolution</p>
+</div>
+<div class="eip-stat">
+<p class="eip-stat-num">8</p>
+<p class="eip-stat-label">Images / Prompt</p>
+</div>
+<div class="eip-stat">
+<p class="eip-stat-num">16</p>
+<p class="eip-stat-label">Reference Slots</p>
+</div>
+</div>
+
+<h2 class="eip-h">What Actually Changed in Images 2.0</h2>
+
+<p>Before you can prompt the model expertly, you have to understand what it became. The April 2026 release is not a refresh — it's a new architecture.</p>
+
+<div class="eip-new">
+<h3>The five changes that matter for prompting</h3>
+<ul>
+<li><strong>Reasoning step before generation.</strong> The model now <em>thinks</em> through spatial relationships, text placement, and visual logic before a single pixel is drawn. Labeled, structured prompts are read and obeyed in order — not blended into mush.</li>
+<li><strong>Near-perfect text rendering.</strong> Roughly <code>99%</code> character accuracy on first attempt across multi-line headlines, non-Latin scripts (Japanese, Korean, Chinese, Hindi, Bengali), and mixed-language layouts.</li>
+<li><strong>Multi-reference image support.</strong> Up to <code>16</code> reference images per prompt, each addressable by index — <em>"composition from Image #1, character from Image #2 + #3, lighting from Image #4."</em></li>
+<li><strong>Up to 2K native resolution.</strong> Posters, magazine covers, product mockups now ship at print-usable resolution without upscaling tricks.</li>
+<li><strong>Up to 8 coherent images per prompt.</strong> Variations on a theme, sequential frames for storyboards, or multiple camera angles of the same subject — generated as a single set.</li>
+</ul>
+</div>
+
+<p>The headline implication: <strong>the prompt format that worked in 2024 actively underperforms in 2026.</strong> Comma-soup prompts (<em>"cinematic, ultra-detailed, 8k, masterpiece, trending on artstation"</em>) miss the reasoning step entirely. Labeled briefs hit it.</p>
+
+<h2 class="eip-h">Amateur vs Expert: Side By Side</h2>
+
+<p>The same image idea, prompted two different ways.</p>
+
+<div class="eip-compare">
+<div class="eip-bad">
+<span class="eip-label">Amateur</span>
+"A cyberpunk samurai woman in a neon city at night, very detailed, cinematic lighting, masterpiece, 8k, trending on artstation, by greg rutkowski"
+</div>
+<div class="eip-good">
+<span class="eip-label">Expert</span>
+"Magazine cover illustration, vertical poster, A4 portrait.<br><br>
+TYPOGRAPHY (top): wordmark 'NEONSAMURAI' in carved cross-section wood-grain serif, charcoal black on cream.<br><br>
+SUBJECT (centered, ¾ length): 28-year-old woman in mended kintsugi-gold lacquered armor, tired calm expression.<br><br>
+LIGHTING: neon backlight, rim from upper-right pink, fill from lower-left teal, faint volumetric fog.<br><br>
+CAMERA: slight low-angle fisheye, subject tilted forward toward lens.<br><br>
+STYLE: Studio Ghibli + Korean illustration palette, muted dusty blues, warm cream, gentle film grain, no harsh outlines.<br><br>
+LAYOUT: title dominates upper third, small caption block lower-left: 'Issue No. 41 — Heirloom Steel.'"
+</div>
+</div>
+
+<p>The first prompt produces a stock-feeling image you've seen a thousand times. The second produces a magazine cover the model will <strong>commit to</strong> because it reads as a structured brief — exactly what the new reasoning step is optimized for.</p>
+
+<h2 class="eip-h">The 6-Block Expert Prompt Formula</h2>
+
+<p>Every expert prompt in 2026 collapses into six labeled blocks. Drop any block the image doesn't need, but keep the labels and the order.</p>
+
+<div class="eip-block">
+<span class="eip-block-num">1</span>
+<h4>Frame</h4>
+<span class="eip-block-tag">format · medium · ratio</span>
+<p class="eip-block-desc">One line that sets the entire canvas. Medium (illustration / photograph / 3D render / vector / oil painting), format (poster / magazine cover / Instagram square / 16:9 wide), aspect ratio, intended use.</p>
+<div class="eip-block-ex">"Magazine cover illustration, vertical A4 portrait, designed for newsstand display at arm's length."</div>
+</div>
+
+<div class="eip-block">
+<span class="eip-block-num">2</span>
+<h4>Subject</h4>
+<span class="eip-block-tag">who · what · pose</span>
+<p class="eip-block-desc">The center of attention, fully specified. Age, build, expression, gesture, clothing, props. The more concrete, the more committed the output. "Tired calm expression" beats "looking confident." "28-year-old" beats "young."</p>
+<div class="eip-block-ex">"28-year-old woman, athletic build, ¾ length pose, holding a folded paper crane in her right hand, calm tired half-smile."</div>
+</div>
+
+<div class="eip-block">
+<span class="eip-block-num">3</span>
+<h4>Wardrobe / Materials</h4>
+<span class="eip-block-tag">surfaces · textures</span>
+<p class="eip-block-desc">What the subject is wearing or made of, and how it weathered. The single biggest unlock for realism. "Kintsugi-gold lacquered steel armor, scratched, hand-mended over old impacts" makes the AI invent stories. "Cool armor" does not.</p>
+<div class="eip-block-ex">"Lacquered cream linen kimono, indigo-dyed cuffs, mended kintsugi-gold over an old shoulder tear. Worn dock boots, salt-streaked."</div>
+</div>
+
+<div class="eip-block">
+<span class="eip-block-num">4</span>
+<h4>Lighting</h4>
+<span class="eip-block-tag">key · fill · rim · mood</span>
+<p class="eip-block-desc">The block most beginners skip and the one that 3× the usable-result rate. Name your key, fill, rim and back light, the time of day, the atmosphere. Then state the emotional mood the lighting should produce.</p>
+<div class="eip-block-ex">"Neon backlight, rim from upper-right magenta, fill from lower-left teal, faint volumetric fog. Mood: melancholic, mythic."</div>
+</div>
+
+<div class="eip-block">
+<span class="eip-block-num">5</span>
+<h4>Camera / Composition</h4>
+<span class="eip-block-tag">angle · lens · framing</span>
+<p class="eip-block-desc">Where the camera is and what it's doing. Angle (eye-level / low / overhead), lens (fisheye / 50mm / wide), depth of field, framing rule (rule of thirds, centered hero, off-center with negative space). Be opinionated.</p>
+<div class="eip-block-ex">"Slight low-angle fisheye, subject tilted forward toward lens, mid-eyed gaze, shallow depth of field, clean curve from upper left."</div>
+</div>
+
+<div class="eip-block">
+<span class="eip-block-num">6</span>
+<h4>Style + Palette + Text</h4>
+<span class="eip-block-tag">references · colors · type</span>
+<p class="eip-block-desc">The aesthetic spine. Reference one or two named styles (Ghibli + Korean illustration / Wes Anderson + Saul Leiter). Spell out the palette in plain words. If text appears, quote it exactly and specify font feel.</p>
+<div class="eip-block-ex">"Studio Ghibli + Korean illustrator palette: muted dusty blues, warm cream, soft greens, gentle shadows, painterly highlights, soft ambient light. Title 'HEIRLOOM STEEL' in carved wood-grain serif, top third."</div>
+</div>
+
+<h2 class="eip-h">The Multi-Reference Technique</h2>
+
+<p>This is the part most guides still miss. With 16 reference slots, you can compose a brief out of <em>existing</em> images instead of describing every detail in words.</p>
+
+<p>The workflow has two passes. First, use Claude or ChatGPT (text-only) to generate the labeled prompt while pointing at reference images. Second, paste the prompt back into ChatGPT Image 2 with the same references attached, and let the model bake.</p>
+
+<div class="eip-code">
+<span class="eip-code-label">Pass 1 — Prompt-writing message (paste into Claude or ChatGPT)</span>
+<span class="c">// Attach all reference images first, then send:</span>
+
+<span class="h">I want to create a prompt for generating an image.</span>
+
+The <span class="v">TITLE</span> should be like <span class="v">[Image #1]</span>.
+The <span class="v">CHARACTER</span> should look like a combination of <span class="v">[Image #2]</span> and <span class="v">[Image #3]</span>.
+The <span class="v">CAMERA ANGLE</span> and overall visual style should match <span class="v">[Image #4]</span>,
+including the coloring and rendering mood.
+The <span class="v">OUTFIT</span> should be the one shown in <span class="v">[Image #5]</span>,
+but with this jacket layered on top.
+
+Later, when generating the image in ChatGPT Images 2.0,
+I will re-attach all of these reference images.
+For now, only write the prompt — use the 6-block labeled format.
+</div>
+
+<p>Claude or ChatGPT will read each reference and produce a labeled brief: <code>TYPOGRAPHY</code>, <code>CHARACTER</code>, <code>WARDROBE</code>, <code>LIGHTING</code>, <code>CAMERA</code>, <code>STYLE</code>, <code>LAYOUT</code>, <code>MOOD</code>. You now have a prompt the image model can <em>commit</em> to — because every block has a visual anchor.</p>
+
+<div class="eip-code">
+<span class="eip-code-label">Pass 2 — Generation message (paste into ChatGPT Images 2.0)</span>
+<span class="c">// Re-attach Images #1–5, then send the labeled prompt:</span>
+
+<span class="h">Magazine cover illustration, vertical poster format.</span>
+
+<span class="v">TITLE TYPOGRAPHY</span> (top of frame):
+The word "HEIRLOOM" rendered as massive woodblock-print letters,
+split into two stacked lines — "HEIRLOOM" on top, "STEEL" below.
+Letterforms carved from cross-section wood-grain texture.
+
+<span class="v">CHARACTER</span> (centered, full body, hero pose):
+A 28-year-old woman, slim build. Short black hair...
+
+<span class="v">LIGHTING</span>: <span class="c">[from Block 4 above]</span>
+<span class="v">CAMERA</span>: <span class="c">[from Block 5 above]</span>
+<span class="v">STYLE + PALETTE</span>: <span class="c">[from Block 6 above]</span>
+
+<span class="v">LAYOUT</span>: Title dominates the upper third, small lower-left caption.
+<span class="v">MOOD</span>: melancholic, mythic, lived-in. Final-fantasy-meets-Ghibli energy.
+</div>
+
+<p>This two-pass loop is the single biggest difference between hobbyist results and the work you see on premium covers, posters, and design portfolios. <strong>Don't make the image model invent. Make it execute.</strong></p>
+
+<h2 class="eip-h">10 Tips That Compound</h2>
+
+<ol class="eip-tips">
+<li><span class="eip-tips-num">Tip 01</span><strong>Lead with the format.</strong> "Magazine cover," "Instagram carousel slide 3 of 5," "product hero shot for Shopify PDP." The model adjusts polish, framing, and bleed based on intended use.</li>
+<li><span class="eip-tips-num">Tip 02</span><strong>Name a real style, sparingly.</strong> "Wes Anderson symmetry," "Saul Leiter color block," "Studio Ghibli + Korean illustration" — one or two references max. Three or more dilutes everything.</li>
+<li><span class="eip-tips-num">Tip 03</span><strong>Quote every visible word.</strong> If text shows up, wrap it in quotes: <code>"HEARTWOOD FALL"</code>. The 2026 model honors exact strings far better than paraphrased instructions.</li>
+<li><span class="eip-tips-num">Tip 04</span><strong>Describe lighting before pose.</strong> Light dictates mood faster than pose. State the key light direction in one phrase and the model commits to it across the frame.</li>
+<li><span class="eip-tips-num">Tip 05</span><strong>Use concrete ages, not generations.</strong> "28-year-old" beats "millennial." "Late 60s, sun-worn hands" beats "elderly." Specificity carries through to facial structure.</li>
+<li><span class="eip-tips-num">Tip 06</span><strong>Spell the palette in plain words.</strong> "Muted dusty blues, warm cream, soft greens, gentle shadows" works. "Cinematic colors" doesn't.</li>
+<li><span class="eip-tips-num">Tip 07</span><strong>One mood line, at the end.</strong> Close the prompt with: <em>"Mood: melancholic, mythic, lived-in."</em> The reasoning step uses it as the emotional north star.</li>
+<li><span class="eip-tips-num">Tip 08</span><strong>Iterate inside the same conversation.</strong> Images 2.0 retains scene memory. Say <em>"keep everything, only swap the jacket for a navy peacoat."</em> Don't restart from scratch.</li>
+<li><span class="eip-tips-num">Tip 09</span><strong>Request 4 variations, not 1.</strong> Use the <code>"Generate 4 variations with different lighting"</code> trick — pick the strongest, then refine.</li>
+<li><span class="eip-tips-num">Tip 10</span><strong>Save winning prompts as templates.</strong> When a prompt produces a winner, save the labeled version. Swap the Subject + Wardrobe blocks, keep the rest. Your style stabilizes inside a week.</li>
+</ol>
+
+<h2 class="eip-h">Common Mistakes (And Their Fixes)</h2>
+
+<table class="eip-mistakes">
+<thead>
+<tr><th>Mistake</th><th>Fix</th></tr>
+</thead>
+<tbody>
+<tr><td>Comma-soup prompts ("8k, masterpiece, trending on artstation")</td><td>Labeled, layered, 6-block brief in plain English</td></tr>
+<tr><td>"Very detailed" / "ultra realistic" stuffing</td><td>Replace with specific surface words: "scratched lacquer, salt-streaked leather, mended kintsugi"</td></tr>
+<tr><td>One paragraph wall of text</td><td>Line breaks + labeled blocks the reasoning step can parse</td></tr>
+<tr><td>Three or more style references</td><td>One named primary, one secondary at most</td></tr>
+<tr><td>Paraphrasing text instead of quoting</td><td>Wrap visible words in quotes, exactly as they should appear</td></tr>
+<tr><td>Describing everything, ignoring references</td><td>Attach 3–5 reference images, address each by index</td></tr>
+<tr><td>Restarting on every refinement</td><td>Iterate inside the same thread — "keep all, only swap X"</td></tr>
+<tr><td>Vague lighting ("nice light")</td><td>Name key + fill + rim + time of day + mood word</td></tr>
+<tr><td>Generic ages ("young woman")</td><td>Pin a specific age + a defining detail</td></tr>
+<tr><td>Skipping intended use / format</td><td>State it in line one — the model calibrates polish accordingly</td></tr>
+</tbody>
+</table>
+
+<h2 class="eip-h">A Complete Example, End to End</h2>
+
+<p>Putting all six blocks together, with no filler. Read it once — this is what a winning 2026 prompt looks like.</p>
+
+<div class="eip-code">
+<span class="eip-code-label">Final prompt (copy-paste ready)</span>
+<span class="h">Magazine cover illustration, vertical poster, A4 portrait, for newsstand display.</span>
+
+<span class="v">TITLE TYPOGRAPHY</span> (top of frame):
+The word <span class="v">"HEARTWOOD"</span> rendered as massive woodblock-print letters,
+split into two stacked lines — <span class="v">"HEARTWOOD"</span> on top, <span class="v">"FALL"</span> below.
+Letterforms carved from cross-section wood-grain texture. Deep oxblood
+red with concentric tree-ring patterns visible inside each letter,
+two or three letters rendered in charcoal black for contrast.
+Edges chipped, paint cracked, printed on aged cream paper with faint
+stains and a tiny red leaf detail. Hand-pressed woodcut feel, distressed,
+imperfect registration.
+
+<span class="v">CHARACTER</span> (centered, full body, hero pose):
+A 14-year-old boy, slim build. Short black hair, cropped close (about 3 cm).
+Messy bangs falling over the brow. Small faded scar on his right cheek.
+Calm, slightly tired expression. He wears battered medieval-style armor:
+a dented steel half-helm with a rounded dome and short side-discs (visor
+up, face visible), chainmail under-shirt, scratched steel breastplate
+strapped over a dark tunic, segmented pauldrons, bracers and gauntlets
+on both forearms, a wide leather belt with buckles, dark fitted pants,
+tall knee-high steel-plated greaves over worn boots. Armor is scuffed,
+scratched, lived-in — not shiny.
+
+<span class="v">OVER THE ARMOR</span>: He wears a classic medium-wash blue denim trucker
+jacket (Levi's-style): pointed collar, two chest flap-pockets with
+buttons, copper rivets, faded indigo with natural whiskering and slight
+wear at seams. Jacket is unbuttoned, worn loose over the breastplate.
+Sleeves rolled or pushed up slightly so the steel bracers show.
+
+<span class="v">VIEW &amp; RENDERING STYLE</span> (match references):
+Slight high-angle / fisheye perspective looking down at the character,
+who tilts his face up toward the camera — wide-eyed, large expressive
+anime eyes, one eye partly hidden. Background: a cluttered painter's
+studio / workshop — checkerboard tile floor, easels, canvases stacked,
+paint tubes, window light streaming from upper left. Floor curves
+gently from the lens distortion.
+
+<span class="v">COLORING</span>: Hand-painted 2D anime cel style, Studio-Ghibli /
+Korean illustrator palette — muted dusty blues, warm cream, soft
+greens, gentle shadows, no harsh outlines, painterly highlights.
+Soft ambient light. Slight film grain. Vintage magazine-cover composite.
+
+<span class="v">LAYOUT</span>: Title <span class="v">"HEARTWOOD FALL"</span> dominates the upper third in
+the woodblock style described above, overlapping slightly behind the
+character's helm. Small corner text: <span class="v">"Art collaboration — Vol. 41."</span>
+Lower-left small caption block in serif type. Poster aspect ratio 3:4.
+
+<span class="v">MOOD</span>: melancholic, mythic, lived-in. Final-fantasy-meets-Ghibli
+cover energy.
+</div>
+
+<p>Paste this into ChatGPT Images 2.0 with three or four reference images attached and you'll get a result the model commits to. Iterate inside the same thread — <em>"keep everything, but make the denim jacket dark indigo with red contrast stitching"</em> — and the scene memory holds.</p>
+
+<div class="eip-cta">
+<h3>The Complete Playbook — Coming Soon</h3>
+<p>This article is the public summary. The full e-book covers the 6-block formula in depth, ships 40+ template prompts across categories (magazine covers, product shots, character design, infographics, brand assets), and includes the multi-reference workflows that pros use daily.</p>
+<a class="eip-buy" href="https://zerix1.gumroad.com/l/TBD-IMAGE-EBOOK" target="_blank" rel="noopener">Notify Me On Launch →</a>
+</div>
+
+<h2 class="eip-h">Frequently Asked Questions</h2>
+
+<div class="eip-faq">
+<h4>Do I need ChatGPT Plus to use Images 2.0?</h4>
+<p>Image generation in the ChatGPT app is available on Plus, Pro, Team, and Enterprise tiers. Free users get a small daily quota with the previous-generation model. For the 2K resolution and reasoning-grade output, Plus or Pro is the practical floor.</p>
+</div>
+
+<div class="eip-faq">
+<h4>How is this different from DALL·E 3?</h4>
+<p>DALL·E 3 was a separate diffusion model. Images 2.0 / GPT Image 2 is integrated into the same model that handles your chat — which is why it can reason about your prompt, hold scene memory across turns, and address reference images by index.</p>
+</div>
+
+<div class="eip-faq">
+<h4>Can I use Claude to write prompts and ChatGPT to generate?</h4>
+<p>Yes — and many pros do exactly that. Claude tends to write tighter labeled briefs from reference images. Paste the labeled brief into ChatGPT Images 2.0 with the same references attached. This two-tool loop is the workflow described above.</p>
+</div>
+
+<div class="eip-faq">
+<h4>What about Midjourney, Flux, Gemini Nano Banana, Stable Diffusion?</h4>
+<p>The 6-block labeled formula transfers to all of them with minor adjustments — Midjourney needs explicit aspect-ratio flags, Flux likes shorter Subject blocks, Gemini's Nano Banana is forgiving on commas. The formula scales because it matches how modern reasoning models parse intent, not how any one model was trained.</p>
+</div>
+
+<div class="eip-faq">
+<h4>Can I commercially use images generated this way?</h4>
+<p>OpenAI grants commercial usage rights to ChatGPT users for images they generate. Check current terms before high-stakes commercial use (logos, large campaigns) — and be aware that <em>style</em> references (e.g., living artists) carry their own legal nuance regardless of platform policy.</p>
+</div>
+
+<div class="eip-faq">
+<h4>How many reference images is the sweet spot?</h4>
+<p>Three to five. One for typography or layout, one or two for character, one for lighting, one for palette. Past six, the model averages instead of composing — and you lose the specificity that made the technique work.</p>
+</div>
+
+<p style="margin-top:2em;padding:22px;background:#f0fff4;border:1px solid #c3e9d6;border-radius:8px;text-align:center;font-size:15px;">
+<strong>The model got smarter. Most prompts didn't.</strong> Drop the comma-soup, switch to labeled 6-block briefs, attach references by index, and iterate inside one thread. The same model gives premium results when you brief it like a creative director — and stock-feeling results when you don't.
+</p>
+
+</div>
+
+<!--
+SOURCES (for reference, do not render in final post):
+- ChatGPT Images 2.0 — TechCrunch (2026-04-21) https://techcrunch.com/2026/04/21/chatgpts-new-images-2-0-model-is-surprisingly-good-at-generating-text/
+- Introducing ChatGPT Images 2.0 — OpenAI https://openai.com/index/introducing-chatgpt-images-2-0/
+- OpenAI Claims ChatGPT Images 2.0 Can Think — PetaPixel https://petapixel.com/2026/04/21/openai-claims-chatgpt-images-2-0-can-think/
+- GPT Image Generation Models Prompting Guide — OpenAI https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide
+- VentureBeat — multilingual, infographics, manga https://venturebeat.com/technology/openais-chatgpt-images-2-0-is-here-and-it-does-multilingual-text-full-infographics-slides-maps-even-manga-seemingly-flawlessly
+-->
